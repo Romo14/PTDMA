@@ -12,9 +12,19 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ExpandableListView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    HashMap<String,List<String>> hourlyForecast;
+    List<String> forecast;
+    ExpandableListView expandableListView;
+    ForecastAdapter forecastAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +41,14 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        expandableListView = (ExpandableListView) findViewById(R.id.hourlyForecastList);
+        hourlyForecast = Forecast.getHourlyForecast();
+        forecast = new ArrayList<String>(hourlyForecast.keySet());
+        forecastAdapter = new ForecastAdapter(this, hourlyForecast,forecast);
+        expandableListView.setAdapter(forecastAdapter);
+
+
     }
 
     @Override
@@ -56,12 +74,6 @@ public class MainActivity extends AppCompatActivity
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
         return super.onOptionsItemSelected(item);
     }
 
