@@ -10,12 +10,13 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.oriolgasset.weatherforecast.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+    tools:showIn="@layout/app_bar_main"
+    android:background="#f2f2f2">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/scrollView" >
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView">
 
         <TextView
             android:layout_width="wrap_content"
@@ -24,135 +25,205 @@
             android:text="Barcelona"
             android:id="@+id/locationName"
             android:layout_centerHorizontal="true"
-            android:textSize="30dp" />
+            android:textSize="30sp" />
 
 
-    <ImageView
-        android:layout_width="250dp"
-        android:layout_height="150dp"
-        android:id="@+id/weahterIconMain"
-        android:src="@mipmap/ic_launcher"
-        android:layout_below="@+id/textClock"
-        android:layout_centerHorizontal="true" />
-
-    <TextClock
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textClock"
-        android:layout_below="@+id/locationName"
-        android:layout_alignStart="@+id/locationName"
-        android:layout_alignEnd="@+id/locationName"
-        android:layout_centerInParent="true"
-        android:layout_alignParentEnd="false"
-        android:layout_alignParentStart="false"
-        android:textAlignment="center"
-        android:textSize="20dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="18º"
-        android:id="@+id/temperatureText"
-        android:textAlignment="center"
-        android:textSize="60dp"
-        android:layout_below="@+id/weahterIconMain"
-        android:layout_toStartOf="@+id/descriptionText" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Sunny"
-        android:id="@+id/descriptionText"
-        android:layout_alignBottom="@+id/temperatureText"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Max:"
-        android:id="@+id/maxTempText"
-        android:layout_below="@+id/temperatureText"
-        android:layout_alignStart="@+id/humidityText"
-        android:textSize="20dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/maxTempValue"
-        android:text="21º"
-        android:layout_below="@+id/temperatureText"
-        android:layout_toEndOf="@+id/maxTempText"
-        android:layout_marginLeft="5dp"
-        android:textSize="20dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Min:"
-        android:id="@+id/minTempText"
-        android:layout_marginLeft="5dp"
-        android:textSize="20dp"
-        android:layout_above="@+id/humidityText"
-        android:layout_toEndOf="@+id/humidityText" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/minTempValue"
-        android:text="13º"
-        android:textSize="20dp"
-        android:layout_above="@+id/humidityText"
-        android:layout_toEndOf="@+id/minTempText"
-        android:layout_marginLeft="5dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Humidity:"
-        android:id="@+id/humidityText"
-        android:layout_below="@+id/maxTempText"
-        android:layout_alignStart="@+id/weahterIconMain"
-        android:layout_marginTop="5dp"
-        android:textSize="20dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Wind:"
-        android:id="@+id/windText"
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/humidityText"
-        android:layout_alignStart="@+id/maxTempText"
-        android:textSize="20dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="54%"
-        android:id="@+id/humidityValue"
-        android:layout_above="@+id/windText"
-        android:layout_alignStart="@+id/minTempText"
-        android:textSize="20dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="17 km/h"
-        android:id="@+id/windValue"
-        android:textSize="20dp"
-        android:layout_alignTop="@+id/windText"
-        android:layout_alignStart="@+id/textClock" />
-
-        <ExpandableListView
+        <TextClock
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/hourlyForecastList"
-            android:layout_below="@+id/windText"
-            android:layout_alignParentEnd="true"
-            android:indicatorLeft="?android:attr/expandableListPreferredItemIndicatorLeft"
-            />
+            android:id="@+id/textClock"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:layout_below="@+id/locationName"
+            android:layout_centerHorizontal="true" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/textClock"
+            android:id="@+id/mainInfoLayout"
+            android:background="@drawable/layout_border"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="18º"
+                android:id="@+id/temperatureText"
+                android:textAlignment="center"
+                android:textSize="60sp"
+                android:layout_alignTop="@+id/weahterIconMain"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Sunny"
+                android:id="@+id/descriptionText"
+                android:layout_alignBottom="@+id/temperatureText"
+                android:layout_toEndOf="@+id/temperatureText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Max:"
+                android:id="@+id/maxTempText"
+                android:textSize="20sp"
+                android:layout_alignTop="@+id/maxTempValue"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/maxTempValue"
+                android:text="21º"
+                android:layout_below="@+id/temperatureText"
+                android:layout_toEndOf="@+id/maxTempText"
+                android:layout_marginStart="5sp"
+                android:textSize="20sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Min:"
+                android:id="@+id/minTempText"
+                android:layout_marginStart="5dp"
+                android:textSize="20sp"
+                android:layout_above="@+id/humidityText"
+                android:layout_toEndOf="@+id/temperatureText" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/minTempValue"
+                android:text="13º"
+                android:textSize="20sp"
+                android:layout_above="@+id/humidityText"
+                android:layout_toEndOf="@+id/minTempText"
+                android:layout_marginStart="5dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Humidity:"
+                android:id="@+id/humidityText"
+                android:textSize="20sp"
+                android:layout_below="@+id/maxTempText"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Wind:"
+                android:id="@+id/windText"
+                android:textSize="20sp"
+                android:layout_below="@+id/humidityText"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="8sp"
+                android:layout_marginBottom="8sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="54%"
+                android:id="@+id/humidityValue"
+                android:textSize="20sp"
+                android:layout_above="@+id/windText"
+                android:layout_toEndOf="@+id/humidityText"
+                android:layout_marginStart="5sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="17 km/h"
+                android:id="@+id/windValue"
+                android:textSize="20sp"
+                android:layout_alignTop="@+id/windText"
+                android:layout_toEndOf="@+id/windText"
+                android:layout_marginStart="5sp" />
+
+            <ImageView
+                android:layout_width="250sp"
+                android:layout_height="130sp"
+                android:id="@+id/weahterIconMain"
+                android:src="@mipmap/weather_sunny"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/descriptionText" />
+
+        </RelativeLayout>
+
+        <HorizontalScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/hourlyHorizontalScrollView"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="20sp"
+            android:layout_below="@+id/mainInfoLayout"
+            android:background="@drawable/layout_border">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hourly Forecast"
+                    android:id="@+id/hourlyForecastText"
+                    android:layout_marginTop="5sp"
+                    android:layout_marginStart="8sp"
+                    android:layout_marginBottom="8sp" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/hourlyForecastText">
+
+                </LinearLayout>
+            </RelativeLayout>
+        </HorizontalScrollView>
+
+
+        <HorizontalScrollView
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/dailyhorizontalScrollView"
+            android:layout_below="@+id/hourlyHorizontalScrollView"
+            android:layout_alignParentStart="false"
+            android:layout_marginTop="10sp"
+            android:background="@drawable/layout_border">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Daily Forecast"
+                    android:id="@+id/dailyForecastText"
+                    android:layout_marginStart="8sp"
+                    android:layout_marginTop="5sp"
+                    android:layout_marginBottom="8sp" />
+
+                <LinearLayout
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/dailyForecastText" >
+
+                </LinearLayout>
+            </RelativeLayout>
+        </HorizontalScrollView>
+
     </RelativeLayout>
-    </ScrollView>
+</ScrollView>
 
