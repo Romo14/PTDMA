@@ -11,7 +11,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.oriolgasset.weatherforecast.MainActivity"
     tools:showIn="@layout/app_bar_main"
-    android:background="#f2f2f2">
+    android:background="#E1F2F7">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -56,7 +56,7 @@
                 android:textSize="60sp"
                 android:layout_alignTop="@+id/weahterIconMain"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="5dp" />
 
             <TextView
@@ -76,7 +76,7 @@
                 android:textSize="20sp"
                 android:layout_alignTop="@+id/maxTempValue"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="10dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -86,7 +86,8 @@
                 android:layout_below="@+id/temperatureText"
                 android:layout_toEndOf="@+id/maxTempText"
                 android:layout_marginStart="5sp"
-                android:textSize="20sp" />
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -106,7 +107,8 @@
                 android:textSize="20sp"
                 android:layout_above="@+id/humidityText"
                 android:layout_toEndOf="@+id/minTempText"
-                android:layout_marginStart="5dp" />
+                android:layout_marginStart="5dp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -116,7 +118,7 @@
                 android:textSize="20sp"
                 android:layout_below="@+id/maxTempText"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="8dp" />
+                android:layout_marginStart="10dp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -126,7 +128,7 @@
                 android:textSize="20sp"
                 android:layout_below="@+id/humidityText"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="8sp"
+                android:layout_marginStart="10dp"
                 android:layout_marginBottom="8sp" />
 
             <TextView
@@ -137,7 +139,8 @@
                 android:textSize="20sp"
                 android:layout_above="@+id/windText"
                 android:layout_toEndOf="@+id/humidityText"
-                android:layout_marginStart="5sp" />
+                android:layout_marginStart="5sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -147,13 +150,14 @@
                 android:textSize="20sp"
                 android:layout_alignTop="@+id/windText"
                 android:layout_toEndOf="@+id/windText"
-                android:layout_marginStart="5sp" />
+                android:layout_marginStart="5sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:layout_width="250sp"
                 android:layout_height="130sp"
                 android:id="@+id/weahterIconMain"
-                android:src="@mipmap/weather_sunny"
+                android:src="@mipmap/fair"
                 android:layout_centerVertical="true"
                 android:layout_toEndOf="@+id/descriptionText" />
 
@@ -169,7 +173,7 @@
             android:background="@drawable/layout_border">
 
             <RelativeLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent">
 
                 <TextView
@@ -202,7 +206,7 @@
             android:background="@drawable/layout_border">
 
             <RelativeLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent" >
 
                 <TextView
@@ -221,8 +225,52 @@
                     android:layout_below="@+id/dailyForecastText" >
 
                 </LinearLayout>
+
             </RelativeLayout>
         </HorizontalScrollView>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="false"
+            android:id="@+id/detailedWeatherLayout"
+            android:layout_below="@+id/dailyhorizontalScrollView"
+            android:layout_alignParentTop="false"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/layout_border">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Details"
+                android:id="@+id/textView"
+                android:layout_marginLeft="10sp"
+                android:layout_marginBottom="8sp"
+                android:layout_marginTop="8sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/relativeLayout"
+            android:background="@drawable/layout_border"
+            android:layout_alignParentTop="false"
+            android:layout_below="@+id/detailedWeatherLayout"
+            android:layout_marginTop="8sp"
+            android:layout_marginBottom="8sp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Details"
+                android:id="@+id/textView2"
+                android:layout_marginStart="10sp"
+                android:layout_marginTop="8sp"
+                android:layout_marginBottom="8sp" />
+
+        </RelativeLayout>
 
     </RelativeLayout>
 </ScrollView>

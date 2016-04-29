@@ -18,7 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity android:name=".AddCityActivity" android:theme="@style/AppTheme.Transparent"
+            android:label="Add city"></activity>
     </application>
 
 </manifest>
