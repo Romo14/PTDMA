@@ -4,274 +4,312 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#E1F2F7"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.oriolgasset.weatherforecast.MainActivity"
-    tools:showIn="@layout/app_bar_main"
-    android:background="#E1F2F7">
+    tools:showIn="@layout/app_bar_main">
 
     <RelativeLayout
+        android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/scrollView">
+        android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/locationName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/city_name"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Barcelona"
-            android:id="@+id/locationName"
-            android:layout_centerHorizontal="true"
-            android:textSize="30sp" />
+            android:textSize="30sp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true" />
 
 
         <TextClock
+            android:id="@+id/textClock"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/textClock"
-            android:textAlignment="center"
-            android:textSize="20sp"
             android:layout_below="@+id/locationName"
-            android:layout_centerHorizontal="true" />
+            android:layout_centerHorizontal="true"
+            android:textAlignment="center"
+            android:textSize="20sp" />
 
-        <RelativeLayout
+        <android.support.v7.widget.CardView
+            android:id="@+id/mainInfoCardView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/textClock"
-            android:id="@+id/mainInfoLayout"
-            android:background="@drawable/layout_border"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="18º"
-                android:id="@+id/temperatureText"
-                android:textAlignment="center"
-                android:textSize="60sp"
-                android:layout_alignTop="@+id/weahterIconMain"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Sunny"
-                android:id="@+id/descriptionText"
-                android:layout_alignBottom="@+id/temperatureText"
-                android:layout_toEndOf="@+id/temperatureText" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Max:"
-                android:id="@+id/maxTempText"
-                android:textSize="20sp"
-                android:layout_alignTop="@+id/maxTempValue"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="10dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/maxTempValue"
-                android:text="21º"
-                android:layout_below="@+id/temperatureText"
-                android:layout_toEndOf="@+id/maxTempText"
-                android:layout_marginStart="5sp"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Min:"
-                android:id="@+id/minTempText"
-                android:layout_marginStart="5dp"
-                android:textSize="20sp"
-                android:layout_above="@+id/humidityText"
-                android:layout_toEndOf="@+id/temperatureText" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/minTempValue"
-                android:text="13º"
-                android:textSize="20sp"
-                android:layout_above="@+id/humidityText"
-                android:layout_toEndOf="@+id/minTempText"
-                android:layout_marginStart="5dp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Humidity:"
-                android:id="@+id/humidityText"
-                android:textSize="20sp"
-                android:layout_below="@+id/maxTempText"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="10dp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Wind:"
-                android:id="@+id/windText"
-                android:textSize="20sp"
-                android:layout_below="@+id/humidityText"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginBottom="8sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="54%"
-                android:id="@+id/humidityValue"
-                android:textSize="20sp"
-                android:layout_above="@+id/windText"
-                android:layout_toEndOf="@+id/humidityText"
-                android:layout_marginStart="5sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="17 km/h"
-                android:id="@+id/windValue"
-                android:textSize="20sp"
-                android:layout_alignTop="@+id/windText"
-                android:layout_toEndOf="@+id/windText"
-                android:layout_marginStart="5sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:layout_width="250sp"
-                android:layout_height="130sp"
-                android:id="@+id/weahterIconMain"
-                android:src="@mipmap/fair"
-                android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/descriptionText" />
-
-        </RelativeLayout>
-
-        <HorizontalScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/hourlyHorizontalScrollView"
-            android:layout_alignParentStart="true"
-            android:layout_marginTop="20sp"
-            android:layout_below="@+id/mainInfoLayout"
-            android:background="@drawable/layout_border">
+            android:layout_marginTop="2dp">
 
             <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent">
+                android:id="@+id/mainInfoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="5dp">
+
+
+                <TextView
+                    android:id="@+id/temperatureText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignTop="@+id/weatherIconMain"
+                    android:layout_marginStart="10dp"
+                    android:textAlignment="center"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="50sp" />
+
+                <TextView
+                    android:id="@+id/descriptionText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/temperatureText"
+                    android:layout_below="@+id/temperatureText"
+                    android:textAppearance="?android:attr/textAppearanceLarge" />
+
+                <TextView
+                    android:id="@+id/maxTempText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/max_temperature"
+                    android:layout_below="@+id/realFeelText"
+                    android:layout_alignStart="@+id/descriptionText" />
+
+                <TextView
+                    android:id="@+id/minTempText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:text="@string/min_temperature"
+                    android:layout_alignTop="@+id/maxTempText"
+                    android:layout_toEndOf="@+id/maxTempValue" />
+
+                <TextView
+                    android:id="@+id/minTempValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_alignTop="@+id/minTempText"
+                    android:layout_toEndOf="@+id/minTempText"
+                    android:layout_marginLeft="5dp" />
+
+
+                <ImageView
+                    android:id="@+id/weatherIconMain"
+                    android:layout_width="250sp"
+                    android:layout_height="130sp"
+                    android:contentDescription="@string/weather_icon"
+                    android:src="@mipmap/fair"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true" />
+
+                <TextView
+                    android:id="@+id/maxTempValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:textStyle="bold"
+                    android:layout_alignTop="@+id/maxTempText"
+                    android:layout_toEndOf="@+id/maxTempText" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Hourly Forecast"
-                    android:id="@+id/hourlyForecastText"
-                    android:layout_marginTop="5sp"
-                    android:layout_marginStart="8sp"
-                    android:layout_marginBottom="8sp" />
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/hourlyForecastText">
-
-                </LinearLayout>
-            </RelativeLayout>
-        </HorizontalScrollView>
-
-
-        <HorizontalScrollView
-            android:layout_width="fill_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/dailyhorizontalScrollView"
-            android:layout_below="@+id/hourlyHorizontalScrollView"
-            android:layout_alignParentStart="false"
-            android:layout_marginTop="10sp"
-            android:background="@drawable/layout_border">
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent" >
+                    android:id="@+id/realFeelValue"
+                    android:layout_alignBaseline="@+id/realFeelText"
+                    android:layout_alignBottom="@+id/realFeelText"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/realFeelText" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Daily Forecast"
-                    android:id="@+id/dailyForecastText"
-                    android:layout_marginStart="8sp"
-                    android:layout_marginTop="5sp"
-                    android:layout_marginBottom="8sp" />
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_below="@+id/dailyForecastText" >
-
-                </LinearLayout>
+                    android:text="@string/real_feel_text"
+                    android:id="@+id/realFeelText"
+                    android:layout_alignStart="@+id/descriptionText"
+                    android:layout_below="@+id/descriptionText" />
 
             </RelativeLayout>
-        </HorizontalScrollView>
+        </android.support.v7.widget.CardView>
 
-        <RelativeLayout
+        <android.support.v7.widget.CardView
+            android:id="@+id/hourlyForecastCardView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentStart="false"
-            android:id="@+id/detailedWeatherLayout"
-            android:layout_below="@+id/dailyhorizontalScrollView"
-            android:layout_alignParentTop="false"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/layout_border">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/mainInfoCardView"
+            android:layout_marginTop="10sp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Details"
-                android:id="@+id/textView"
-                android:layout_marginLeft="10sp"
-                android:layout_marginBottom="8sp"
-                android:layout_marginTop="8sp" />
+            <HorizontalScrollView
+                android:id="@+id/hourlyHorizontalScrollView"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true">
 
-        </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
 
-        <RelativeLayout
+                    <TextView
+                        android:id="@+id/hourlyForecastText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8sp"
+                        android:layout_marginStart="8sp"
+                        android:layout_marginTop="5sp"
+                        android:text="@string/hourly_forecast" />
+
+                    <LinearLayout
+                        android:id="@+id/hourlyParentLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/hourlyForecastText"
+                        android:divider="@color/colorPrimary"
+                        android:orientation="horizontal"
+                        android:dividerPadding="5sp">
+
+                    </LinearLayout>
+                </RelativeLayout>
+            </HorizontalScrollView>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/dailyForecastCardView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/relativeLayout"
-            android:background="@drawable/layout_border"
-            android:layout_alignParentTop="false"
-            android:layout_below="@+id/detailedWeatherLayout"
-            android:layout_marginTop="8sp"
-            android:layout_marginBottom="8sp">
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/hourlyForecastCardView"
+            android:layout_marginTop="10sp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Details"
-                android:id="@+id/textView2"
-                android:layout_marginStart="10sp"
-                android:layout_marginTop="8sp"
-                android:layout_marginBottom="8sp" />
+            <HorizontalScrollView
+                android:id="@+id/dailyhorizontalScrollView"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="false">
 
-        </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
 
+                    <TextView
+                        android:id="@+id/dailyForecastText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8sp"
+                        android:layout_marginStart="8sp"
+                        android:layout_marginTop="5sp"
+                        android:text="@string/daily_forecast" />
+
+                    <LinearLayout
+                        android:id="@+id/dailyParentLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_below="@+id/dailyForecastText"
+                        android:orientation="horizontal"
+                        android:dividerPadding="5dp"
+                        android:divider="@color/colorPrimary">
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+            </HorizontalScrollView>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/detailsForecastCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/dailyForecastCardView"
+            android:layout_marginTop="10dp">
+
+            <RelativeLayout
+                android:id="@+id/detailedWeatherLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentTop="false">
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8sp"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginTop="8sp"
+                    android:text="@string/weather_details" />
+
+
+                <TextView
+                    android:id="@+id/humidityText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginStart="10dp"
+                    android:text="@string/humidity"
+                    android:layout_below="@+id/textView" />
+
+                <TextView
+                    android:id="@+id/windText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/wind"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignStart="@+id/textView"
+                    android:layout_below="@+id/humidityText"
+                    android:paddingBottom="10dp" />
+
+                <TextView
+                    android:id="@+id/humidityValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_below="@+id/textView"
+                    android:layout_toEndOf="@+id/humidityText"
+                    android:layout_marginLeft="5dp" />
+
+                <TextView
+                    android:id="@+id/windValue"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:layout_marginLeft="5dp"
+                    android:layout_below="@+id/humidityText"
+                    android:layout_toEndOf="@+id/windText" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/mapForecastCardView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/detailsForecastCardView"
+            android:layout_marginTop="10dp">
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="false"
+                android:layout_marginBottom="8sp">
+
+                <TextView
+                    android:id="@+id/mapText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8sp"
+                    android:layout_marginStart="10sp"
+                    android:layout_marginTop="8sp"
+                    android:text="@string/weather_maps" />
+
+            </RelativeLayout>
+        </android.support.v7.widget.CardView>
     </RelativeLayout>
 </ScrollView>
 

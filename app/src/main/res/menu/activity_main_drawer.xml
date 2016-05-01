@@ -1,37 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/city1"
-            android:icon="@mipmap/fair"
-            android:title="Barcelona"
-            />
-        <item
-            android:id="@+id/city2"
-            android:icon="@mipmap/cloudy"
-            android:title="New York" />
-        <item
-            android:id="@+id/city3"
-            android:icon="@mipmap/mostly_cloudy"
-            android:title="London" />
-        <item
-            android:id="@+id/city4"
-            android:icon="@mipmap/rain"
-            android:title="Paris" />
-        <item
-            android:id="@+id/city5"
-            android:icon="@mipmap/rain"
-            android:title="Madrid" />
+    <group
+        android:id="@+id/citiesMenu"
+        android:checkableBehavior="single">
+
 
     </group>
 
-    <group android:id="@+id/group_settings"
+    <group
+        android:id="@+id/group_settings"
         android:checkableBehavior="single">
-        <item
-            android:id="@+id/settings"
-            android:icon="@mipmap/ic_settings_black_48dp"
-            android:title="@string/action_settings" />
+
     </group>
 
 
