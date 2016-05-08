@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <item
         android:title="@string/add_city_button"
-        android:id="@+id/action_add_task"
-        android:icon="@mipmap/ic_add_white"
+        android:id="@+id/action_load_current_loacation_weather"
+        android:icon="@mipmap/ic_gps_fixed_white_48dp"
         app:showAsAction="ifRoom"
+        android:onClick="searchCurrentLocation"
         />
 </menu>

@@ -8,15 +8,15 @@
     tools:context="com.example.oriolgasset.weatherforecast.AddCityActivity">
 
 
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbarAddCity"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-
     <include layout="@layout/content_add_city" />
+
+    <android.support.design.widget.NavigationView
+        android:id="@+id/toolbarAddCity"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:menu="@menu/add_city_menu"
+        app:popupTheme="@style/AppTheme.PopupOverlay" />
+
 
 </android.support.design.widget.CoordinatorLayout>

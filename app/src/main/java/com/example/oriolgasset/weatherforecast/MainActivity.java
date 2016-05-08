@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +23,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private List<String> cities = new ArrayList<String>();
-    private WeatherClientAdapter weatherClient;
-    private GoogleApiClient mGoogleApiClient;
+    private List<String> cities = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,23 +45,10 @@ public class MainActivity extends AppCompatActivity
 
         Menu m = navigationView.getMenu();
 
-        //weatherClient = new WeatherClientAdapter(this);
 
         cities = loadCities();
         addCitiesToMenu(m, cities);
         loadCurrentWeather(cities.get(0));
-    }
-
-    @Override
-    protected void onStart() {
-        mGoogleApiClient.connect();
-        super.onStart();
-    }
-
-    @Override
-    protected void onStop() {
-        mGoogleApiClient.disconnect();
-        super.onStop();
     }
 
     private void addCitiesToMenu(Menu menu, List<String> cities) {
@@ -78,16 +62,15 @@ public class MainActivity extends AppCompatActivity
 
     private void loadCurrentWeather(String city) {
         //weatherClient.loadForecastByCity(city);
-        RelativeLayout cityLayout = (RelativeLayout) findViewById(R.id.mainInfoLayout);
-        TextView temperatureText = (TextView) cityLayout.findViewById(R.id.temperatureText);
-        TextView maxTemperatureText = (TextView) cityLayout.findViewById(R.id.maxTempValue);
-        TextView minTemperatureText = (TextView) cityLayout.findViewById(R.id.minTempValue);
-        TextView descriptionText = (TextView) cityLayout.findViewById(R.id.descriptionText);
+        TextView temperatureText = (TextView) findViewById(R.id.temperatureText);
+        TextView maxTemperatureText = (TextView) findViewById(R.id.maxTempValue);
+        TextView minTemperatureText = (TextView) findViewById(R.id.minTempValue);
+        TextView descriptionText = (TextView) findViewById(R.id.descriptionText);
         TextView humidityText = (TextView) findViewById(R.id.humidityValue);
         TextView windText = (TextView) findViewById(R.id.windValue);
-        ImageView weatherIcon = (ImageView) cityLayout.findViewById(R.id.weatherIconMain);
+        ImageView weatherIcon = (ImageView) findViewById(R.id.weatherIconMain);
         TextView cityName = (TextView) findViewById(R.id.locationName);
-        TextView realFeelText = (TextView) cityLayout.findViewById(R.id.realFeelValue);
+        TextView realFeelText = (TextView) findViewById(R.id.realFeelValue);
         cityName.setText(city);
         switch (city) {
             case "Barcelona":
@@ -231,7 +214,7 @@ public class MainActivity extends AppCompatActivity
 
 
     private List<String> loadCities() {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         result.add("Barcelona");
         result.add("New York");
         result.add("Paris");
