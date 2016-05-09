@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent" android:id="@+id/mainInfoLayout">
 
@@ -13,7 +13,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="5dp"
-            android:layout_marginTop="5dp">
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8sp"
+            android:layout_marginEnd="8sp">
 
 
             <TextView
@@ -33,7 +35,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/temperatureText"
                 android:layout_below="@+id/temperatureText"
-                android:textAppearance="?android:attr/textAppearanceLarge" />
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="30sp"/>
 
             <TextView
                 android:id="@+id/maxTempText"
@@ -47,7 +50,7 @@
                 android:id="@+id/minTempText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="10dp"
                 android:text="@string/min_temperature"
                 android:layout_alignTop="@+id/maxTempText"
                 android:layout_toEndOf="@+id/maxTempValue" />
@@ -67,7 +70,6 @@
                 android:layout_width="250sp"
                 android:layout_height="130sp"
                 android:contentDescription="@string/weather_icon"
-                android:src="@mipmap/fair"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true" />
 
@@ -101,4 +103,4 @@
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 
-</LinearLayout>
+</RelativeLayout>

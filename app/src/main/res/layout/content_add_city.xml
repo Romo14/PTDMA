@@ -9,7 +9,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.oriolgasset.weatherforecast.AddCityActivity"
-    tools:showIn="@layout/activity_add_city">
+    tools:showIn="@layout/activity_add_city"
+    android:id="@+id/addCityLayout">
 
     <android.support.v7.widget.CardView
         android:id="@+id/view"
@@ -21,7 +22,8 @@
             android:name="com.google.android.gms.location.places.ui.PlaceAutocompleteFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:tag="@string/cities_search" />
+            android:tag="@string/cities_search"
+            />
     </android.support.v7.widget.CardView>
 
     <include
