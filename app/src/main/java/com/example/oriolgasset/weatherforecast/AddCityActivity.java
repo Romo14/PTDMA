@@ -92,7 +92,8 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-                getWeatherForecast(place.getLatLng());
+
+                getWeatherForecast((String) place.getName());
             }
 
             @Override
@@ -132,8 +133,8 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
 
-    private void getWeatherForecast(LatLng latLng) {
-        weatherClient.getCurrentWeather(latLng, mainInfoLayout);
+    private void getWeatherForecast(String cityName) {
+        weatherClient.getCurrentWeather(cityName, mainInfoLayout);
         mainInfoLayout.setVisibility(View.VISIBLE);
     }
 
@@ -229,7 +230,8 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
         if (addresses.size() > 0) {
             autocompleteFragment.setText(addresses.get(0).getLocality());
             latLng = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
+            getWeatherForecast(addresses.get(0).getLocality());
         }
-        getWeatherForecast(latLng);
+
     }
 }

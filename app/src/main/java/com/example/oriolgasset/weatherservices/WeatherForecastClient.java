@@ -11,11 +11,16 @@ import com.survivingwithandroid.weather.lib.WeatherClient;
 import com.survivingwithandroid.weather.lib.WeatherConfig;
 import com.survivingwithandroid.weather.lib.exception.WeatherLibException;
 import com.survivingwithandroid.weather.lib.exception.WeatherProviderInstantiationException;
+import com.survivingwithandroid.weather.lib.model.City;
 import com.survivingwithandroid.weather.lib.model.CurrentWeather;
 import com.survivingwithandroid.weather.lib.model.WeatherForecast;
 import com.survivingwithandroid.weather.lib.model.WeatherHourForecast;
+import com.survivingwithandroid.weather.lib.provider.forecastio.ForecastIOProviderType;
 import com.survivingwithandroid.weather.lib.provider.openweathermap.OpenweathermapProviderType;
+import com.survivingwithandroid.weather.lib.provider.yahooweather.YahooProviderType;
 import com.survivingwithandroid.weather.lib.request.WeatherRequest;
+
+import java.util.List;
 
 /**
  * Created by Oriol on 9/5/2016.
@@ -25,7 +30,7 @@ public class WeatherForecastClient implements WeatherClient.ForecastWeatherEvent
     private static String IMG_URL = "http://openweathermap.org/img/w/";
     private com.survivingwithandroid.weather.lib.WeatherClient weatherClient;
     private String provider;
-    private String API_KEY = "9ac226bfa2820374259ab6f62b83a3bd";
+    private String API_KEY = "dj0yJmk9WXM1MlptaWZTTWZqJmQ9WVdrOWFFeGhlVVJqTkhVbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD00Mw--";
     private CurrentWeather currentCondition;
     private WeatherHourForecast weatherHourForecast;
     private WeatherForecast weatherDailyForecast;
@@ -38,7 +43,7 @@ public class WeatherForecastClient implements WeatherClient.ForecastWeatherEvent
         config.ApiKey = API_KEY;
         try {
             weatherClient = builder.attach(context)
-                    .provider(new OpenweathermapProviderType())
+                    .provider(new YahooProviderType())
                     .httpClient(com.survivingwithandroid.weather.lib.client.okhttp.WeatherDefaultClient.class)
                     .config(config)
                     .build();
@@ -55,10 +60,26 @@ public class WeatherForecastClient implements WeatherClient.ForecastWeatherEvent
         weatherClient.getForecastWeather(new WeatherRequest(latLng.longitude, latLng.latitude), this);
     }
 
-    public void getCurrentWeather(LatLng latLng, RelativeLayout layout) {
+    public void getCurrentWeather(String cityName, RelativeLayout layout) {
         this.layoutToFill = layout;
-        weatherClient.getCurrentCondition(new WeatherRequest(latLng.longitude, latLng.latitude), this);
-        weatherClient.getForecastWeather(new WeatherRequest(latLng.longitude, latLng.latitude), this);
+        weatherClient.searchCity(cityName, new WeatherClient.CityEventListener() {
+            @Override
+            public void onCityListRetrieved(List<City> cityList) {
+                weatherClient.getCurrentCondition(new WeatherRequest(cityList.get(0).getId()), WeatherForecastClient.this);
+                weatherClient.getForecastWeather(new WeatherRequest(cityList.get(0).getId()), WeatherForecastClient.this);
+            }
+
+            @Override
+            public void onWeatherError(WeatherLibException wle) {
+
+            }
+
+            @Override
+            public void onConnectionError(Throwable t) {
+
+            }
+        });
+
     }
 
     @Override
