@@ -16,7 +16,7 @@ import java.util.concurrent.ExecutionException;
 /**
  * Created by Oriol Gasset on 8/5/2016.
  */
-public class OpenWeatherMapService {
+public class OpenWeatherMapClient {
 
     private static final String BASE_URL =
             "http://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&units=metric";

@@ -23,11 +23,12 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.oriolgasset.model.OpenWeatherMapVO;
-import com.example.oriolgasset.weatherservices.OpenWeatherMapService;
-import com.example.oriolgasset.weatherservices.WeatherForecastClient;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+import com.example.oriolgasset.model.YahooCityResult;
+import com.example.oriolgasset.model.YahooVO;
+import com.example.oriolgasset.weatherservices.YahooClient;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -62,7 +63,6 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
     private ImageView weatherIconImageView;
     private RelativeLayout mainInfoLayout;
     private PlaceAutocompleteFragment autocompleteFragment;
-    private WeatherForecastClient weatherClient;
 
 
     @Override
@@ -109,7 +109,6 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
         autocompleteFragment.setHint(getString(R.string.city_search_hint));
         ((EditText)autocompleteFragment.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(16.0f);
 
-        weatherClient = new WeatherForecastClient(this);
 
         mainInfoLayout.setVisibility(View.INVISIBLE);
 
@@ -134,7 +133,18 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
     }
 
     private void getWeatherForecast(String cityName) {
-        weatherClient.getCurrentWeather(cityName, mainInfoLayout);
+        List<YahooCityResult> cities =  YahooClient.getCityList(cityName);
+        String cityId;
+        if(!cities.isEmpty()){
+            cityId = cities.get(0).getWoeid();
+            YahooClient.getWeather(cityId,"M", Volley.newRequestQueue(getApplicationContext()),new YahooClient.WeatherClientListener() {
+
+                @Override
+                public void onWeatherResponse(YahooVO weather) {
+                    mainInfoLayout.setVisibility(View.VISIBLE);
+                }
+            });
+        }
         mainInfoLayout.setVisibility(View.VISIBLE);
     }
 

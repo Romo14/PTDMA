@@ -31,7 +31,5 @@ dependencies {
     compile 'com.google.android.gms:play-services-ads:8.4.0'
     compile 'com.google.android.gms:play-services-auth:8.4.0'
     compile 'com.google.android.gms:play-services-gcm:8.4.0'
-    compile 'com.survivingwithandroid:weatherlib:1.6.0'
-    compile 'com.survivingwithandroid:weatherlib_okhttpclient:1.6.0'
-    compile 'com.squareup.okhttp:okhttp:2.0.+'
+    compile 'com.android.volley:volley:1.0.0'
 }
