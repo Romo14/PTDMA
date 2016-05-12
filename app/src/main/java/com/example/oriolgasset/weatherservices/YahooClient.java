@@ -38,7 +38,6 @@ public class YahooClient {
             yahooHttpConn.connect();
             XmlPullParser parser = XmlPullParserFactory.newInstance().newPullParser();
             parser.setInput(new InputStreamReader(yahooHttpConn.getInputStream()));
-            Log.d("Swa", "XML Parser ok");
             int event = parser.getEventType();
 
             YahooCityResult cty = null;
