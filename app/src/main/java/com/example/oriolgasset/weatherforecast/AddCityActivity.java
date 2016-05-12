@@ -30,6 +30,7 @@ import com.example.oriolgasset.listener.WeatherServiceListener;
 import com.example.oriolgasset.model.Channel;
 import com.example.oriolgasset.model.YahooCityResult;
 import com.example.oriolgasset.model.YahooVO;
+import com.example.oriolgasset.weatherservices.WeatherForecastClient;
 import com.example.oriolgasset.weatherservices.YahooClient;
 import com.example.oriolgasset.weatherservices.YahooWeatherService;
 import com.google.android.gms.common.ConnectionResult;
@@ -66,7 +67,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
     private ImageView weatherIconImageView;
     private RelativeLayout mainInfoLayout;
     private PlaceAutocompleteFragment autocompleteFragment;
-    private YahooWeatherService weatherService;
+    private WeatherForecastClient weatherService;
 
 
     @Override
@@ -97,7 +98,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
             @Override
             public void onPlaceSelected(Place place) {
 
-                getWeatherForecast((String) place.getName());
+                getWeatherForecast(place.getLatLng());
             }
 
             @Override
@@ -113,7 +114,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
         autocompleteFragment.setHint(getString(R.string.city_search_hint));
         ((EditText)autocompleteFragment.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(16.0f);
 
-        weatherService = new YahooWeatherService(this);
+        weatherService = new WeatherForecastClient(getApplicationContext());
 
         mainInfoLayout.setVisibility(View.INVISIBLE);
 
@@ -137,7 +138,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
 
-    private void getWeatherForecast(String cityName) {
+    private void getWeatherForecast(LatLng latLng) {
         /*List<YahooCityResult> cities =  YahooClient.getCityList(cityName);
         String cityId;
         if(!cities.isEmpty()){
@@ -150,7 +151,10 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
                 }
             });
         }*/
-        weatherService.refreshWeather(cityName);
+
+
+        weatherService.getCurrentWeather(latLng,mainInfoLayout);
+        mainInfoLayout.setVisibility(View.VISIBLE);
     }
 
     private void initiateLocationManager() {
@@ -245,7 +249,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
         if (addresses.size() > 0) {
             autocompleteFragment.setText(addresses.get(0).getLocality());
             latLng = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
-            getWeatherForecast(addresses.get(0).getLocality());
+            getWeatherForecast(latLng);
         }
 
     }
