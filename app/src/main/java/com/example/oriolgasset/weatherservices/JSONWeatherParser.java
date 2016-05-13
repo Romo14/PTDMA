@@ -34,30 +34,79 @@ import com.example.oriolgasset.model.*;
  */
 public class JSONWeatherParser {
 
-	public static OpenWeatherMapVO getWeather(String data) throws JSONException  {
-		OpenWeatherMapVO weather = new OpenWeatherMapVO();
+	public static CityWeather getCurrentWeather(String data) throws JSONException  {
+		CityWeather weather = new CityWeather();
 
-		// We create out JSONObject from the data
 		JSONObject jObj = new JSONObject(data);
-		
-		// We start extracting the info
-		Location loc = new Location();
-		
-		JSONObject coordObj = getObject("coord", jObj);
-		loc.setLatitude(getFloat("lat", coordObj));
-		loc.setLongitude(getFloat("lon", coordObj));
-		
-		JSONObject sysObj = getObject("sys", jObj);
-		loc.setCountry(getString("country", sysObj));
-		loc.setSunrise(getInt("sunrise", sysObj));
-		loc.setSunset(getInt("sunset", sysObj));
-		loc.setCity(getString("name", jObj));
-		weather.location = loc;
-		
+
+		JSONObject locationObj = getObject("location", jObj);
+		weather.setLocationName (getString ("name", locationObj));
+		weather.setLocationRegion (getString ("region", locationObj));
+		weather.setLocationCountry (getString ("country", locationObj));
+
+		JSONObject currentObj = getObject("current", jObj);
+        CurrentWeather current = new CurrentWeather ();
+		current.setCurrentUpdated (getString("last_updated", currentObj));
+        current.setCurrentTemp (getString("temp_c", currentObj));
+        current.setCurrentIsDay (getString("is_day", currentObj));
+
+        JSONObject currentConditionObj = getObject("condition", currentObj);
+        current.setConditionIconCode (getString("icon", currentConditionObj));
+        current.setConditionText (getString("text", currentConditionObj));
+
+        current.setConditionWindSpeed (getString("wind_kph", currentObj));
+        current.setConditionWindDegree (getString("wind_degree", currentObj));
+        current.setConditionWindDir (getString("wind_dir", currentObj));
+        current.setConditionPressure (getString("pressure_mb", currentObj));
+        current.setConditionPrecip (getString("precip_mm", currentObj));
+        current.setConditionHumidity (getString("humidity", currentObj));
+        current.setConditionCloud (getString("cloud", currentObj));
+        current.setConditionFeelsLike (getString("feelslike_c", currentObj));
+
+        weather.setCurrentWeather (current);
+
 		// We get weather info (This is an array)
-		JSONArray jArr = jObj.getJSONArray("weather");
+		JSONArray jArr = jObj.getJSONArray("forecastday");
 		
 		// We use only the first value
+        for (int i = 0; i<jArr.length (); ++i){
+            DailyForecast dailyForecast = new DailyForecast ();
+            JSONObject dailyJSON = jArr.getJSONObject(i);
+            dailyForecast.setDate (getString ("date",dailyJSON));
+            JSONObject dayJSON = dailyJSON.getJSONObject ("day");
+            dailyForecast.setMaxTemp (getString ("maxtemp_c",dayJSON));
+            dailyForecast.setMinTemp (getString ("mintemp_c",dayJSON));
+            dailyForecast.setPrecipitation (getString ("totalprecip_mm",dayJSON));
+
+            JSONObject dayCondition = dayJSON.getJSONObject ("condition");
+            dailyForecast.setConditionText (getString ("text",dayCondition));
+            dailyForecast.setIcon (getString ("icon",dayCondition));
+
+            JSONObject dayAstro = dayJSON.getJSONObject ("astro");
+            dailyForecast.setSunrise (getString ("sunrise",dayAstro));
+            dailyForecast.setSunset (getString ("sunset",dayAstro));
+            dailyForecast.setMoonrise (getString ("moonrise",dayAstro));
+            dailyForecast.setMoonset (getString ("moonset",dayAstro));
+
+            JSONArray hourlyForecastJSON = dailyJSON.getJSONArray ("hour");
+
+            for (int j = 0; j < hourlyForecastJSON.length (); ++j){
+                HourlyForecast hourlyForecast = new HourlyForecast ();
+                JSONObject hourlyJSON = hourlyForecastJSON.getJSONObject (j);
+
+                hourlyForecast.setTime (getString ("time",hourlyJSON));
+                hourlyForecast.setTemp (getString ("temp_c",hourlyJSON));
+                hourlyForecast.setIsDay (getString ("is_day",hourlyJSON));
+                hourlyForecast.setTime (getString ("time",hourlyJSON));
+                hourlyForecast.setTime (getString ("time",hourlyJSON));
+                hourlyForecast.setTime (getString ("time",hourlyJSON));
+                hourlyForecast.setTime (getString ("time",hourlyJSON));
+                hourlyForecast.setTime (getString ("time",hourlyJSON));
+                hourlyForecast.setTime (getString ("time",hourlyJSON));
+
+            }
+
+        }
 		JSONObject JSONWeather = jArr.getJSONObject(0);
 		weather.currentCondition.setWeatherId(getInt("id", JSONWeather));
 		weather.currentCondition.setDescr(getString("description", JSONWeather));
@@ -85,6 +134,15 @@ public class JSONWeatherParser {
 		
 		return weather;
 	}
+
+    public static CityWeather getDailyWeather(String data) throws JSONException  {
+
+    }
+
+    public static CityWeather getHourlyWeather(String data) throws JSONException  {
+
+
+    }
 	
 	
 	private static JSONObject getObject(String tagName, JSONObject jObj)  throws JSONException {

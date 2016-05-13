@@ -24,15 +24,8 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
-import com.example.oriolgasset.listener.WeatherServiceListener;
-import com.example.oriolgasset.model.Channel;
-import com.example.oriolgasset.model.YahooCityResult;
-import com.example.oriolgasset.model.YahooVO;
-import com.example.oriolgasset.weatherservices.WeatherForecastClient;
-import com.example.oriolgasset.weatherservices.YahooClient;
-import com.example.oriolgasset.weatherservices.YahooWeatherService;
+import com.example.oriolgasset.model.OpenWeatherMapVO;
+import com.example.oriolgasset.weatherservices.OpenWeatherMapClient;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
@@ -68,6 +61,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
     private RelativeLayout mainInfoLayout;
     private PlaceAutocompleteFragment autocompleteFragment;
     private WeatherForecastClient weatherService;
+    private OpenWeatherMapClient openWeatherMapClient;
 
 
     @Override
@@ -97,8 +91,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
         autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
             @Override
             public void onPlaceSelected(Place place) {
-
-                getWeatherForecast(place.getLatLng());
+                getWeatherForecast((String) place.getName());
             }
 
             @Override
@@ -115,6 +108,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
         ((EditText)autocompleteFragment.getView().findViewById(R.id.place_autocomplete_search_input)).setTextSize(16.0f);
 
         weatherService = new WeatherForecastClient(getApplicationContext());
+        openWeatherMapClient = new OpenWeatherMapClient();
 
         mainInfoLayout.setVisibility(View.INVISIBLE);
 
@@ -138,22 +132,8 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
         LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
 
-    private void getWeatherForecast(LatLng latLng) {
-        /*List<YahooCityResult> cities =  YahooClient.getCityList(cityName);
-        String cityId;
-        if(!cities.isEmpty()){
-            cityId = cities.get(0).getWoeid();
-            YahooClient.getWeather(cityId,"M", Volley.newRequestQueue(getApplicationContext()),new YahooClient.WeatherClientListener() {
-
-                @Override
-                public void onWeatherResponse(YahooVO weather) {
-                    mainInfoLayout.setVisibility(View.VISIBLE);
-                }
-            });
-        }*/
-
-
-        weatherService.getCurrentWeather(latLng,mainInfoLayout);
+    private void getWeatherForecast(String cityName) {
+        OpenWeatherMapVO weather = openWeatherMapClient.getWeather(cityName);
         mainInfoLayout.setVisibility(View.VISIBLE);
     }
 
@@ -249,7 +229,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
         if (addresses.size() > 0) {
             autocompleteFragment.setText(addresses.get(0).getLocality());
             latLng = new LatLng(addresses.get(0).getLatitude(), addresses.get(0).getLongitude());
-            getWeatherForecast(latLng);
+            getWeatherForecast(addresses.get(0).getLocality());
         }
 
     }
