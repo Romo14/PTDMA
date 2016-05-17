@@ -1,6 +1,7 @@
 package com.example.oriolgasset.weatherforecast;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,22 +12,51 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.example.oriolgasset.utils.WeatherForecastUtils;
+import com.example.oriolgasset.weatherservices.ApixuClient;
+import com.weatherlibrary.datamodel.Forecastday;
+import com.weatherlibrary.datamodel.Hour;
+import com.weatherlibrary.datamodel.WeatherModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private List<String> cities = new ArrayList<>();
+    private ApixuClient weatherClient;
+    private TextView temperatureText;
+    private TextView maxTemperatureText;
+    private TextView minTemperatureText;
+    private TextView descriptionText;
+    private TextView humidityText;
+    private TextView windText;
+    private ImageView weatherIcon;
+    private TextView cityName;
+    private TextView realFeelText;
+    private TextView pressureText;
+    private TextView cloudsText;
+    private TextView precipitationsText;
+    private TextView lastUpdatedText;
+    private SharedPreferences sharedPreferences;
+    private String defaultCity;
+    private WeatherModel weather;
+    private boolean weatherLoaded = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -36,195 +66,197 @@ public class MainActivity extends AppCompatActivity
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.syncState();
-        drawer.findViewById(R.id.citiesMenu);
+        if (drawer != null) {
+            drawer.findViewById(R.id.citiesMenu);
+        }
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        if (navigationView != null) {
+            navigationView.setNavigationItemSelectedListener(this);
+        }
 
-        Menu m = navigationView.getMenu();
+        Menu m = null;
+        if (navigationView != null) {
+            m = navigationView.getMenu();
+        }
 
+        temperatureText = (TextView) findViewById(R.id.temperatureText);
+        maxTemperatureText = (TextView) findViewById(R.id.maxTempValue);
+        minTemperatureText = (TextView) findViewById(R.id.minTempValue);
+        descriptionText = (TextView) findViewById(R.id.descriptionText);
+        humidityText = (TextView) findViewById(R.id.humidityValue);
+        windText = (TextView) findViewById(R.id.windValue);
+        weatherIcon = (ImageView) findViewById(R.id.weatherIconMain);
+        cityName = (TextView) findViewById(R.id.locationName);
+        realFeelText = (TextView) findViewById(R.id.realFeelValue);
+        pressureText = (TextView) findViewById(R.id.pressureValue);
+        precipitationsText = (TextView) findViewById(R.id.precipitationsValue);
+        cloudsText = (TextView) findViewById(R.id.cloudValue);
+        lastUpdatedText = (TextView) findViewById(R.id.lastUpdatedValue);
 
-        cities = loadCities();
-        addCitiesToMenu(m, cities);
-        loadCurrentWeather(cities.get(0));
+        sharedPreferences = getSharedPreferences("weatherForecastPreferences", MODE_PRIVATE);
+
+        weatherClient = new ApixuClient();
+
+        if (!weatherLoaded) {
+            cities = loadCities();
+            addCitiesToMenu(m, cities);
+            loadCurrentWeather(defaultCity);
+        }
+        weatherLoaded = true;
     }
 
     private void addCitiesToMenu(Menu menu, List<String> cities) {
-        menu.add(R.id.citiesMenu, Menu.FIRST, Menu.NONE, cities.get(0)).setIcon(R.mipmap.fair);
-        menu.add(R.id.citiesMenu, Menu.FIRST + 1, Menu.NONE, cities.get(1)).setIcon(R.mipmap.cloudy);
-        menu.add(R.id.citiesMenu, Menu.FIRST + 2, Menu.NONE, cities.get(2)).setIcon(R.mipmap.partly_cloudy);
-        menu.add(R.id.citiesMenu, Menu.FIRST + 3, Menu.NONE, cities.get(3)).setIcon(R.mipmap.rain);
-        menu.add(R.id.citiesMenu, Menu.FIRST + 4, Menu.NONE, cities.get(4)).setIcon(R.mipmap.rain);
+        menu.add(R.id.citiesMenu, Menu.FIRST, Menu.NONE, defaultCity);
+        for (String cityName : cities) {
+            if (!cityName.equals(defaultCity))
+                menu.add(R.id.citiesMenu, Menu.FIRST, Menu.NONE, cityName);
+        }
         menu.add(R.id.group_settings, Menu.FIRST, Menu.NONE, R.string.action_settings).setIcon(R.mipmap.ic_settings_black_48dp);
     }
 
     private void loadCurrentWeather(String city) {
-        //weatherClient.loadForecastByCity(city);
-        TextView temperatureText = (TextView) findViewById(R.id.temperatureText);
-        TextView maxTemperatureText = (TextView) findViewById(R.id.maxTempValue);
-        TextView minTemperatureText = (TextView) findViewById(R.id.minTempValue);
-        TextView descriptionText = (TextView) findViewById(R.id.descriptionText);
-        TextView humidityText = (TextView) findViewById(R.id.humidityValue);
-        TextView windText = (TextView) findViewById(R.id.windValue);
-        ImageView weatherIcon = (ImageView) findViewById(R.id.weatherIconMain);
-        TextView cityName = (TextView) findViewById(R.id.locationName);
-        TextView realFeelText = (TextView) findViewById(R.id.realFeelValue);
         cityName.setText(city);
-        switch (city) {
-            case "Barcelona":
-                temperatureText.setText("18º");
-                maxTemperatureText.setText("21º");
-                minTemperatureText.setText("12º");
-                descriptionText.setText("Sunny");
-                humidityText.setText("54%");
-                windText.setText("17 km/h");
-                weatherIcon.setImageResource(R.mipmap.fair);
-                realFeelText.setText("20º");
-                break;
-            case "New York":
-                temperatureText.setText("9º");
-                maxTemperatureText.setText("14º");
-                minTemperatureText.setText("5º");
-                descriptionText.setText("Cloudy");
-                humidityText.setText("76%");
-                windText.setText("3 km/h");
-                weatherIcon.setImageResource(R.mipmap.cloudy);
-                realFeelText.setText("10º");
-                break;
-            case "London":
-                temperatureText.setText("13º");
-                maxTemperatureText.setText("16º");
-                minTemperatureText.setText("8º");
-                descriptionText.setText("Rain");
-                humidityText.setText("80%");
-                windText.setText("10 km/h");
-                weatherIcon.setImageResource(R.mipmap.rain);
-                realFeelText.setText("11º");
-                break;
-            case "Paris":
-                temperatureText.setText("18º");
-                maxTemperatureText.setText("19º");
-                minTemperatureText.setText("10º");
-                descriptionText.setText("Partly cloudy");
-                humidityText.setText("54%");
-                windText.setText("25 km/h");
-                weatherIcon.setImageResource(R.mipmap.partly_cloudy);
-                realFeelText.setText("16º");
-                break;
-            case "Tokyo":
-                temperatureText.setText("18º");
-                maxTemperatureText.setText("25º");
-                minTemperatureText.setText("15º");
-                descriptionText.setText("Rain");
-                humidityText.setText("90%");
-                windText.setText("2 km/h");
-                weatherIcon.setImageResource(R.mipmap.rain);
-                realFeelText.setText("17º");
-                break;
+        if (WeatherForecastUtils.isConnected(this)) {
+            weather = weatherClient.getWeather(city);
+            if (weather.getLocation() != null) {
+                String location = weather.getLocation().name + ", " + weather.getLocation().getCountry();
+                cityName.setText(location);
+                temperatureText.setText(String.format("%sº", String.valueOf(weather.getCurrent().temp_c)));
+                maxTemperatureText.setText(String.format("%sº", String.valueOf(weather.getForecast().getForecastday().get(0).getDay().maxtemp_c)));
+                minTemperatureText.setText(String.format("%sº", String.valueOf(weather.getForecast().getForecastday().get(0).getDay().mintemp_c)));
+                descriptionText.setText(weather.getCurrent().getCondition().getText());
+                humidityText.setText(String.format("%s%%", String.valueOf(weather.getCurrent().humidity)));
+                windText.setText(String.format("%skm/h %dº %s", weather.getCurrent().wind_kph, weather.getCurrent().wind_degree, weather.getCurrent().wind_dir));
+                weatherIcon.setImageBitmap(weatherClient.getImageData(weather.getCurrent().getCondition().icon));
+                realFeelText.setText(String.format("%sº", String.valueOf(weather.getCurrent().feelslike_c)));
+                pressureText.setText(String.format("%smb", weather.getCurrent().pressure_mb));
+                precipitationsText.setText(String.format("%smm", weather.getCurrent().precip_mm));
+                cloudsText.setText(String.valueOf(weather.getCurrent().cloud));
+                lastUpdatedText.setText((weather.getCurrent().last_updated));
+                loadHourlyForecast(weather);
+                loadDailyForecast(weather);
+            }
+        } else {
+            Toast.makeText(MainActivity.this, "Weather information could not be retrieved", Toast.LENGTH_SHORT).show();
         }
-
-        loadHourlyForecast(city);
-        loadDailyForecast(city);
     }
 
-    private void loadHourlyForecast(String city) {
+    private void loadHourlyForecast(WeatherModel weather) {
         LinearLayout hourlyLinearLayoutParent = (LinearLayout) findViewById(R.id.hourlyParentLayout);
-        hourlyLinearLayoutParent.removeAllViews();
+        if (hourlyLinearLayoutParent != null) {
+            hourlyLinearLayoutParent.removeAllViews();
+        }
 
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
         layoutParams.setMargins(20, 10, 20, 10);
 
+        if (hourlyLinearLayoutParent != null) {
+            int i = 0;
+            int j = 0;
+            while (i < 24) {
+                for (Hour hour : weather.getForecast().getForecastday().get(j).getHour()) {
+                    if (hour.time_epoch > weather.getLocation().localtime_epoch) {
+                        LinearLayout ll = new LinearLayout(this);
+                        ll.setOrientation(LinearLayout.VERTICAL);
 
-        for (int i = 0; i < 24; ++i) {
-            LinearLayout ll = new LinearLayout(this);
-            ll.setOrientation(LinearLayout.VERTICAL);
+                        TextView hourView = new TextView(this);
+                        String hourText = String.format("%s", hour.getTime().substring(10));
+                        hourView.setText(hourText);
+                        hourView.setGravity(Gravity.CENTER);
+                        ll.addView(hourView);
 
-            TextView hour = new TextView(this);
-            String hourText = String.valueOf(i) + ":00";
-            hour.setText(hourText);
-            hour.setGravity(Gravity.CENTER);
-            ll.addView(hour);
+                        TextView temp = new TextView(this);
+                        String tempText = String.format("%sº", String.valueOf(hour.getTempC()));
+                        temp.setText(tempText);
+                        temp.setGravity(Gravity.CENTER);
+                        ll.addView(temp);
 
-            TextView temp = new TextView(this);
-            String tempText = String.valueOf(i + 3) + "º";
-            temp.setText(tempText);
-            temp.setGravity(Gravity.CENTER);
-            ll.addView(temp);
+                        ImageView icon = new ImageView(this);
+                        icon.setImageBitmap(weatherClient.getImageData(hour.getCondition().icon));
+                        icon.setMinimumHeight(64);
+                        icon.setMinimumWidth(64);
+                        ll.addView(icon);
 
-            ImageView icon = new ImageView(this);
-
-            if (i % 2 == 0) {
-                icon.setImageResource(R.mipmap.fog);
-            } else {
-                icon.setImageResource(R.mipmap.thunderstorms);
+                        hourlyLinearLayoutParent.addView(ll, layoutParams);
+                        ++i;
+                    }
+                }
+                ++j;
             }
-            ll.addView(icon);
-
-            hourlyLinearLayoutParent.addView(ll, layoutParams);
         }
     }
 
-    private void loadDailyForecast(String city) {
+    private void loadDailyForecast(WeatherModel weather) {
         LinearLayout dailyLinearLayoutParent = (LinearLayout) findViewById(R.id.dailyParentLayout);
-        dailyLinearLayoutParent.removeAllViews();
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+        if (dailyLinearLayoutParent != null) {
+            dailyLinearLayoutParent.removeAllViews();
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            layoutParams.setMargins(25, 10, 25, 10);
+            for (Forecastday day : weather.getForecast().getForecastday()) {
+                LinearLayout ll = new LinearLayout(this);
+                ll.setOrientation(LinearLayout.VERTICAL);
 
-        layoutParams.setMargins(25, 10, 25, 10);
+                TextView dayView = new TextView(this);
+                String dayText = day.getDate().substring(6).replace('-', '/');
+                dayView.setText(dayText);
+                dayView.setGravity(Gravity.CENTER);
+                ll.addView(dayView);
 
-        for (int i = 0; i < 5; ++i) {
-            LinearLayout ll = new LinearLayout(this);
-            ll.setOrientation(LinearLayout.VERTICAL);
-
-            TextView day = new TextView(this);
-            String dayText = String.valueOf(i + 1) + "/04";
-            day.setText(dayText);
-            day.setGravity(Gravity.CENTER);
-            ll.addView(day);
-
-            TextView temp = new TextView(this);
-            String tempText = String.valueOf(i + 3) + "º " + String.valueOf(i + 10) + "º";
-            temp.setText(tempText);
-            temp.setGravity(Gravity.CENTER);
-            ll.addView(temp);
-
-            ImageView icon = new ImageView(this);
+                TextView temp = new TextView(this);
+                String tempText = String.format("%sº %sº", String.valueOf(day.getDay().maxtemp_c), String.valueOf(day.getDay().mintemp_c));
+                temp.setText(tempText);
+                temp.setGravity(Gravity.CENTER);
+                ll.addView(temp);
 
 
-            TextView description = new TextView(this);
-            if (i % 2 == 0) {
-                description.setText("Mostly cloudy");
-                icon.setImageResource(R.mipmap.mostly_cloudy);
-            } else {
-                description.setText("Rain");
-                icon.setImageResource(R.mipmap.rain);
+                TextView descriptionView = new TextView(this);
+                String description = day.getDay().getCondition().getText();
+                descriptionView.setText(description);
+                descriptionView.setGravity(Gravity.CENTER);
+                ll.addView(descriptionView);
+
+                ImageView icon = new ImageView(this);
+                icon.setImageBitmap(weatherClient.getImageData(day.getDay().getCondition().icon));
+                icon.setMinimumHeight(64);
+                icon.setMinimumWidth(64);
+                ll.addView(icon);
+
+                dailyLinearLayoutParent.addView(ll, layoutParams);
             }
-            description.setGravity(Gravity.CENTER);
-            ll.addView(description);
-
-            ll.addView(icon);
-
-            dailyLinearLayoutParent.addView(ll, layoutParams);
         }
     }
 
 
     private List<String> loadCities() {
         List<String> result = new ArrayList<>();
-        result.add("Barcelona");
-        result.add("New York");
-        result.add("Paris");
-        result.add("London");
-        result.add("Tokyo");
+        defaultCity = sharedPreferences.getString("defaultCity", "London");
+        Set<String> citiesList = sharedPreferences.getStringSet("citiesList", null);
+        if (citiesList != null) {
+            for (String cityName : citiesList) {
+                result.add(cityName);
+            }
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putStringSet("citiesList", citiesList);
+            editor.putString("defaultCity", "London");
+            editor.apply();
+        } else {
+            result.add("Barcelona");
+            result.add("New York");
+            result.add("Paris");
+            result.add("London");
+            result.add("Tokyo");
+        }
         return result;
     }
-
 
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        assert drawer != null;
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -247,8 +279,6 @@ public class MainActivity extends AppCompatActivity
         if (item.getItemId() == R.id.action_add_task) {
             Intent intent = new Intent(this, AddCityActivity.class);
             startActivity(intent);
-        } else {
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -258,31 +288,27 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         String city = (String) item.getTitle();
-        LinearLayout layout = (LinearLayout) findViewById(R.id.menuHeaderLayout);
         TextView text = (TextView) findViewById(R.id.menuHeaderText);
-        text.setText(city);
-        if (city.equals(cities.get(0))) {
-            loadCurrentWeather(city);
-            layout.setBackgroundResource(R.mipmap.fair_wallpaper);
-        } else if (city.equals(cities.get(1))) {
-            loadCurrentWeather(city);
-            layout.setBackgroundResource(R.mipmap.cloudy_wallpaper);
-        } else if (city.equals(cities.get(2))) {
-            loadCurrentWeather(city);
-            layout.setBackgroundResource(R.mipmap.partly_cloudy_wallpaper);
-        } else if (city.equals(cities.get(3))) {
-            loadCurrentWeather(city);
-            layout.setBackgroundResource(R.mipmap.rain_wallpaper);
-        } else if (city.equals(cities.get(4))) {
-            loadCurrentWeather(city);
-            layout.setBackgroundResource(R.mipmap.rain_wallpaper);
-        } else if (city.equals(getResources().getString(R.string.action_settings))) {
+        if (text != null) {
+            text.setText(city);
+        }
+        // TODO afegir imatge background header + icona del temps
+
+        if (city.equals(getResources().getString(R.string.action_settings))) {
             Intent intent = new Intent(this, SettingsActivity.class);
             startActivity(intent);
+        } else {
+            loadCurrentWeather(city);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
+        if (drawer != null) {
+            drawer.closeDrawer(GravityCompat.START);
+        }
         return true;
+    }
+
+    public void focusAdditionalInfo(View view) {
+        // TODO focus daily forecast
     }
 }

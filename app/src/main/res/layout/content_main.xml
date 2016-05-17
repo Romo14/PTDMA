@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:text="@string/city_name"
+            android:text=""
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textSize="30sp" />
 
@@ -93,7 +93,7 @@
             android:layout_marginTop="10sp">
 
             <HorizontalScrollView
-                android:id="@+id/dailyhorizontalScrollView"
+                android:id="@+id/dailyHorizontalScrollView"
                 android:layout_width="fill_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentStart="false">
@@ -109,7 +109,8 @@
                         android:layout_marginBottom="8sp"
                         android:layout_marginStart="8sp"
                         android:layout_marginTop="5sp"
-                        android:text="@string/daily_forecast" />
+                        android:text="@string/daily_forecast"
+                        android:onClick="focusAdditionalInfo"/>
 
                     <LinearLayout
                         android:id="@+id/dailyParentLayout"
@@ -165,10 +166,8 @@
                     android:id="@+id/windText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
                     android:layout_alignStart="@+id/textView"
                     android:layout_below="@+id/humidityText"
-                    android:paddingBottom="10dp"
                     android:text="@string/wind" />
 
                 <TextView
@@ -188,6 +187,75 @@
                     android:layout_marginLeft="5dp"
                     android:layout_toEndOf="@+id/windText"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/pressure"
+                    android:id="@+id/pressureText"
+                    android:layout_below="@+id/windValue"
+                    android:layout_alignStart="@+id/windText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/pressureValue"
+                    android:layout_below="@+id/windValue"
+                    android:layout_marginLeft="5dp"
+                    android:layout_toEndOf="@+id/pressureText"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/clouds"
+                    android:id="@+id/cloudText"
+                    android:layout_below="@+id/pressureText"
+                    android:layout_alignStart="@+id/pressureText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/cloudValue"
+                    android:layout_marginLeft="5dp"
+                    android:layout_below="@+id/pressureValue"
+                    android:layout_toEndOf="@+id/cloudText"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/precipitations"
+                    android:id="@+id/precipitationsText"
+                    android:layout_below="@+id/cloudText"
+                    android:layout_alignStart="@+id/cloudText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/precipitationsValue"
+                    android:layout_marginLeft="5dp"
+                    android:layout_below="@+id/cloudValue"
+                    android:layout_toEndOf="@+id/precipitationsText"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/last_updated"
+                    android:id="@+id/lastUpdatedText"
+                    android:layout_below="@+id/precipitationsText"
+                    android:layout_alignStart="@+id/precipitationsText"
+                    android:layout_marginBottom="10dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/lastUpdatedValue"
+                    android:layout_marginLeft="5dp"
+                    android:layout_below="@+id/precipitationsValue"
+                    android:layout_toEndOf="@+id/lastUpdatedText"
+                    android:textStyle="bold"/>
 
             </RelativeLayout>
         </android.support.v7.widget.CardView>
@@ -217,6 +285,7 @@
 
             </RelativeLayout>
         </android.support.v7.widget.CardView>
+
     </RelativeLayout>
 </ScrollView>
 

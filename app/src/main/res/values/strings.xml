@@ -84,4 +84,10 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+    <string name="current_weather">Current weather</string>
+    <string name="pressure">Pressure</string>
+    <string name="clouds">Clouds</string>
+    <string name="precipit_ations">Precipit ations</string>
+    <string name="precipitations">Precipitations</string>
+    <string name="last_updated">Last updated</string>
 </resources>

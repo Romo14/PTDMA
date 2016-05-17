@@ -45,5 +45,7 @@
         android:onClick="addCity"
         android:src="@mipmap/ic_add_white" />
 
-
+    <include layout="@layout/loading_layout" />
 </RelativeLayout>
+
+
