@@ -166,7 +166,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
                 temperatureTextView.setText(String.format("%sº", String.valueOf(weather.getCurrent().temp_c)));
                 descriptionTextView.setText(weather.getCurrent().getCondition().getText());
                 realFeelTextView.setText(String.format("%sº", String.valueOf(weather.getCurrent().feelslike_c)));
-                weatherIconImageView.setImageBitmap(weatherClient.getImageData(weather.getCurrent().getCondition().icon));
+                weatherIconImageView.setImageResource(weatherClient.getImageData(weather.getCurrent().getCondition()));
                 autocompleteFragment.setText(weather.getLocation().getName());
                 maxTemperatureTextView.setText(String.format("%sº", String.valueOf(weather.getForecast().getForecastday().get(0).getDay().maxtemp_c)));
                 minTemperatureTextView.setText(String.format("%sº", String.valueOf(weather.getForecast().getForecastday().get(0).getDay().mintemp_c)));

@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity
                 descriptionText.setText(weather.getCurrent().getCondition().getText());
                 humidityText.setText(String.format("%s%%", String.valueOf(weather.getCurrent().humidity)));
                 windText.setText(String.format("%skm/h %dº %s", weather.getCurrent().wind_kph, weather.getCurrent().wind_degree, weather.getCurrent().wind_dir));
-                weatherIcon.setImageBitmap(weatherClient.getImageData(weather.getCurrent().getCondition().icon));
+                weatherIcon.setImageResource(weatherClient.getImageData(weather.getCurrent().getCondition()));
                 realFeelText.setText(String.format("%sº", String.valueOf(weather.getCurrent().feelslike_c)));
                 pressureText.setText(String.format("%smb", weather.getCurrent().pressure_mb));
                 precipitationsText.setText(String.format("%smm", weather.getCurrent().precip_mm));
@@ -175,7 +175,7 @@ public class MainActivity extends AppCompatActivity
                         ll.addView(temp);
 
                         ImageView icon = new ImageView(this);
-                        icon.setImageBitmap(weatherClient.getImageData(hour.getCondition().icon));
+                        icon.setImageResource(weatherClient.getImageData(hour.getCondition()));
                         icon.setMinimumHeight(64);
                         icon.setMinimumWidth(64);
                         ll.addView(icon);
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity
                 ll.addView(descriptionView);
 
                 ImageView icon = new ImageView(this);
-                icon.setImageBitmap(weatherClient.getImageData(day.getDay().getCondition().icon));
+                icon.setImageResource(weatherClient.getImageData(day.getDay().getCondition()));
                 icon.setMinimumHeight(64);
                 icon.setMinimumWidth(64);
                 ll.addView(icon);
