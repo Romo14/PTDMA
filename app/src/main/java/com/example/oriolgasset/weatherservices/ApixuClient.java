@@ -189,146 +189,124 @@ public class ApixuClient implements IRepository {
                 if (condition.icon.contains("day")) return R.mipmap.sun;
                 return R.mipmap.moon;
             case 1003:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_with_1cloud;
+                return R.mipmap.moon_with_clouds;
             case 1006:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds;
             case 1009:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds;
             case 1030:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_haze_01;
+                return R.mipmap.moon_haze_01;
             case 1063:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_with_2cloud_littlerain;
+                return R.mipmap.moon_drizzle_01;
             case 1066:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_with_clouds_littlesnow;
+                return R.mipmap.moon_with_clouds_littlesnow;
             case 1069:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_rain_snow_01;
+                return R.mipmap.moon_rain_snow_01;
             case 1072:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_littlerain;
             case 1087:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.clouds_with_lighting;
+                return R.mipmap.moon_clouds_thunder_01;
             case 1114:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_littlesnow;
             case 1117:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_snow;
             case 1135:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_haze_01;
+                return R.mipmap.moon_haze_01;
             case 1147:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_haze_01;
+                return R.mipmap.moon_haze_01;
             case 1150:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_littlerain;
             case 1153:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_littlerain;
             case 1168:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_littlerain;
             case 1171:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_littlerain;
             case 1180:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_with_2cloud_littlerain;
+                return R.mipmap.moon_drizzle_01;
             case 1183:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_littlerain;
             case 1186:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_with_2cloud_littlerain;
+                return R.mipmap.moon_drizzle_01;
             case 1189:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_littlerain;
             case 1192:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_with_2cloud_rain;
+                return R.mipmap.moon_drizzle_01;
             case 1195:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_rain;
             case 1198:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_rain;
             case 1201:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_rain;
             case 1204:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_rain_snow_01;
+                return R.mipmap.moon_rain_snow_01;
             case 1207:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_rain_snow_01;
+                return R.mipmap.moon_rain_snow_01;
             case 1210:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_with_clouds_snow;
+                return R.mipmap.moon_with_clouds_snow;
             case 1213:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_littlesnow;
             case 1216:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_with_clouds_snow;
+                return R.mipmap.moon_with_clouds_snow;
             case 1219:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_littlesnow;
             case 1222:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_with_clouds_snow;
+                return R.mipmap.moon_with_clouds_snow;
             case 1225:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_snow;
             case 1237:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_snow;
             case 1240:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_with_2cloud_littlerain;
+                return R.mipmap.moon_drizzle_01;
             case 1243:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_with_2cloud_rain;
+                return R.mipmap.moon_drizzle_01;
             case 1246:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_rain;
             case 1249:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_rain_snow_01;
+                return R.mipmap.moon_rain_snow_01;
             case 1252:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_rain_snow_01;
+                return R.mipmap.moon_rain_snow_01;
             case 1255:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_with_clouds_snow;
+                return R.mipmap.moon_with_clouds_snow;
             case 1258:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_with_clouds_snow;
+                return R.mipmap.moon_with_clouds_snow;
             case 1261:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_with_clouds_snow;
+                return R.mipmap.moon_with_clouds_snow;
             case 1264:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.sun_with_clouds_snow;
+                return R.mipmap.moon_with_clouds_snow;
             case 1273:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                if (condition.icon.contains("day")) return R.mipmap.clouds_with_lighting_littlerain;
+                return R.mipmap.moon_clouds_thunder_01;
             case 1276:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_lighting_rain;
             case 1279:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_lighting_rain;
             case 1282:
-                if (condition.icon.contains("day")) return R.mipmap.sun;
-                return R.mipmap.moon;
+                return R.mipmap.clouds_with_lighting_rain;
         }
 
         return 0;

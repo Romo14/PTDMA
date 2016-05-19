@@ -76,7 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_below="@+id/hourlyForecastText"
-                        android:divider="@color/colorPrimary"
+                        android:divider="@color/primary"
                         android:dividerPadding="5sp"
                         android:orientation="horizontal">
 
@@ -117,7 +117,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_below="@+id/dailyForecastText"
-                        android:divider="@color/colorPrimary"
+                        android:divider="@color/primary"
                         android:dividerPadding="5dp"
                         android:orientation="horizontal">
 
