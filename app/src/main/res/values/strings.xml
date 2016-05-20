@@ -90,4 +90,5 @@
     <string name="precipit_ations">Precipit ations</string>
     <string name="precipitations">Precipitations</string>
     <string name="last_updated">Last updated</string>
+    <string name="no_location_detected">No location found</string>
 </resources>
