@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -107,6 +108,10 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void addCitiesToMenu(Menu menu, List<String> cities) {
+        TextView text = (TextView) findViewById(R.id.menuHeaderText);
+        if (text != null) {
+            text.setText(defaultCity);
+        }
         menu.add(R.id.citiesMenu, Menu.FIRST, Menu.NONE, defaultCity);
         for (String cityName : cities) {
             if (!cityName.equals(defaultCity))
@@ -151,14 +156,14 @@ public class MainActivity extends AppCompatActivity
         LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        layoutParams.setMargins(20, 10, 20, 10);
+        layoutParams.setMargins(35, 10, 35, 10);
 
         if (hourlyLinearLayoutParent != null) {
             int i = 0;
             int j = 0;
             while (i < 24) {
                 for (Hour hour : weather.getForecast().getForecastday().get(j).getHour()) {
-                    if (hour.time_epoch > weather.getLocation().localtime_epoch) {
+                    if (hour.time_epoch > weather.getLocation().localtime_epoch && i < 24) {
                         LinearLayout ll = new LinearLayout(this);
                         ll.setOrientation(LinearLayout.VERTICAL);
 
@@ -168,17 +173,15 @@ public class MainActivity extends AppCompatActivity
                         hourView.setGravity(Gravity.CENTER);
                         ll.addView(hourView);
 
+                        ImageView icon = new ImageView(this);
+                        icon.setImageResource(weatherClient.getImageData(hour.getCondition()));
+                        ll.addView(icon);
+
                         TextView temp = new TextView(this);
                         String tempText = String.format("%sº", String.valueOf(hour.getTempC()));
                         temp.setText(tempText);
                         temp.setGravity(Gravity.CENTER);
                         ll.addView(temp);
-
-                        ImageView icon = new ImageView(this);
-                        icon.setImageResource(weatherClient.getImageData(hour.getCondition()));
-                        icon.setMinimumHeight(64);
-                        icon.setMinimumWidth(64);
-                        ll.addView(icon);
 
                         hourlyLinearLayoutParent.addView(ll, layoutParams);
                         ++i;
@@ -195,7 +198,7 @@ public class MainActivity extends AppCompatActivity
             dailyLinearLayoutParent.removeAllViews();
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            layoutParams.setMargins(25, 10, 25, 10);
+            layoutParams.setMargins(35, 15, 35, 15);
             for (Forecastday day : weather.getForecast().getForecastday()) {
                 LinearLayout ll = new LinearLayout(this);
                 ll.setOrientation(LinearLayout.VERTICAL);
@@ -206,23 +209,26 @@ public class MainActivity extends AppCompatActivity
                 dayView.setGravity(Gravity.CENTER);
                 ll.addView(dayView);
 
-                TextView temp = new TextView(this);
-                String tempText = String.format("%sº %sº", String.valueOf(day.getDay().maxtemp_c), String.valueOf(day.getDay().mintemp_c));
-                temp.setText(tempText);
-                temp.setGravity(Gravity.CENTER);
-                ll.addView(temp);
+                LinearLayout llaux = new LinearLayout(this);
+                llaux.setOrientation(LinearLayout.HORIZONTAL);
 
+                TextView maxTemp = new TextView(this);
+                String tempText = String.format("%sº ", String.valueOf(day.getDay().maxtemp_c));
+                maxTemp.setText(tempText);
+                maxTemp.setTextColor(ContextCompat.getColor(this,R.color.primary_text));
+                llaux.addView(maxTemp);
 
-                TextView descriptionView = new TextView(this);
-                String description = day.getDay().getCondition().getText();
-                descriptionView.setText(description);
-                descriptionView.setGravity(Gravity.CENTER);
-                ll.addView(descriptionView);
+                TextView minTemp = new TextView(this);
+                String minTempText = String.format("%sº", String.valueOf(day.getDay().mintemp_c));
+                minTemp.setText(minTempText);
+                minTemp.setTextColor(ContextCompat.getColor(this,R.color.secondary_text));
+                llaux.addView(minTemp);
+
+                llaux.setGravity(Gravity.CENTER);
+                ll.addView(llaux);
 
                 ImageView icon = new ImageView(this);
                 icon.setImageResource(weatherClient.getImageData(day.getDay().getCondition()));
-                icon.setMinimumHeight(64);
-                icon.setMinimumWidth(64);
                 ll.addView(icon);
 
                 dailyLinearLayoutParent.addView(ll, layoutParams);
