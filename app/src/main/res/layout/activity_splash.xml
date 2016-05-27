@@ -5,10 +5,10 @@
               android:orientation="vertical"
               android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
 
-    <VideoView
-        android:id="@+id/videoView"
+    <pl.droidsonroids.gif.GifImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
+        android:layout_height="match_parent"
+        android:src="@drawable/intro"
+        android:background="@drawable/intro"
         />
 </LinearLayout>

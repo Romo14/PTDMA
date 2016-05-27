@@ -30,7 +30,7 @@
         <activity
             android:name=".SplashScreen"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.Transparent">
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -39,7 +39,7 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBk_pIpN2zJz578Hw4gPw1S5jshfDHHhaA" />
+            android:value="AIzaSyBCDTk_DbLLLrnm0WMnkQoc5-phuI9Hyw4" />
 
         <activity
             android:name=".SettingsActivity"
@@ -48,7 +48,11 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.oriolgasset.weatherforecast.MainActivity" />
-        </activity>
+        </activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
     </application>
 
 </manifest>

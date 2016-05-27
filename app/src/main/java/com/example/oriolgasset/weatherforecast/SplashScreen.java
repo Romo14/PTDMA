@@ -1,5 +1,6 @@
 package com.example.oriolgasset.weatherforecast;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,20 +11,14 @@ import android.widget.VideoView;
 /**
  * Created by Oriol on 15/5/2016.
  */
-public class SplashScreen extends AppCompatActivity {
+public class SplashScreen extends Activity {
 
-    private static final long SPLASH_TIME_OUT = 3000;
+    private static final long SPLASH_TIME_OUT = 2000;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_splash);
-        VideoView video = (VideoView) findViewById (R.id.videoView);
-        Uri uri = Uri.parse ("android.resource://" + getPackageName () + "/" + R.raw.intro);
-        if (video != null) {
-            video.setVideoURI (uri);
-        }
-
         new Handler ().postDelayed (new Runnable () {
             @Override
             public void run() {

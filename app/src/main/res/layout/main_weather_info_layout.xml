@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mainInfoLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+                android:id="@+id/mainInfoLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
     <android.support.v7.widget.CardView
         android:id="@+id/mainInfoCardView"
@@ -14,10 +14,12 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="5dp"
-            android:layout_marginEnd="8sp"
-            android:layout_marginLeft="8sp"
-            android:layout_marginTop="8dp">
+            android:layout_marginBottom="12sp"
+            android:layout_marginEnd="12sp"
+            android:layout_marginLeft="12sp"
+            android:layout_marginTop="12sp"
+            android:paddingEnd="10sp"
+            android:paddingStart="10sp">
 
             <TextView
                 android:id="@+id/currentWeather"
@@ -25,9 +27,10 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="6dp"
                 android:text="@string/current_weather"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/secondary_text"
+                />
 
             <TextView
                 android:id="@+id/temperatureText"
@@ -36,8 +39,8 @@
                 android:layout_alignStart="@+id/currentWeather"
                 android:layout_below="@+id/currentWeather"
                 android:textAlignment="center"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="40sp" />
+                android:textSize="50sp"
+                />
 
             <TextView
                 android:id="@+id/descriptionText"
@@ -45,8 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/temperatureText"
                 android:layout_below="@+id/temperatureText"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="24sp" />
+                android:textSize="20sp"/>
 
             <TextView
                 android:id="@+id/maxTempText"
@@ -54,19 +56,19 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/descriptionText"
                 android:layout_below="@+id/realFeelText"
-                android:layout_marginTop="7dp"
                 android:text="@string/max_temperature"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/secondary_text"
+                android:layout_marginTop="3sp"/>
 
             <TextView
                 android:id="@+id/minTempText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/maxTempText"
-                android:layout_marginStart="10dp"
+                android:layout_marginStart="6sp"
                 android:layout_toEndOf="@+id/maxTempValue"
                 android:text="@string/min_temperature"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/secondary_text"/>
 
             <TextView
                 android:id="@+id/minTempValue"
@@ -74,7 +76,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/minTempText"
                 android:layout_marginStart="5dp"
-                android:layout_toEndOf="@+id/minTempText" />
+                android:layout_toEndOf="@+id/minTempText"/>
 
 
             <ImageView
@@ -83,7 +85,7 @@
                 android:layout_height="128sp"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
-                android:contentDescription="@string/weather_icon" />
+                android:contentDescription="@string/weather_icon"/>
 
             <TextView
                 android:id="@+id/maxTempValue"
@@ -91,7 +93,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/maxTempText"
                 android:layout_marginLeft="5dp"
-                android:layout_toEndOf="@+id/maxTempText" />
+                android:layout_toEndOf="@+id/maxTempText"/>
 
             <TextView
                 android:id="@+id/realFeelValue"
@@ -100,7 +102,7 @@
                 android:layout_alignBaseline="@+id/realFeelText"
                 android:layout_alignBottom="@+id/realFeelText"
                 android:layout_marginLeft="5dp"
-                android:layout_toEndOf="@+id/realFeelText" />
+                android:layout_toEndOf="@+id/realFeelText"/>
 
             <TextView
                 android:id="@+id/realFeelText"
@@ -108,32 +110,31 @@
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/descriptionText"
                 android:layout_below="@+id/descriptionText"
-                android:layout_marginTop="10dp"
                 android:text="@string/real_feel_text"
-                android:textColor="@color/secondary_text" />
+                android:textColor="@color/secondary_text"
+                android:layout_marginTop="3sp"/>
 
             <TextView
                 android:id="@+id/lastUpdatedValue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
+                android:layout_below="@+id/minTempValue"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/secondary_text"
-                android:textSize="12sp" />
+                android:textSize="12sp"/>
 
             <TextView
                 android:id="@+id/lastUpdatedText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/minTempValue"
+                android:layout_marginRight="4sp"
+                android:layout_toStartOf="@id/lastUpdatedValue"
                 android:text="@string/last_updated_text"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textSize="12sp"
-                android:layout_marginTop="10dp"
-                android:layout_marginRight="4sp"
                 android:textColor="@color/secondary_text"
-                android:layout_below="@+id/minTempValue"
-                android:layout_toStartOf="@id/lastUpdatedValue" />
+                android:textSize="12sp"/>
 
         </RelativeLayout>
     </android.support.v7.widget.CardView>
