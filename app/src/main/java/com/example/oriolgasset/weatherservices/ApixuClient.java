@@ -65,7 +65,7 @@ public class ApixuClient implements IRepository {
                                RequestBlocks.Days ForecastOfDays) throws Exception {
         String cityName = URLEncoder.encode(value, "UTF-8");
         url = APIURL + RequestBuilder.PrepareRequest(RequestBlocks.MethodType.Forecast, key, getBy, cityName);
-        url += "&days=5";
+        url += "&days=10";
         this.weatherModel = new getWeatherList().execute(url).get();
     }
 

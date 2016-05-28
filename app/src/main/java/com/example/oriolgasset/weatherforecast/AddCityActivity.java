@@ -86,7 +86,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
         loadingPanel = (RelativeLayout) findViewById (R.id.loadingPanel);
         addButton = (FloatingActionButton) findViewById (R.id.addCityButton);
         if (addButton != null) {
-            addButton.setVisibility (View.GONE);
+            addButton.setVisibility (View.INVISIBLE);
         }
 
         buildGoogleApiClient ();
@@ -97,6 +97,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
         autocompleteFragment.setOnPlaceSelectedListener (new PlaceSelectionListener () {
             @Override
             public void onPlaceSelected(Place place) {
+                mainInfoLayout.setVisibility(View.GONE);
                 loadingPanel.setVisibility (View.VISIBLE);
                 getCityName (place.getLatLng ());
                 getWeatherForecast (place.getLatLng ());
@@ -134,6 +135,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
         });
 
         sharedPreferences = getSharedPreferences ("weatherForecastPreferences", MODE_PRIVATE);
+        loadingPanel.setVisibility(View.GONE);
 
         mainInfoLayout.setVisibility (View.INVISIBLE);
         weatherClient = new ApixuClient ();
@@ -174,6 +176,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
                 realFeelTextView.setText (String.format ("%sº", String.valueOf (weather.getCurrent ().feelslike_c)));
                 weatherIconImageView.setImageResource (weatherClient.getImageData (weather.getCurrent ().getCondition ()));
                 ((EditText) autocompleteFragment.getView ().findViewById (R.id.place_autocomplete_search_input)).setText (cityName);
+                autocompleteFragment.setText(cityName);
                 maxTemperatureTextView.setText (String.format ("%sº", String.valueOf (weather.getForecast ().getForecastday ().get (0).getDay ().maxtemp_c)));
                 minTemperatureTextView.setText (String.format ("%sº", String.valueOf (weather.getForecast ().getForecastday ().get (0).getDay ().mintemp_c)));
                 lastUpdatedText.setText ((weather.getCurrent ().last_updated));
@@ -212,6 +215,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
             }
             cities = new LinkedHashSet<> (citiesAux);
             editor.putStringSet ("citiesList", cities);
+            editor.putString("newCity",cityName);
             editor.commit ();
         }
         setResult (1);

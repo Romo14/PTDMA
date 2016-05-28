@@ -17,8 +17,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
         android:id="@+id/menuHeaderText"
-        android:textColor="#FFFFFF"
-        android:textSize="30sp"/>
+        android:textColor="@color/cardview_light_background"
+        android:textSize="30sp"
+        android:paddingLeft="10sp"/>
 </LinearLayout>

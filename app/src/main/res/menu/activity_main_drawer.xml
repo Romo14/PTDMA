@@ -4,14 +4,11 @@
     <group
         android:id="@+id/citiesMenu"
         android:checkableBehavior="single">
-
-
     </group>
 
     <group
         android:id="@+id/group_settings"
         android:checkableBehavior="single">
-
     </group>
 
 
