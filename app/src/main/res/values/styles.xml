@@ -32,13 +32,20 @@
         <item name="android:windowNoTitle">true</item>
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:actionMenuTextColor">@color/secondary_text</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
 
         <!-- To change the background of options menu-->
         <item name="android:itemBackground">@color/primary</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:actionMenuTextColor">@color/secondary_text</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+        <!-- To change the background of options menu-->
+        <item name="android:itemBackground">@color/primary</item>
+    </style>
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
 </resources>
