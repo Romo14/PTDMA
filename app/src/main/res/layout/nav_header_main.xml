@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/menuHeaderLayout"
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
+    android:background="@mipmap/fair_wallpaper"
     android:gravity="bottom"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
@@ -10,15 +12,13 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:theme="@style/ThemeOverlay.AppCompat.Dark"
-    tools:showIn="@layout/activity_main"
-    android:background="@mipmap/fair_wallpaper"
-    android:id="@+id/menuHeaderLayout">
+    tools:showIn="@layout/activity_main">
 
     <TextView
+        android:id="@+id/menuHeaderText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/menuHeaderText"
+        android:paddingLeft="10sp"
         android:textColor="@color/cardview_light_background"
-        android:textSize="22sp"
-        android:paddingLeft="10sp"/>
+        android:textSize="20sp" />
 </LinearLayout>

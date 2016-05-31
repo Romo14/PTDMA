@@ -2,7 +2,6 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/primary</item>
         <item name="colorAccent">@color/accent</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
@@ -10,6 +9,7 @@
         <item name="android:textColor">@color/background</item>
         <item name="android:gravity">center_vertical</item>
         <item name="android:minHeight">24sp</item>
+        <item name="android:titleTextColor">@android:color/white</item>
     </style>
 
     <style name="AppTheme.Transparent">

@@ -61,11 +61,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_below="@id/hourlyForecastText"
+                        android:layout_marginBottom="5sp"
+                        android:layout_marginTop="2sp"
                         android:background="@color/divider"
                         android:paddingBottom="10sp"
-                        android:paddingTop="2sp"
-                        android:layout_marginTop="2sp"
-                        android:layout_marginBottom="5sp" />
+                        android:paddingTop="2sp" />
 
                     <HorizontalScrollView
                         android:id="@+id/hourlyHorizontalScrollView"
@@ -73,6 +73,8 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentStart="true"
                         android:layout_below="@id/hourlyDivider"
+                        android:layout_marginRight="10sp"
+                        android:fillViewport="false"
                         android:scrollbars="none">
 
                         <LinearLayout
@@ -116,11 +118,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_below="@id/dailyForecastText"
+                        android:layout_marginBottom="5sp"
+                        android:layout_marginTop="2sp"
                         android:background="@color/divider"
                         android:paddingBottom="2sp"
-                        android:paddingTop="10sp"
-                        android:layout_marginTop="2sp"
-                        android:layout_marginBottom="5sp" />
+                        android:paddingTop="10sp" />
 
                     <HorizontalScrollView
                         android:id="@+id/dailyHorizontalScrollView"
