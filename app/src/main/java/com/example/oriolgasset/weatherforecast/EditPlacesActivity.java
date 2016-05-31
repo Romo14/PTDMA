@@ -56,7 +56,7 @@ public class EditPlacesActivity extends AppCompatActivity {
 
         /* Enable drag and drop functionality */
             listView.enableDragAndDrop ();
-            listView.setDraggableManager (new TouchViewDraggableManager (R.id.rowTextView));
+            listView.setDraggableManager (new TouchViewDraggableManager (R.id.list_row_draganddrop_textview));
             listView.setOnItemMovedListener (new MyOnItemMovedListener (adapter));
             listView.setOnItemLongClickListener (
                     new AdapterView.OnItemLongClickListener () {

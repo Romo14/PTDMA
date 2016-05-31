@@ -8,6 +8,8 @@
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textColor">@color/background</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">24sp</item>
     </style>
 
     <style name="AppTheme.Transparent">
@@ -18,6 +20,8 @@
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:textColor">@color/primary_text</item>
         <item name="colorPrimary">@color/primary</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">24sp</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -33,19 +37,24 @@
         <item name="android:backgroundDimEnabled">false</item>
         <item name="android:actionMenuTextColor">@color/secondary_text</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">24sp</item>
 
-        <!-- To change the background of options menu-->
-        <item name="android:itemBackground">@color/primary</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="android:actionMenuTextColor">@color/secondary_text</item>
         <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:minHeight">24sp</item>
 
-        <!-- To change the background of options menu-->
-        <item name="android:itemBackground">@color/primary</item>
     </style>
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+
+    <style name="TextAppearance.FontPath" parent="android:TextAppearance">
+        <!-- Custom Attr-->
+        <item name="fontPath">fonts/Roboto-Regular.ttf</item>
+    </style>
 
 </resources>

@@ -25,32 +25,11 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin">
 
-            <TextView
-                android:id="@+id/locationName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:text=""
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="24sp" />
-
-
-            <TextClock
-                android:id="@+id/textClock"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/locationName"
-                android:layout_centerHorizontal="true"
-                android:textAlignment="center"
-                android:textSize="16sp" />
-
             <include
                 android:id="@+id/mainInfoCardView"
                 layout="@layout/main_weather_info_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/textClock"
                 android:layout_marginTop="5sp" />
 
             <android.support.v7.widget.CardView
@@ -75,7 +54,7 @@
                         android:scrollbars="none"
                         android:text="@string/hourly_forecast"
                         android:textColor="@color/secondary_text"
-                        android:textSize="22sp"/>
+                        android:textSize="20sp"/>
 
                     <View
                         android:id="@+id/hourlyDivider"
@@ -130,7 +109,7 @@
                         android:layout_marginTop="10sp"
                         android:text="@string/daily_forecast"
                         android:textColor="@color/secondary_text"
-                        android:textSize="22sp"/>
+                        android:textSize="20sp"/>
 
                     <View
                         android:id="@+id/dailyDivider"

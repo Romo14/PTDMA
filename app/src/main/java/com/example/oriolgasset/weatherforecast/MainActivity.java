@@ -1,7 +1,9 @@
 package com.example.oriolgasset.weatherforecast;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -15,7 +17,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -35,6 +36,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -47,7 +50,6 @@ public class MainActivity extends AppCompatActivity
     private TextView humidityText;
     private TextView windText;
     private ImageView weatherIcon;
-    private TextView cityName;
     private TextView realFeelText;
     private TextView pressureText;
     private TextView cloudsText;
@@ -60,6 +62,11 @@ public class MainActivity extends AppCompatActivity
     private Menu m;
     private GoogleApiClient client;
     private SwipeRefreshLayout mySwipeRefreshLayout;
+    private Typeface typeface;
+    private TextView toolbarTitle;
+    private String cityName;
+    private Toolbar toolbar;
+    private LinearLayout menuHeaderLayout;
 
 
     @Override
@@ -67,10 +74,12 @@ public class MainActivity extends AppCompatActivity
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById (R.id.toolbar);
+        toolbar = (Toolbar) findViewById (R.id.toolbar);
         setSupportActionBar (toolbar);
         getSupportActionBar ().setDisplayHomeAsUpEnabled (true);
         getSupportActionBar ().setDisplayShowHomeEnabled (true);
+
+        typeface = Typeface.createFromAsset(getAssets(), "fonts/Roboto-Light.ttf");
 
         DrawerLayout drawer = (DrawerLayout) findViewById (R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle (
@@ -98,12 +107,13 @@ public class MainActivity extends AppCompatActivity
         humidityText = (TextView) findViewById (R.id.humidityValue);
         windText = (TextView) findViewById (R.id.windValue);
         weatherIcon = (ImageView) findViewById (R.id.weatherIconMain);
-        cityName = (TextView) findViewById (R.id.locationName);
         realFeelText = (TextView) findViewById (R.id.realFeelValue);
         pressureText = (TextView) findViewById (R.id.pressureValue);
         precipitationsText = (TextView) findViewById (R.id.precipitationsValue);
         cloudsText = (TextView) findViewById (R.id.cloudValue);
         lastUpdatedText = (TextView) findViewById (R.id.lastUpdatedValue);
+        toolbarTitle = (TextView) findViewById (R.id.toolbar_title);
+        menuHeaderLayout = (LinearLayout) findViewById (R.id.menuHeaderLayout);
         mySwipeRefreshLayout = (SwipeRefreshLayout) findViewById (R.id.swiperefresh);
         if (mySwipeRefreshLayout != null) {
             mySwipeRefreshLayout.setColorSchemeResources (R.color.primary);
@@ -128,7 +138,7 @@ public class MainActivity extends AppCompatActivity
                                     @Override
                                     public void run() {
                                         mySwipeRefreshLayout.setRefreshing (false);
-                                        loadCurrentWeather ((String) cityName.getText ());
+                                        loadCurrentWeather (cityName);
                                     }
                                 });
 
@@ -146,6 +156,7 @@ public class MainActivity extends AppCompatActivity
         if (!weatherLoaded) {
             cities = loadCities ();
             addCitiesToMenu (m, cities);
+            cityName = defaultCity;
             loadCurrentWeather (defaultCity);
         }
         weatherLoaded = true;
@@ -162,13 +173,13 @@ public class MainActivity extends AppCompatActivity
             if (!cityName.equals (defaultCity))
                 menu.add (R.id.citiesMenu, Menu.FIRST, Menu.NONE, cityName);
         }
-        menu.add (R.id.group_settings, Menu.FIRST, Menu.NONE, getString(R.string.edit_places)).setIcon (R.mipmap.ic_mode_edit_black_48dp);
+        menu.add (R.id.group_settings, Menu.FIRST, Menu.NONE, getString (R.string.edit_places)).setIcon (R.mipmap.ic_mode_edit_black_48dp);
         menu.add (R.id.group_settings, Menu.FIRST, Menu.NONE, R.string.action_settings).setIcon (R.mipmap.ic_settings_black_48dp);
     }
 
 
     private void loadCurrentWeather(String city) {
-        cityName.setText (city);
+        toolbarTitle.setText (city);
         if (WeatherForecastUtils.isConnected (this)) {
             weather = weatherClient.getWeather (city);
             if (weather.getLocation () != null) {
@@ -178,7 +189,9 @@ public class MainActivity extends AppCompatActivity
                 descriptionText.setText (weather.getCurrent ().getCondition ().getText ());
                 humidityText.setText (String.format ("%s%%", String.valueOf (weather.getCurrent ().humidity)));
                 windText.setText (String.format ("%skm/h %dº %s", weather.getCurrent ().wind_kph, weather.getCurrent ().wind_degree, weather.getCurrent ().wind_dir));
-                weatherIcon.setImageResource (weatherClient.getImageData (weather.getCurrent ().getCondition ()));
+                int image = weatherClient.getImageData (weather.getCurrent ().getCondition ());
+                weatherIcon.setImageResource (image);
+                //menuHeaderLayout.setBackgroundResource (weatherClient.getBackgroundImage (image));
                 realFeelText.setText (String.format ("%sº", String.valueOf (weather.getCurrent ().feelslike_c)));
                 pressureText.setText (String.format ("%smb", weather.getCurrent ().pressure_mb));
                 precipitationsText.setText (String.format ("%smm", weather.getCurrent ().precip_mm));
@@ -217,6 +230,7 @@ public class MainActivity extends AppCompatActivity
                         String hourText = String.format ("%s", hour.getTime ().substring (10));
                         hourView.setText (hourText);
                         hourView.setGravity (Gravity.CENTER);
+                        hourView.setTypeface (typeface);
                         ll.addView (hourView);
 
                         ImageView icon = new ImageView (this);
@@ -227,6 +241,7 @@ public class MainActivity extends AppCompatActivity
                         String tempText = String.format ("%sº", String.valueOf (hour.getTempC ()));
                         temp.setText (tempText);
                         temp.setGravity (Gravity.CENTER);
+                        temp.setTypeface (typeface);
                         ll.addView (temp);
 
                         hourlyLinearLayoutParent.addView (ll, layoutParams);
@@ -253,6 +268,7 @@ public class MainActivity extends AppCompatActivity
                 String[] dayText = day.getDate ().substring (6).split ("-");
                 dayView.setText (dayText[1] + "/" + dayText[0]);
                 dayView.setGravity (Gravity.CENTER);
+                dayView.setTypeface (typeface);
                 ll.addView (dayView);
 
                 LinearLayout llaux = new LinearLayout (this);
@@ -263,6 +279,7 @@ public class MainActivity extends AppCompatActivity
                 maxTemp.setText (tempText);
                 maxTemp.setTextColor (ContextCompat.getColor (this, R.color.primary_text));
                 maxTemp.setTextSize (12);
+                dayView.setTypeface (typeface);
                 llaux.addView (maxTemp);
 
                 TextView minTemp = new TextView (this);
@@ -270,6 +287,7 @@ public class MainActivity extends AppCompatActivity
                 minTemp.setText (minTempText);
                 minTemp.setTextColor (ContextCompat.getColor (this, R.color.secondary_text));
                 minTemp.setTextSize (12);
+                dayView.setTypeface (typeface);
                 llaux.addView (minTemp);
 
                 llaux.setGravity (Gravity.CENTER);
@@ -353,13 +371,13 @@ public class MainActivity extends AppCompatActivity
         if (text != null) {
             text.setText (city);
         }
-
+        cityName = city;
         // TODO afegir imatge background header + icona del temps
 
         if (city.equals (getResources ().getString (R.string.action_settings))) {
             Intent intent = new Intent (this, SettingsActivity.class);
             startActivity (intent);
-        } else if(city.equals (getResources ().getString (R.string.edit_places))){
+        } else if (city.equals (getResources ().getString (R.string.edit_places))) {
             Intent intent = new Intent (this, EditPlacesActivity.class);
             startActivityForResult (intent, 2);
         } else {
@@ -380,7 +398,7 @@ public class MainActivity extends AppCompatActivity
             m.clear ();
             addCitiesToMenu (m, cities);
             loadCurrentWeather (sharedPreferences.getString ("newCity", defaultCity));
-        } else if(resultCode == 2) {
+        } else if (resultCode == 2) {
             cities = loadCities ();
             m.clear ();
             addCitiesToMenu (m, cities);
@@ -430,6 +448,11 @@ public class MainActivity extends AppCompatActivity
         );
         AppIndex.AppIndexApi.end (client, viewAction);
         client.disconnect ();
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext (CalligraphyContextWrapper.wrap (newBase));
     }
 }
 
