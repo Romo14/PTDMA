@@ -19,7 +19,6 @@ import com.nhaarman.listviewanimations.itemmanipulation.DynamicListView;
 import com.nhaarman.listviewanimations.itemmanipulation.dragdrop.OnItemMovedListener;
 import com.nhaarman.listviewanimations.itemmanipulation.dragdrop.TouchViewDraggableManager;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
-import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.SimpleSwipeUndoAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.TimedUndoAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.UndoAdapter;
 
@@ -90,6 +89,11 @@ public class EditPlacesActivity extends AppCompatActivity {
         finish ();
     }
 
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
     private static class MyListAdapter extends ArrayAdapter<String> implements UndoAdapter {
 
         private final Context mContext;
@@ -151,7 +155,11 @@ public class EditPlacesActivity extends AppCompatActivity {
             for (int position : reverseSortedPositions) {
                 String s = mAdapter.getItem (position);
                 mAdapter.remove (s);
-                cities.remove (s);
+                for (String aux : cities) {
+                    if (aux.contains(s)) {
+                        cities.remove(aux);
+                    }
+                }
                 SharedPreferences.Editor editor = sharedPreferences.edit ();
                 if(!mAdapter.isEmpty () && s.equals (sharedPreferences.getString ("defaultCity",""))){
                     editor.putString ("defaultCity",mAdapter.getItem (0));
@@ -177,11 +185,5 @@ public class EditPlacesActivity extends AppCompatActivity {
                 Toast.makeText (getBaseContext (), String.format ("Default city changed: %s", mAdapter.getItem (newPosition)), Toast.LENGTH_LONG).show ();
             }
         }
-    }
-
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext (CalligraphyContextWrapper.wrap (newBase));
     }
 }
