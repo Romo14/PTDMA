@@ -263,7 +263,7 @@ public class CountryCodes {
     public String getCode(String country) {
         String countryFound = map.get(country);
         if (countryFound == null) {
-            countryFound = "UK";
+            countryFound = "ES";
         }
         return countryFound;
     }

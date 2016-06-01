@@ -20,5 +20,6 @@
         android:layout_height="wrap_content"
         android:paddingLeft="10sp"
         android:textColor="@color/cardview_light_background"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 </LinearLayout>

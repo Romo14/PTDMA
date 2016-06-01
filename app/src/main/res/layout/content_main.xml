@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/swiperefresh"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.example.oriolgasset.weatherforecast.MainActivity"
-    tools:showIn="@layout/app_bar_main">
+                                              xmlns:app="http://schemas.android.com/apk/res-auto"
+                                              xmlns:tools="http://schemas.android.com/tools"
+                                              android:id="@+id/swiperefresh"
+                                              android:layout_width="match_parent"
+                                              android:layout_height="match_parent"
+                                              app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                                              tools:context="com.example.oriolgasset.weatherforecast.MainActivity"
+                                              tools:showIn="@layout/app_bar_main">
 
 
     <ScrollView
@@ -30,7 +30,7 @@
                 layout="@layout/main_weather_info_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5sp" />
+                android:layout_marginTop="5sp"/>
 
             <android.support.v7.widget.CardView
                 android:id="@+id/hourlyForecastCardView"
@@ -65,7 +65,7 @@
                         android:layout_marginTop="2sp"
                         android:background="@color/divider"
                         android:paddingBottom="10sp"
-                        android:paddingTop="2sp" />
+                        android:paddingTop="2sp"/>
 
                     <HorizontalScrollView
                         android:id="@+id/hourlyHorizontalScrollView"
@@ -122,7 +122,7 @@
                         android:layout_marginTop="2sp"
                         android:background="@color/divider"
                         android:paddingBottom="2sp"
-                        android:paddingTop="10sp" />
+                        android:paddingTop="10sp"/>
 
                     <HorizontalScrollView
                         android:id="@+id/dailyHorizontalScrollView"
@@ -170,94 +170,67 @@
                         android:layout_marginStart="10sp"
                         android:layout_marginTop="8sp"
                         android:text="@string/weather_details"
-                        android:textColor="@color/secondary_text" />
+                        android:textColor="@color/secondary_text"
+                        android:textSize="20sp"/>
+
+                    <View
+                        android:id="@+id/detailsDivider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@id/textView"
+                        android:layout_marginBottom="5sp"
+                        android:layout_marginTop="2sp"
+                        android:background="@color/divider"
+                        android:paddingBottom="2sp"
+                        android:paddingTop="10sp"/>
 
 
-                    <TextView
-                        android:id="@+id/humidityText"
-                        android:layout_width="wrap_content"
+                    <include
+                        android:id="@+id/humidityDetail"
+                        layout="@layout/weather_item"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentStart="true"
-                        android:layout_below="@+id/textView"
-                        android:layout_marginStart="10dp"
-                        android:text="@string/humidity"
-                        android:textColor="@color/secondary_text" />
+                        android:layout_below="@id/detailsDivider"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginLeft="5sp"/>
 
-                    <TextView
-                        android:id="@+id/windText"
-                        android:layout_width="wrap_content"
+                    <include
+                        android:id="@+id/windDetail"
+                        layout="@layout/weather_item"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignStart="@+id/textView"
-                        android:layout_below="@+id/humidityText"
-                        android:text="@string/wind"
-                        android:textColor="@color/secondary_text" />
+                        android:layout_below="@id/humidityDetail"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginLeft="5sp"/>
 
-                    <TextView
-                        android:id="@+id/humidityValue"
-                        android:layout_width="wrap_content"
+                    <include
+                        android:id="@+id/pressureDetail"
+                        layout="@layout/weather_item"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/textView"
-                        android:layout_marginLeft="5dp"
-                        android:layout_toEndOf="@+id/humidityText" />
+                        android:layout_below="@id/windDetail"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginLeft="5sp"/>
 
-                    <TextView
-                        android:id="@+id/windValue"
-                        android:layout_width="wrap_content"
+                    <include
+                        android:id="@+id/cloudsDetail"
+                        layout="@layout/weather_item"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/humidityText"
-                        android:layout_marginLeft="5dp"
-                        android:layout_toEndOf="@+id/windText" />
+                        android:layout_below="@id/pressureDetail"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginLeft="5sp"/>
 
-                    <TextView
-                        android:id="@+id/pressureText"
-                        android:layout_width="wrap_content"
+                    <include
+                        android:id="@+id/precipitationsDetail"
+                        layout="@layout/weather_item"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_alignStart="@+id/windText"
-                        android:layout_below="@+id/windValue"
-                        android:text="@string/pressure"
-                        android:textColor="@color/secondary_text" />
+                        android:layout_below="@id/cloudsDetail"
+                        android:layout_marginTop="10sp"
+                        android:layout_marginLeft="5sp"
+                        android:layout_marginBottom="10sp"/>
 
-                    <TextView
-                        android:id="@+id/pressureValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/windValue"
-                        android:layout_marginLeft="5dp"
-                        android:layout_toEndOf="@+id/pressureText" />
-
-                    <TextView
-                        android:id="@+id/cloudText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignStart="@+id/pressureText"
-                        android:layout_below="@+id/pressureText"
-                        android:text="@string/clouds"
-                        android:textColor="@color/secondary_text" />
-
-                    <TextView
-                        android:id="@+id/cloudValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/pressureValue"
-                        android:layout_marginLeft="5dp"
-                        android:layout_toEndOf="@+id/cloudText" />
-
-                    <TextView
-                        android:id="@+id/precipitationsText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignStart="@+id/cloudText"
-                        android:layout_below="@+id/cloudText"
-                        android:text="@string/precipitations"
-                        android:textColor="@color/secondary_text" />
-
-                    <TextView
-                        android:id="@+id/precipitationsValue"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/cloudValue"
-                        android:layout_marginLeft="5dp"
-                        android:layout_toEndOf="@+id/precipitationsText" />
 
                 </RelativeLayout>
             </android.support.v7.widget.CardView>
@@ -286,7 +259,19 @@
                         android:layout_marginStart="10sp"
                         android:layout_marginTop="8sp"
                         android:text="@string/weather_maps"
-                        android:textColor="@color/secondary_text" />
+                        android:textColor="@color/secondary_text"
+                        android:textSize="20sp"/>
+
+                    <View
+                        android:id="@+id/mapsDivider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_below="@id/mapText"
+                        android:layout_marginBottom="5sp"
+                        android:layout_marginTop="2sp"
+                        android:background="@color/divider"
+                        android:paddingBottom="2sp"
+                        android:paddingTop="10sp"/>
 
                 </RelativeLayout>
             </android.support.v7.widget.CardView>

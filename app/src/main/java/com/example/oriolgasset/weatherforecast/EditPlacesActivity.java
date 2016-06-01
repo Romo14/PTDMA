@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,10 +20,13 @@ import com.nhaarman.listviewanimations.itemmanipulation.dragdrop.OnItemMovedList
 import com.nhaarman.listviewanimations.itemmanipulation.dragdrop.TouchViewDraggableManager;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCallback;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.SimpleSwipeUndoAdapter;
+import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.TimedUndoAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.UndoAdapter;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class EditPlacesActivity extends AppCompatActivity {
 
@@ -36,20 +39,27 @@ public class EditPlacesActivity extends AppCompatActivity {
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_edit_places);
 
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
         listView = (DynamicListView) findViewById (R.id.edit_places_view);
         sharedPreferences = getSharedPreferences ("weatherForecastPreferences", MODE_PRIVATE);
         String defaultCity = sharedPreferences.getString ("defaultCity", "");
         cities = sharedPreferences.getStringSet ("citiesList", new HashSet<String> ());
         if (!cities.isEmpty ()) {
             /* Setup the adapter */
-            ArrayAdapter<String> adapter = new MyListAdapter (this);
-            adapter.add (defaultCity);
+            MyListAdapter adapter = new MyListAdapter (this);
+            String defaultCityAux = defaultCity.split ("=")[0];
+            adapter.add (defaultCityAux);
             for (String city : cities) {
                 if(!city.equals (defaultCity)){
-                    adapter.add (city);
+                    String aux = city.split ("=")[0];
+                    adapter.add (aux);
                 }
             }
-            SimpleSwipeUndoAdapter simpleSwipeUndoAdapter = new SimpleSwipeUndoAdapter (adapter, this, new MyOnDismissCallback (adapter));
+            TimedUndoAdapter simpleSwipeUndoAdapter = new TimedUndoAdapter (adapter, this, new MyOnDismissCallback (adapter));
             AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter (simpleSwipeUndoAdapter);
             animationAdapter.setAbsListView (listView);
             listView.setAdapter (animationAdapter);
@@ -143,7 +153,7 @@ public class EditPlacesActivity extends AppCompatActivity {
                 mAdapter.remove (s);
                 cities.remove (s);
                 SharedPreferences.Editor editor = sharedPreferences.edit ();
-                if(s.equals (sharedPreferences.getString ("defaultCity",""))){
+                if(!mAdapter.isEmpty () && s.equals (sharedPreferences.getString ("defaultCity",""))){
                     editor.putString ("defaultCity",mAdapter.getItem (0));
                 }
                 editor.putStringSet ("citiesList", cities);
@@ -167,5 +177,11 @@ public class EditPlacesActivity extends AppCompatActivity {
                 Toast.makeText (getBaseContext (), String.format ("Default city changed: %s", mAdapter.getItem (newPosition)), Toast.LENGTH_LONG).show ();
             }
         }
+    }
+
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext (CalligraphyContextWrapper.wrap (newBase));
     }
 }

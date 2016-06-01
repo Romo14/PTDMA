@@ -99,4 +99,10 @@
     <string name="taptoundo">Undo</string>
     <string name="interntet_error">Internet connection not available</string>
     <string name="apixu_errpr">Weather information could not be retrieved</string>
+    <string name="edit_places_activity">Edit Places</string>
+    <string name="humidityText">Humidity</string>
+    <string name="wind_text">Wind</string>
+    <string name="cloudtext">Clouds</string>
+    <string name="precipText">Precipitations</string>
+    <string name="pressureText">Pressure</string>
 </resources>
