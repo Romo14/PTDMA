@@ -9,18 +9,18 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:minHeight="32sp"
-        android:minWidth="32sp"
+        android:adjustViewBounds="true"
         android:maxHeight="32sp"
         android:maxWidth="32sp"
-        android:src="@mipmap/wind_icon"/>
+        android:scaleType="fitCenter"
+        android:src="@mipmap/cloud_icon"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:orientation="vertical"
-        android:layout_marginLeft="25sp">
+        android:layout_marginLeft="25sp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/detailText"
@@ -28,7 +28,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/secondary_text"
             android:textSize="12sp"
-            />
+            android:text="Prueba"/>
 
         <TextView
             android:id="@+id/detailValue"
@@ -36,6 +36,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/primary_text"
             android:textSize="20sp"
+            android:text="esto es una prueba"
             />
     </LinearLayout>
 

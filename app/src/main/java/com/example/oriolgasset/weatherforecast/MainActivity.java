@@ -8,8 +8,11 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
@@ -19,6 +22,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -29,6 +33,10 @@ import android.widget.Toast;
 
 import com.example.oriolgasset.utils.WeatherForecastUtils;
 import com.example.oriolgasset.weatherservices.ApixuClient;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -48,13 +56,14 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
 
     private List<String> cities = new ArrayList<> ();
     private ApixuClient weatherClient;
@@ -75,6 +84,7 @@ public class MainActivity extends AppCompatActivity
     private String cityName;
     private LinearLayout menuHeaderLayout;
     private Boolean showWeatherInfo = true;
+    private Boolean reloadWeatherInfo = false;
     private Map<String, LatLng> citiesCoordinates;
     private TextView menuHeaderText;
     private LinearLayout humidityDetail;
@@ -82,6 +92,7 @@ public class MainActivity extends AppCompatActivity
     private LinearLayout windDetail;
     private LinearLayout precipitationsDetail;
     private LinearLayout cloudsDetail;
+    private GoogleApiClient mGoogleApiClient;
 
 
     @Override
@@ -141,16 +152,11 @@ public class MainActivity extends AppCompatActivity
                         new Thread (new Runnable () {
                             @Override
                             public void run() {
-                                try {
-                                    Thread.sleep (1000);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace ();
-                                }
                                 runOnUiThread (new Runnable () {
                                     @Override
                                     public void run() {
-                                        mySwipeRefreshLayout.setRefreshing (false);
                                         showWeatherInfo = true;
+                                        reloadWeatherInfo = true;
                                         loadCurrentWeather (cityName);
                                     }
                                 });
@@ -167,6 +173,8 @@ public class MainActivity extends AppCompatActivity
         cloudsDetail = (LinearLayout) findViewById (R.id.cloudsDetail);
 
         sharedPreferences = getSharedPreferences ("weatherForecastPreferences", MODE_PRIVATE);
+
+        buildGoogleApiClient ();
 
         weatherClient = new ApixuClient ();
 
@@ -201,7 +209,7 @@ public class MainActivity extends AppCompatActivity
         cityName = city;
         if (!toolbarTitle.getText ().equals (city)) {
             new getWeatherList ().execute (city);
-            mySwipeRefreshLayout.setRefreshing (false);
+
         }
     }
 
@@ -304,11 +312,13 @@ public class MainActivity extends AppCompatActivity
     private List<String> loadCities() {
         List<String> result = new ArrayList<> ();
         citiesCoordinates = new ArrayMap<> ();
-        defaultCity = sharedPreferences.getString ("defaultCity", "Barcelona, ES=41.3851,2.1734");
+        defaultCity = sharedPreferences.getString ("defaultCity", "userLocation");
         Set<String> citiesList = sharedPreferences.getStringSet ("citiesList", new LinkedHashSet<String> ());
         LinkedHashSet<String> citiesAux = new LinkedHashSet<> (citiesList);
         SharedPreferences.Editor editor = sharedPreferences.edit ();
-        if (!citiesAux.contains (defaultCity)) {
+        if (defaultCity.equals ("userLocation")) {
+            loadUserLocationWeather ();
+        } else if (!citiesAux.contains (defaultCity)) {
             citiesAux.add (defaultCity);
             editor.putStringSet ("citiesList", citiesAux);
         }
@@ -319,8 +329,47 @@ public class MainActivity extends AppCompatActivity
             LatLng value = new LatLng (Double.valueOf (valueAux[0]), Double.valueOf (valueAux[1]));
             citiesCoordinates.put (key, value);
         }
+        editor.putString ("defaultCity", defaultCity);
         editor.commit ();
         return result;
+    }
+
+    protected synchronized void buildGoogleApiClient() {
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder (this)
+                    .addConnectionCallbacks (this)
+                    .addOnConnectionFailedListener (this)
+                    .addApi (LocationServices.API)
+                    .build ();
+        }
+    }
+
+    protected void onStart() {
+        mGoogleApiClient.connect ();
+        super.onStart ();
+    }
+
+    protected void onStop() {
+        mGoogleApiClient.disconnect ();
+        super.onStop ();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause ();
+    }
+
+    private void loadUserLocationWeather() {
+        WeatherForecastUtils.checkLocationPermission (this);
+        Location location = LocationServices.FusedLocationApi.getLastLocation (
+                mGoogleApiClient);
+        if (location != null) {
+            LatLng latLng = new LatLng (location.getLatitude (), location.getLongitude ());
+            cityName = "=" + location.getLatitude () + "," + location.getLongitude ();
+            loadCurrentWeather (cityName);
+        } else {
+            Toast.makeText (this, R.string.no_location_detected, Toast.LENGTH_LONG).show ();
+        }
     }
 
     @Override
@@ -427,31 +476,109 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void loadDetailsForecast(WeatherModel weather) {
+        /*  pressureText.setText (String.format ("%smb", weather.getCurrent ().pressure_mb));
+                    precipitationsText.setText (String.format ("%smm", weather.getCurrent ().precip_mm));
+                    cloudsText.setText (String.valueOf (weather.getCurrent ().cloud));
+                    humidityText.setText (String.format ("%s%%", String.valueOf (weather.getCurrent ().humidity)));
+                    windText.setText (String.format ("%skm/h %dº %s", weather.getCurrent ().wind_kph, weather.getCurrent ().wind_degree, weather.getCurrent ().wind_dir));*/
+        TextView text;
+        TextView value;
+        ImageView icon;
+
+        // Humidity
+        text = (TextView) humidityDetail.findViewById (R.id.detailText);
+        value = (TextView) humidityDetail.findViewById (R.id.detailValue);
+        icon = (ImageView) humidityDetail.findViewById (R.id.imageView);
+        text.setText (getString (R.string.humidityText));
+        value.setText (String.format ("%s%%", String.valueOf (weather.getCurrent ().humidity)));
+        icon.setImageResource (R.mipmap.humidity_icon);
+
+        // Wind
+        text = (TextView) windDetail.findViewById (R.id.detailText);
+        value = (TextView) windDetail.findViewById (R.id.detailValue);
+        icon = (ImageView) windDetail.findViewById (R.id.imageView);
+        text.setText (getString (R.string.wind_text));
+        value.setText (String.format ("%skm/h %dº %s", weather.getCurrent ().wind_kph, weather.getCurrent ().wind_degree, weather.getCurrent ().wind_dir));
+        icon.setImageResource (R.mipmap.wind_icon);
+
+        // Pressure
+        text = (TextView) pressureDetail.findViewById (R.id.detailText);
+        value = (TextView) pressureDetail.findViewById (R.id.detailValue);
+        icon = (ImageView) pressureDetail.findViewById (R.id.imageView);
+        text.setText (getString (R.string.pressureText));
+        value.setText (String.format ("%smb", weather.getCurrent ().pressure_mb));
+        icon.setImageResource (R.mipmap.pressure_icon);
+
+        // Precipitations
+        text = (TextView) precipitationsDetail.findViewById (R.id.detailText);
+        value = (TextView) precipitationsDetail.findViewById (R.id.detailValue);
+        icon = (ImageView) precipitationsDetail.findViewById (R.id.imageView);
+        text.setText (getString (R.string.precipText));
+        value.setText (String.format ("%smm", weather.getCurrent ().precip_mm));
+        icon.setImageResource (R.mipmap.precipitation_icon);
+
+        // Cloud
+        text = (TextView) cloudsDetail.findViewById (R.id.detailText);
+        value = (TextView) cloudsDetail.findViewById (R.id.detailValue);
+        icon = (ImageView) cloudsDetail.findViewById (R.id.imageView);
+        text.setText (getString (R.string.cloudtext));
+        value.setText (String.valueOf (weather.getCurrent ().cloud) + "%");
+        icon.setImageResource (R.mipmap.cloud_icon);
+
+
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
     public class getWeatherList extends AsyncTask<String, Void, WeatherModel> {
 
-        private ProgressDialog dialog;
-        private String citySearched;
+
+        private ProgressDialog progDailog;
 
         @Override
         protected void onPreExecute() {
-            if (showWeatherInfo)
-                dialog = ProgressDialog.show (MainActivity.this, "Loading", "Please Wait", false, false);
+            progDailog = new ProgressDialog (MainActivity.this);
+            progDailog.setMessage ("Loading...");
+            progDailog.setIndeterminate (false);
+            progDailog.setProgressStyle (ProgressDialog.STYLE_SPINNER);
+            progDailog.setCancelable (true);
+            progDailog.show ();
         }
 
         @Override
         protected WeatherModel doInBackground(String... params) {
             WeatherModel result = null;
             String data = sharedPreferences.getString (params[0], "");
-            citySearched = params[0];
-            if (data.equals ("")) {
+            if (data.equals ("") || reloadWeatherInfo) {
                 if (WeatherForecastUtils.isConnected (getBaseContext ())) {
                     data = weatherClient.getWeatherData ("forecast", citiesCoordinates.get (params[0].split ("=")[0]), null, 7);
+                    Log.i ("Weather loaded", "no info");
                     SharedPreferences.Editor editor = sharedPreferences.edit ();
                     editor.putString (params[0], data);
                     editor.commit ();
                 } else {
                     Toast.makeText (MainActivity.this, R.string.interntet_error, Toast.LENGTH_SHORT).show ();
                 }
+                reloadWeatherInfo = false;
             } else {
                 Gson gson = new GsonBuilder ().create ();
                 JSONObject jObj;
@@ -462,7 +589,7 @@ public class MainActivity extends AppCompatActivity
                         JSONObject curObj = jObj.getJSONObject ("current");
                         Current current = gson.fromJson (curObj.toString (), Current.class);
                         dateString = current.getLastUpdated ();
-                        DateFormat df = new SimpleDateFormat ("yyyy-MM-dd hh:mm");
+                        DateFormat df = new SimpleDateFormat ("yyyy-MM-dd HH:mm");
                         Date startDate = null;
                         try {
                             startDate = df.parse (dateString);
@@ -475,6 +602,7 @@ public class MainActivity extends AppCompatActivity
                         Date threrHourBack = cal.getTime ();
                         if (threrHourBack.compareTo (startDate) >= 0) {
                             data = weatherClient.getWeatherData ("forecast", citiesCoordinates.get (params[0].split ("=")[0]), null, 7);
+                            Log.i ("Weather loaded", "date");
                         }
                     }
 
@@ -491,6 +619,11 @@ public class MainActivity extends AppCompatActivity
         protected void onPostExecute(WeatherModel weather) {
             if (weather != null && weather.getLocation () != null) {
                 if (showWeatherInfo) {
+                    if (cityName.split ("=")[0].equals ("")) {
+                        String[] ll = cityName.split ("=")[1].split (",");
+                        LatLng aux = new LatLng (Double.valueOf (ll[0]), Double.valueOf (ll[1]));
+                        cityName = WeatherForecastUtils.getCityByLatLang (getBaseContext (), aux) + cityName;
+                    }
                     // Main info
                     temperatureText.setText (String.format ("%sº", String.valueOf (weather.getCurrent ().temp_c)));
                     maxTemperatureText.setText (String.format ("%sº", String.valueOf (weather.getForecast ().getForecastday ().get (0).getDay ().maxtemp_c)));
@@ -503,22 +636,20 @@ public class MainActivity extends AppCompatActivity
                     menuHeaderLayout = (LinearLayout) findViewById (R.id.menuHeaderLayout);
                     menuHeaderLayout.setBackgroundResource (weatherClient.getBackgroundImage (image));
                     realFeelText.setText (String.format ("%sº", String.valueOf (weather.getCurrent ().feelslike_c)));
-                    DateFormat dfaux = new SimpleDateFormat ("yyyy-MM-dd hh:mm");
+                    DateFormat dfaux = new SimpleDateFormat ("yyyy-MM-dd HH:mm");
                     Date startDate = null;
                     try {
                         startDate = dfaux.parse (weather.getCurrent ().last_updated);
                     } catch (ParseException e) {
                         e.printStackTrace ();
                     }
-                    dfaux = new SimpleDateFormat("dd/MM HH:mm");
+                    dfaux = new SimpleDateFormat ("dd/MM HH:mm");
                     String updated = dfaux.format (startDate);
                     lastUpdatedText.setText (updated);
                     toolbarTitle.setText (cityName.split ("=")[0]);
 
                     // Details
-                    loadDetailsForecast(weather);
-
-
+                    loadDetailsForecast (weather);
                     loadHourlyForecast (weather);
                     loadDailyForecast (weather);
                     showWeatherInfo = false;
@@ -526,62 +657,9 @@ public class MainActivity extends AppCompatActivity
             } else {
                 Toast.makeText (getBaseContext (), getString (R.string.apixu_errpr), Toast.LENGTH_SHORT).show ();
             }
-            if (dialog != null && dialog.isShowing ())
-                dialog.dismiss ();
+            progDailog.dismiss ();
+            mySwipeRefreshLayout.setRefreshing (false);
         }
-    }
-
-    private void loadDetailsForecast(WeatherModel weather) {
-        /*  pressureText.setText (String.format ("%smb", weather.getCurrent ().pressure_mb));
-                    precipitationsText.setText (String.format ("%smm", weather.getCurrent ().precip_mm));
-                    cloudsText.setText (String.valueOf (weather.getCurrent ().cloud));
-                    humidityText.setText (String.format ("%s%%", String.valueOf (weather.getCurrent ().humidity)));
-                    windText.setText (String.format ("%skm/h %dº %s", weather.getCurrent ().wind_kph, weather.getCurrent ().wind_degree, weather.getCurrent ().wind_dir));*/
-        TextView text;
-        TextView value;
-        ImageView icon;
-
-        // Humidity
-        text = (TextView) humidityDetail.findViewById (R.id.detailText);
-        value = (TextView) humidityDetail.findViewById (R.id.detailValue);
-        icon = (ImageView) humidityDetail.findViewById (R.id.imageView);
-        text.setText (getString(R.string.humidityText));
-        value.setText (String.format ("%s%%", String.valueOf (weather.getCurrent ().humidity)));
-        icon.setImageResource (R.mipmap.humidity_icon);
-
-        // Wind
-        text = (TextView) windDetail.findViewById (R.id.detailText);
-        value = (TextView) windDetail.findViewById (R.id.detailValue);
-        icon = (ImageView) windDetail.findViewById (R.id.imageView);
-        text.setText (getString(R.string.wind_text));
-        value.setText (String.format ("%skm/h %dº %s", weather.getCurrent ().wind_kph, weather.getCurrent ().wind_degree, weather.getCurrent ().wind_dir));
-        icon.setImageResource (R.mipmap.wind_icon);
-
-        // Pressure
-        text = (TextView) pressureDetail.findViewById (R.id.detailText);
-        value = (TextView) pressureDetail.findViewById (R.id.detailValue);
-        icon = (ImageView) pressureDetail.findViewById (R.id.imageView);
-        text.setText (getString(R.string.pressureText));
-        value.setText (String.format ("%smb", weather.getCurrent ().pressure_mb));
-        icon.setImageResource (R.mipmap.pressure_icon);
-
-        // Precipitations
-        text = (TextView) precipitationsDetail.findViewById (R.id.detailText);
-        value = (TextView) precipitationsDetail.findViewById (R.id.detailValue);
-        icon = (ImageView) precipitationsDetail.findViewById (R.id.imageView);
-        text.setText (getString(R.string.precipText));
-        value.setText (String.format ("%smm", weather.getCurrent ().precip_mm));
-        icon.setImageResource (R.mipmap.precipitation_icon);
-
-        // Cloud
-        text = (TextView) cloudsDetail.findViewById (R.id.detailText);
-        value = (TextView) cloudsDetail.findViewById (R.id.detailValue);
-        icon = (ImageView) cloudsDetail.findViewById (R.id.imageView);
-        text.setText (getString(R.string.cloudtext));
-        value.setText (String.valueOf (weather.getCurrent ().cloud)+"%");
-        icon.setImageResource (R.mipmap.cloud_icon);
-
-
     }
 }
 

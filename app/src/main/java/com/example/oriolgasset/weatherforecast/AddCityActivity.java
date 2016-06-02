@@ -182,22 +182,6 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
 
     }
 
-    private void checkLocationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M &&
-                ContextCompat.checkSelfPermission (this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission (this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
-                ContextCompat.checkSelfPermission (this, Manifest.permission.INTERNET) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale (this,
-                    Manifest.permission.ACCESS_FINE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale (this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION) || ActivityCompat.shouldShowRequestPermissionRationale (this,
-                    Manifest.permission.INTERNET)) {
-                ActivityCompat.requestPermissions (this, new String[]{Manifest.permission.INTERNET, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_PERMISSION_LOCATION);
-            } else {
-                ActivityCompat.requestPermissions (this, new String[]{Manifest.permission.INTERNET, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, REQUEST_PERMISSION_LOCATION);
-            }
-        }
-    }
-
     public void addCity(View view) {
         if (cityName != null && !cityName.equals ("")) {
             SharedPreferences.Editor editor = sharedPreferences.edit ();
@@ -238,7 +222,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
 
     public void searchCurrentLocation(MenuItem item) {
         mainInfoLayout.setVisibility (View.GONE);
-        checkLocationPermission ();
+        WeatherForecastUtils.checkLocationPermission (this);
         location = LocationServices.FusedLocationApi.getLastLocation (
                 mGoogleApiClient);
         if (location != null) {
@@ -256,7 +240,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        checkLocationPermission ();
+        WeatherForecastUtils.checkLocationPermission (this);
         location = LocationServices.FusedLocationApi.getLastLocation (
                 mGoogleApiClient);
     }
@@ -280,7 +264,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
         protected void onPreExecute() {
             super.onPreExecute ();
             loadingPanel.setVisibility (View.VISIBLE);
-            dialog = ProgressDialog.show (AddCityActivity.this, "Loading", "Please Wait", false, false);
+            dialog = ProgressDialog.show (AddCityActivity.this, "Loading...",null, false, false);
         }
 
         @Override
@@ -311,7 +295,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
                 autocompleteFragment.setText (cityName.split ("=")[0]);
                 maxTemperatureTextView.setText (String.format ("%sº", String.valueOf (weather.getForecast ().getForecastday ().get (0).getDay ().maxtemp_c)));
                 minTemperatureTextView.setText (String.format ("%sº", String.valueOf (weather.getForecast ().getForecastday ().get (0).getDay ().mintemp_c)));
-                DateFormat df = new SimpleDateFormat ("yyyy-MM-dd hh:mm");
+                DateFormat df = new SimpleDateFormat ("yyyy-MM-dd HH:mm");
                 Date startDate = null;
                 try {
                     startDate = df.parse (weather.getCurrent ().last_updated);

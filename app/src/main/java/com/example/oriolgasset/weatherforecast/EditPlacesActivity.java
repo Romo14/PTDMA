@@ -38,9 +38,9 @@ public class EditPlacesActivity extends AppCompatActivity {
         super.onCreate (savedInstanceState);
         setContentView (R.layout.activity_edit_places);
 
-        ActionBar actionBar = getSupportActionBar();
+        ActionBar actionBar = getSupportActionBar ();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled (true);
         }
 
         listView = (DynamicListView) findViewById (R.id.edit_places_view);
@@ -53,7 +53,7 @@ public class EditPlacesActivity extends AppCompatActivity {
             String defaultCityAux = defaultCity.split ("=")[0];
             adapter.add (defaultCityAux);
             for (String city : cities) {
-                if(!city.equals (defaultCity)){
+                if (!city.equals (defaultCity)) {
                     String aux = city.split ("=")[0];
                     adapter.add (aux);
                 }
@@ -91,7 +91,7 @@ public class EditPlacesActivity extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+        super.attachBaseContext (CalligraphyContextWrapper.wrap (newBase));
     }
 
     private static class MyListAdapter extends ArrayAdapter<String> implements UndoAdapter {
@@ -154,15 +154,17 @@ public class EditPlacesActivity extends AppCompatActivity {
         public void onDismiss(@NonNull final ViewGroup listView, @NonNull final int[] reverseSortedPositions) {
             for (int position : reverseSortedPositions) {
                 String s = mAdapter.getItem (position);
+                SharedPreferences.Editor editor = sharedPreferences.edit ();
                 mAdapter.remove (s);
                 for (String aux : cities) {
-                    if (aux.contains(s)) {
-                        cities.remove(aux);
+                    if (aux.contains (s)) {
+                        cities.remove (aux);
+                        editor.remove (aux);
                     }
                 }
-                SharedPreferences.Editor editor = sharedPreferences.edit ();
-                if(!mAdapter.isEmpty () && s.equals (sharedPreferences.getString ("defaultCity",""))){
-                    editor.putString ("defaultCity",mAdapter.getItem (0));
+
+                if (!mAdapter.isEmpty () && sharedPreferences.getString ("defaultCity", "").contains (s)) {
+                    editor.putString ("defaultCity", mAdapter.getItem (0));
                 }
                 editor.putStringSet ("citiesList", cities);
                 editor.commit ();
