@@ -318,9 +318,12 @@ public class MainActivity extends AppCompatActivity
         SharedPreferences.Editor editor = sharedPreferences.edit ();
         if (defaultCity.equals ("userLocation")) {
             loadUserLocationWeather ();
+            defaultCity = cityName;
+            editor.putString ("defaultCity",defaultCity);
         } else if (!citiesAux.contains (defaultCity)) {
             citiesAux.add (defaultCity);
             editor.putStringSet ("citiesList", citiesAux);
+
         }
         for (String cityName : citiesAux) {
             String key = cityName.split ("=")[0];
