@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="@dimen/nav_header_height"
     android:background="@mipmap/fair_wallpaper"
-    android:gravity="bottom"
+    android:gravity="center_vertical"
     android:orientation="vertical"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -20,6 +20,6 @@
         android:layout_height="wrap_content"
         android:paddingLeft="10sp"
         android:textColor="@color/cardview_light_background"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
+        android:textSize="30sp"
+        android:text="aaaaaaa"/>
 </LinearLayout>

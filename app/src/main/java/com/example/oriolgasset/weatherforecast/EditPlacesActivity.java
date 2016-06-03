@@ -22,16 +22,17 @@ import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.OnDismissCa
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.TimedUndoAdapter;
 import com.nhaarman.listviewanimations.itemmanipulation.swipedismiss.undo.UndoAdapter;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
-
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class EditPlacesActivity extends AppCompatActivity {
 
     private DynamicListView listView;
     private SharedPreferences sharedPreferences;
     private Set<String> cities;
+    private List<String> citiesList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class EditPlacesActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences ("weatherForecastPreferences", MODE_PRIVATE);
         String defaultCity = sharedPreferences.getString ("defaultCity", "");
         cities = sharedPreferences.getStringSet ("citiesList", new HashSet<String> ());
+        citiesList = new ArrayList<String> (cities);
         if (!cities.isEmpty ()) {
             /* Setup the adapter */
             MyListAdapter adapter = new MyListAdapter (this);
@@ -87,11 +89,6 @@ public class EditPlacesActivity extends AppCompatActivity {
     public void onBackPressed() {
         setResult (2);
         finish ();
-    }
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext (CalligraphyContextWrapper.wrap (newBase));
     }
 
     private static class MyListAdapter extends ArrayAdapter<String> implements UndoAdapter {
@@ -156,15 +153,11 @@ public class EditPlacesActivity extends AppCompatActivity {
                 String s = mAdapter.getItem (position);
                 SharedPreferences.Editor editor = sharedPreferences.edit ();
                 mAdapter.remove (s);
-                for (String aux : cities) {
-                    if (aux.contains (s)) {
-                        cities.remove (aux);
-                        editor.remove (aux);
-                    }
-                }
-
+                String aux = citiesList.get (position);
+                cities.remove (aux);
+                editor.remove (aux);
                 if (!mAdapter.isEmpty () && sharedPreferences.getString ("defaultCity", "").contains (s)) {
-                    editor.putString ("defaultCity", mAdapter.getItem (0));
+                    editor.putString ("defaultCity", citiesList.get (0));
                 }
                 editor.putStringSet ("citiesList", cities);
                 editor.commit ();
@@ -183,7 +176,7 @@ public class EditPlacesActivity extends AppCompatActivity {
         @Override
         public void onItemMoved(final int originalPosition, final int newPosition) {
             if (newPosition == 0) {
-                sharedPreferences.edit ().putString ("defaultCity", mAdapter.getItem (newPosition)).commit ();
+                sharedPreferences.edit ().putString ("defaultCity", citiesList.get (newPosition)).commit ();
                 Toast.makeText (getBaseContext (), String.format ("Default city changed: %s", mAdapter.getItem (newPosition)), Toast.LENGTH_LONG).show ();
             }
         }

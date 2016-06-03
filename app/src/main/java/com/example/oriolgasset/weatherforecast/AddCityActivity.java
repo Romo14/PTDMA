@@ -1,20 +1,15 @@
 package com.example.oriolgasset.weatherforecast;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NavUtils;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -49,14 +44,12 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.LinkedHashSet;
+import java.util.Locale;
 import java.util.Set;
-
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 
 public class AddCityActivity extends AppCompatActivity implements ConnectionCallbacks, OnConnectionFailedListener, LocationListener {
 
-    private static final int REQUEST_PERMISSION_LOCATION = 1;
     private Location location;
     private GoogleApiClient mGoogleApiClient;
     private TextView temperatureTextView;
@@ -74,8 +67,6 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
     private FloatingActionButton addButton;
     private TextView lastUpdatedText;
     private CountryCodes countryCodes;
-    private Boolean searchByLatLng = true;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +98,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
             @Override
             public void onPlaceSelected(Place place) {
                 mainInfoLayout.setVisibility (View.GONE);
-                cityName = (String) place.getName () + "=" + place.getLatLng ().latitude + "," + place.getLatLng ().longitude;
+                cityName = place.getName () + "=" + place.getLatLng ().latitude + "," + place.getLatLng ().longitude;
                 getWeatherForecast (place.getLatLng ());
             }
 
@@ -187,11 +178,13 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
             SharedPreferences.Editor editor = sharedPreferences.edit ();
             Set<String> cities = sharedPreferences.getStringSet ("citiesList", new LinkedHashSet<String> ());
             Set<String> citiesAux = new LinkedHashSet<> (cities);
-            if (cities.contains (cityName)) {
-                Toast.makeText (this, R.string.city_duplicate, Toast.LENGTH_LONG).show ();
-                return;
-            } else {
-                citiesAux.add (cityName);
+            for (String aux : cities) {
+                if (aux.contains (cityName.split ("=")[0])) {
+                    Toast.makeText (this, R.string.city_duplicate, Toast.LENGTH_SHORT).show ();
+                    return;
+                } else {
+                    citiesAux.add (cityName);
+                }
             }
             cities = new LinkedHashSet<> (citiesAux);
             editor.putStringSet ("citiesList", cities);
@@ -263,8 +256,12 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
         @Override
         protected void onPreExecute() {
             super.onPreExecute ();
-            loadingPanel.setVisibility (View.VISIBLE);
-            dialog = ProgressDialog.show (AddCityActivity.this, "Loading...",null, false, false);
+            dialog = new ProgressDialog (AddCityActivity.this);
+            dialog.setMessage ("Loading...");
+            dialog.setIndeterminate (false);
+            dialog.setProgressStyle (ProgressDialog.STYLE_SPINNER);
+            dialog.setCancelable (true);
+            dialog.show ();
         }
 
         @Override
@@ -295,14 +292,14 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
                 autocompleteFragment.setText (cityName.split ("=")[0]);
                 maxTemperatureTextView.setText (String.format ("%sº", String.valueOf (weather.getForecast ().getForecastday ().get (0).getDay ().maxtemp_c)));
                 minTemperatureTextView.setText (String.format ("%sº", String.valueOf (weather.getForecast ().getForecastday ().get (0).getDay ().mintemp_c)));
-                DateFormat df = new SimpleDateFormat ("yyyy-MM-dd HH:mm");
+                DateFormat df = new SimpleDateFormat ("yyyy-MM-dd HH:mm", Locale.getDefault ());
                 Date startDate = null;
                 try {
                     startDate = df.parse (weather.getCurrent ().last_updated);
                 } catch (ParseException e) {
                     e.printStackTrace ();
                 }
-                df = new SimpleDateFormat ("dd/MM HH:mm");
+                df = new SimpleDateFormat ("dd/MM HH:mm", Locale.getDefault ());
                 String updated = df.format (startDate);
                 lastUpdatedText.setText (updated);
                 mainInfoLayout.setVisibility (View.VISIBLE);
@@ -311,11 +308,5 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
             if (dialog != null && dialog.isShowing ())
                 dialog.dismiss ();
         }
-    }
-
-
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext (CalligraphyContextWrapper.wrap (newBase));
     }
 }

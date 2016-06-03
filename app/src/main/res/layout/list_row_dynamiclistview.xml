@@ -34,10 +34,7 @@
         android:id="@+id/list_row_draganddrop_textview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
         android:gravity="center_vertical"
-        android:minHeight="48dp"
         android:textColor="@color/secondary_text"
-        android:textSize="20sp"
         tools:ignore="UnusedAttribute" />
 </LinearLayout>

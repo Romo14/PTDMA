@@ -2,17 +2,12 @@ package com.example.oriolgasset.weatherforecast;
 
 import android.app.ActivityManager;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Typeface;
-import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.util.ArrayMap;
@@ -26,6 +21,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,10 +29,6 @@ import android.widget.Toast;
 
 import com.example.oriolgasset.utils.WeatherForecastUtils;
 import com.example.oriolgasset.weatherservices.ApixuClient;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -60,10 +52,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
-
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+        implements NavigationView.OnNavigationItemSelectedListener {
 
     private List<String> cities = new ArrayList<> ();
     private ApixuClient weatherClient;
@@ -79,7 +69,6 @@ public class MainActivity extends AppCompatActivity
     private boolean weatherLoaded = false;
     private Menu m;
     private SwipeRefreshLayout mySwipeRefreshLayout;
-    private Typeface typeface;
     private TextView toolbarTitle;
     private String cityName;
     private LinearLayout menuHeaderLayout;
@@ -92,7 +81,6 @@ public class MainActivity extends AppCompatActivity
     private LinearLayout windDetail;
     private LinearLayout precipitationsDetail;
     private LinearLayout cloudsDetail;
-    private GoogleApiClient mGoogleApiClient;
 
 
     @Override
@@ -106,10 +94,8 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar ().setDisplayShowHomeEnabled (true);
 
         Bitmap bm = BitmapFactory.decodeResource (getResources (), R.mipmap.ic_launcher);
-        ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription (getString (R.string.app_name), bm, getResources ().getColor (R.color.primary_dark));
+        ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription (getString (R.string.app_name), bm, ContextCompat.getColor (this, R.color.primary_dark));
         this.setTaskDescription (taskDesc);
-
-        typeface = Typeface.createFromAsset (getAssets (), "fonts/Roboto-Light.ttf");
 
         DrawerLayout drawer = (DrawerLayout) findViewById (R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle (
@@ -174,7 +160,6 @@ public class MainActivity extends AppCompatActivity
 
         sharedPreferences = getSharedPreferences ("weatherForecastPreferences", MODE_PRIVATE);
 
-        buildGoogleApiClient ();
 
         weatherClient = new ApixuClient ();
 
@@ -204,12 +189,9 @@ public class MainActivity extends AppCompatActivity
 
 
     private void loadCurrentWeather(String city) {
-
-        //clearInfo();
         cityName = city;
-        if (!toolbarTitle.getText ().equals (city)) {
+        if (reloadWeatherInfo || toolbarTitle.getText () == "" || !city.contains (toolbarTitle.getText ())) {
             new getWeatherList ().execute (city);
-
         }
     }
 
@@ -237,7 +219,6 @@ public class MainActivity extends AppCompatActivity
                         String hourText = String.format ("%s", hour.getTime ().substring (10));
                         hourView.setText (hourText);
                         hourView.setGravity (Gravity.CENTER);
-                        hourView.setTypeface (typeface);
                         ll.addView (hourView);
 
                         ImageView icon = new ImageView (this);
@@ -248,7 +229,6 @@ public class MainActivity extends AppCompatActivity
                         String tempText = String.format ("%sº", String.valueOf (hour.getTempC ()));
                         temp.setText (tempText);
                         temp.setGravity (Gravity.CENTER);
-                        temp.setTypeface (typeface);
                         ll.addView (temp);
 
                         hourlyLinearLayoutParent.addView (ll, layoutParams);
@@ -260,14 +240,14 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    private void loadDailyForecast(WeatherModel weather) {
+    private void loadDailyForecast(final WeatherModel weather) {
         LinearLayout dailyLinearLayoutParent = (LinearLayout) findViewById (R.id.dailyParentLayout);
         if (dailyLinearLayoutParent != null) {
             dailyLinearLayoutParent.removeAllViews ();
             LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams (
                     LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
             layoutParams.setMargins (35, 15, 35, 15);
-            for (Forecastday day : weather.getForecast ().getForecastday ()) {
+            for (final Forecastday day : weather.getForecast ().getForecastday ()) {
                 LinearLayout ll = new LinearLayout (this);
                 ll.setOrientation (LinearLayout.VERTICAL);
 
@@ -275,7 +255,6 @@ public class MainActivity extends AppCompatActivity
                 String[] dayText = day.getDate ().substring (6).split ("-");
                 dayView.setText (dayText[1] + "/" + dayText[0]);
                 dayView.setGravity (Gravity.CENTER);
-                dayView.setTypeface (typeface);
                 ll.addView (dayView);
 
                 LinearLayout llaux = new LinearLayout (this);
@@ -286,7 +265,6 @@ public class MainActivity extends AppCompatActivity
                 maxTemp.setText (tempText);
                 maxTemp.setTextColor (ContextCompat.getColor (this, R.color.primary_text));
                 maxTemp.setTextSize (12);
-                dayView.setTypeface (typeface);
                 llaux.addView (maxTemp);
 
                 TextView minTemp = new TextView (this);
@@ -294,7 +272,6 @@ public class MainActivity extends AppCompatActivity
                 minTemp.setText (minTempText);
                 minTemp.setTextColor (ContextCompat.getColor (this, R.color.secondary_text));
                 minTemp.setTextSize (12);
-                dayView.setTypeface (typeface);
                 llaux.addView (minTemp);
 
                 llaux.setGravity (Gravity.CENTER);
@@ -304,6 +281,15 @@ public class MainActivity extends AppCompatActivity
                 icon.setImageResource (weatherClient.getImageData (day.getDay ().getCondition ()));
                 ll.addView (icon);
 
+                ll.setOnClickListener (new View.OnClickListener () {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent (getBaseContext (), DailyForecastDetails.class);
+                        intent.putExtra ("dailyForecast", day);
+                        startActivity (intent);
+                    }
+                });
+
                 dailyLinearLayoutParent.addView (ll, layoutParams);
             }
         }
@@ -312,18 +298,17 @@ public class MainActivity extends AppCompatActivity
     private List<String> loadCities() {
         List<String> result = new ArrayList<> ();
         citiesCoordinates = new ArrayMap<> ();
-        defaultCity = sharedPreferences.getString ("defaultCity", "userLocation");
+        defaultCity = sharedPreferences.getString ("defaultCity", "");
         Set<String> citiesList = sharedPreferences.getStringSet ("citiesList", new LinkedHashSet<String> ());
         LinkedHashSet<String> citiesAux = new LinkedHashSet<> (citiesList);
         SharedPreferences.Editor editor = sharedPreferences.edit ();
-        if (defaultCity.equals ("userLocation")) {
+        if (defaultCity.equals ("")) {
             loadUserLocationWeather ();
             defaultCity = cityName;
-            editor.putString ("defaultCity",defaultCity);
+            editor.putString ("defaultCity", defaultCity);
         } else if (!citiesAux.contains (defaultCity)) {
             citiesAux.add (defaultCity);
             editor.putStringSet ("citiesList", citiesAux);
-
         }
         for (String cityName : citiesAux) {
             String key = cityName.split ("=")[0];
@@ -332,47 +317,13 @@ public class MainActivity extends AppCompatActivity
             LatLng value = new LatLng (Double.valueOf (valueAux[0]), Double.valueOf (valueAux[1]));
             citiesCoordinates.put (key, value);
         }
-        editor.putString ("defaultCity", defaultCity);
         editor.commit ();
         return result;
     }
 
-    protected synchronized void buildGoogleApiClient() {
-        if (mGoogleApiClient == null) {
-            mGoogleApiClient = new GoogleApiClient.Builder (this)
-                    .addConnectionCallbacks (this)
-                    .addOnConnectionFailedListener (this)
-                    .addApi (LocationServices.API)
-                    .build ();
-        }
-    }
-
-    protected void onStart() {
-        mGoogleApiClient.connect ();
-        super.onStart ();
-    }
-
-    protected void onStop() {
-        mGoogleApiClient.disconnect ();
-        super.onStop ();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause ();
-    }
-
     private void loadUserLocationWeather() {
-        WeatherForecastUtils.checkLocationPermission (this);
-        Location location = LocationServices.FusedLocationApi.getLastLocation (
-                mGoogleApiClient);
-        if (location != null) {
-            LatLng latLng = new LatLng (location.getLatitude (), location.getLongitude ());
-            cityName = "=" + location.getLatitude () + "," + location.getLongitude ();
-            loadCurrentWeather (cityName);
-        } else {
-            Toast.makeText (this, R.string.no_location_detected, Toast.LENGTH_LONG).show ();
-        }
+        LatLng latLng = WeatherForecastUtils.getCityByName (this, "Barcelona,ES");
+        cityName = "Barcelona, ES=" + latLng.latitude + "," + latLng.longitude;
     }
 
     @Override
@@ -410,13 +361,18 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
-        String city = (String) item.getTitle ();
+        String city = "=";
+        for (String aux : cities) {
+            if (aux.contains (item.getTitle ())) {
+                city = aux;
+            }
+        }
+
         TextView text = (TextView) findViewById (R.id.menuHeaderText);
         if (text != null) {
             text.setText (city.split ("=")[0]);
         }
         cityName = city;
-        // TODO afegir imatge background header + icona del temps
 
         if (city.equals (getResources ().getString (R.string.action_settings))) {
             Intent intent = new Intent (this, SettingsActivity.class);
@@ -456,18 +412,12 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext (CalligraphyContextWrapper.wrap (newBase));
-    }
-
     private void clearInfo() {
         temperatureText.setText ("");
         maxTemperatureText.setText ("");
         minTemperatureText.setText ("");
         descriptionText.setText ("");
         weatherIcon.setImageResource (R.mipmap.unknown);
-        // menuHeaderLayout.setBackgroundResource(weatherClient.getBackgroundImage(image));
         realFeelText.setText ("");
         lastUpdatedText.setText ("");
         toolbarTitle.setText ("");
@@ -480,11 +430,6 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void loadDetailsForecast(WeatherModel weather) {
-        /*  pressureText.setText (String.format ("%smb", weather.getCurrent ().pressure_mb));
-                    precipitationsText.setText (String.format ("%smm", weather.getCurrent ().precip_mm));
-                    cloudsText.setText (String.valueOf (weather.getCurrent ().cloud));
-                    humidityText.setText (String.format ("%s%%", String.valueOf (weather.getCurrent ().humidity)));
-                    windText.setText (String.format ("%skm/h %dº %s", weather.getCurrent ().wind_kph, weather.getCurrent ().wind_degree, weather.getCurrent ().wind_dir));*/
         TextView text;
         TextView value;
         ImageView icon;
@@ -532,30 +477,11 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onLocationChanged(Location location) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
-    }
-
     public class getWeatherList extends AsyncTask<String, Void, WeatherModel> {
 
 
         private ProgressDialog progDailog;
+        private String cityLoaded;
 
         @Override
         protected void onPreExecute() {
@@ -569,8 +495,9 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         protected WeatherModel doInBackground(String... params) {
-            WeatherModel result = null;
+            WeatherModel result;
             String data = sharedPreferences.getString (params[0], "");
+            cityLoaded = params[0];
             if (data.equals ("") || reloadWeatherInfo) {
                 if (WeatherForecastUtils.isConnected (getBaseContext ())) {
                     data = weatherClient.getWeatherData ("forecast", citiesCoordinates.get (params[0].split ("=")[0]), null, 7);
@@ -592,7 +519,7 @@ public class MainActivity extends AppCompatActivity
                         JSONObject curObj = jObj.getJSONObject ("current");
                         Current current = gson.fromJson (curObj.toString (), Current.class);
                         dateString = current.getLastUpdated ();
-                        DateFormat df = new SimpleDateFormat ("yyyy-MM-dd HH:mm");
+                        DateFormat df = new SimpleDateFormat ("yyyy-MM-dd HH:mm", Locale.getDefault ());
                         Date startDate = null;
                         try {
                             startDate = df.parse (dateString);
@@ -621,6 +548,7 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected void onPostExecute(WeatherModel weather) {
             if (weather != null && weather.getLocation () != null) {
+                int image = weatherClient.getImageData (weather.getCurrent ().getCondition ());
                 if (showWeatherInfo) {
                     if (cityName.split ("=")[0].equals ("")) {
                         String[] ll = cityName.split ("=")[1].split (",");
@@ -632,21 +560,21 @@ public class MainActivity extends AppCompatActivity
                     maxTemperatureText.setText (String.format ("%sº", String.valueOf (weather.getForecast ().getForecastday ().get (0).getDay ().maxtemp_c)));
                     minTemperatureText.setText (String.format ("%sº", String.valueOf (weather.getForecast ().getForecastday ().get (0).getDay ().mintemp_c)));
                     descriptionText.setText (weather.getCurrent ().getCondition ().getText ());
-                    int image = weatherClient.getImageData (weather.getCurrent ().getCondition ());
+                    image = weatherClient.getImageData (weather.getCurrent ().getCondition ());
                     weatherIcon.setImageResource (image);
                     menuHeaderText = (TextView) findViewById (R.id.menuHeaderText);
                     menuHeaderText.setText (cityName.split ("=")[0]);
                     menuHeaderLayout = (LinearLayout) findViewById (R.id.menuHeaderLayout);
                     menuHeaderLayout.setBackgroundResource (weatherClient.getBackgroundImage (image));
                     realFeelText.setText (String.format ("%sº", String.valueOf (weather.getCurrent ().feelslike_c)));
-                    DateFormat dfaux = new SimpleDateFormat ("yyyy-MM-dd HH:mm");
+                    DateFormat dfaux = new SimpleDateFormat ("yyyy-MM-dd HH:mm", Locale.getDefault ());
                     Date startDate = null;
                     try {
                         startDate = dfaux.parse (weather.getCurrent ().last_updated);
                     } catch (ParseException e) {
                         e.printStackTrace ();
                     }
-                    dfaux = new SimpleDateFormat ("dd/MM HH:mm");
+                    dfaux = new SimpleDateFormat ("dd/MM HH:mm", Locale.getDefault ());
                     String updated = dfaux.format (startDate);
                     lastUpdatedText.setText (updated);
                     toolbarTitle.setText (cityName.split ("=")[0]);
@@ -657,6 +585,7 @@ public class MainActivity extends AppCompatActivity
                     loadDailyForecast (weather);
                     showWeatherInfo = false;
                 }
+                m.getItem (cities.indexOf (cityLoaded)).setIcon (image);
             } else {
                 Toast.makeText (getBaseContext (), getString (R.string.apixu_errpr), Toast.LENGTH_SHORT).show ();
             }

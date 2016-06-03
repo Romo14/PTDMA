@@ -12,8 +12,7 @@
         android:adjustViewBounds="true"
         android:maxHeight="32sp"
         android:maxWidth="32sp"
-        android:scaleType="fitCenter"
-        android:src="@mipmap/cloud_icon"/>
+        android:scaleType="fitCenter"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -27,17 +26,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/secondary_text"
-            android:textSize="12sp"
-            android:text="Prueba"/>
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/detailValue"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/primary_text"
-            android:textSize="20sp"
-            android:text="esto es una prueba"
-            />
+            android:textSize="20sp"/>
     </LinearLayout>
 
 

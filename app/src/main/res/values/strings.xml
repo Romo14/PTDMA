@@ -105,4 +105,9 @@
     <string name="cloudtext">Clouds</string>
     <string name="precipText">Precipitations</string>
     <string name="pressureText">Pressure</string>
+    <string name="moonriseset">Moonrise/Moonset</string>
+    <string name="sunriseset">Sunrise/Sunset</string>
+    <string name="temperatureDetail">Temperature</string>
+    <string name="precipitationDetail">Precipitation</string>
+    <string name="dew_point">Dew point</string>
 </resources>
