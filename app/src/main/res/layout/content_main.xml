@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                                              xmlns:app="http://schemas.android.com/apk/res-auto"
-                                              xmlns:tools="http://schemas.android.com/tools"
-                                              android:id="@+id/swiperefresh"
-                                              android:layout_width="match_parent"
-                                              android:layout_height="match_parent"
-                                              app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                                              tools:context="com.example.oriolgasset.weatherforecast.MainActivity"
-                                              tools:showIn="@layout/app_bar_main">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swiperefresh"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.oriolgasset.weatherforecast.MainActivity"
+    tools:showIn="@layout/app_bar_main">
 
     <ScrollView
+        android:id="@+id/mainScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#E1F2F7"
-        android:scrollbars="none"
-        android:id="@+id/mainScrollView">
+        android:scrollbars="none">
 
         <RelativeLayout
             android:id="@+id/scrollView"
@@ -26,13 +26,12 @@
             android:paddingRight="@dimen/activity_horizontal_margin">
 
 
-
             <include
                 android:id="@+id/mainInfoCardView"
                 layout="@layout/main_weather_info_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="5sp"/>
+                android:layout_marginTop="5sp" />
 
             <android.support.v7.widget.CardView
                 android:id="@+id/hourlyForecastCardView"
@@ -56,7 +55,7 @@
                         android:scrollbars="none"
                         android:text="@string/hourly_forecast"
                         android:textColor="@color/secondary_text"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp" />
 
                     <View
                         android:id="@+id/hourlyDivider"
@@ -67,7 +66,7 @@
                         android:layout_marginTop="2sp"
                         android:background="@color/divider"
                         android:paddingBottom="10sp"
-                        android:paddingTop="2sp"/>
+                        android:paddingTop="2sp" />
 
                     <HorizontalScrollView
                         android:id="@+id/hourlyHorizontalScrollView"
@@ -113,7 +112,7 @@
                         android:layout_marginTop="10sp"
                         android:text="@string/daily_forecast"
                         android:textColor="@color/secondary_text"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp" />
 
                     <View
                         android:id="@+id/dailyDivider"
@@ -124,7 +123,7 @@
                         android:layout_marginTop="2sp"
                         android:background="@color/divider"
                         android:paddingBottom="2sp"
-                        android:paddingTop="10sp"/>
+                        android:paddingTop="10sp" />
 
                     <HorizontalScrollView
                         android:id="@+id/dailyHorizontalScrollView"
@@ -172,7 +171,7 @@
                         android:layout_marginTop="10sp"
                         android:text="@string/weather_details"
                         android:textColor="@color/secondary_text"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp" />
 
                     <View
                         android:id="@+id/detailsDivider"
@@ -183,7 +182,7 @@
                         android:layout_marginTop="2sp"
                         android:background="@color/divider"
                         android:paddingBottom="2sp"
-                        android:paddingTop="10sp"/>
+                        android:paddingTop="10sp" />
 
 
                     <include
@@ -193,7 +192,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/detailsDivider"
                         android:layout_marginLeft="5sp"
-                        android:layout_marginTop="10sp"/>
+                        android:layout_marginTop="10sp" />
 
                     <include
                         android:id="@+id/windDetail"
@@ -202,7 +201,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/humidityDetail"
                         android:layout_marginLeft="5sp"
-                        android:layout_marginTop="10sp"/>
+                        android:layout_marginTop="10sp" />
 
                     <include
                         android:id="@+id/pressureDetail"
@@ -211,7 +210,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/windDetail"
                         android:layout_marginLeft="5sp"
-                        android:layout_marginTop="10sp"/>
+                        android:layout_marginTop="10sp" />
 
                     <include
                         android:id="@+id/cloudsDetail"
@@ -220,7 +219,7 @@
                         android:layout_height="wrap_content"
                         android:layout_below="@id/pressureDetail"
                         android:layout_marginLeft="5sp"
-                        android:layout_marginTop="10sp"/>
+                        android:layout_marginTop="10sp" />
 
                     <include
                         android:id="@+id/precipitationsDetail"
@@ -230,7 +229,7 @@
                         android:layout_below="@id/cloudsDetail"
                         android:layout_marginBottom="10sp"
                         android:layout_marginLeft="5sp"
-                        android:layout_marginTop="10sp"/>
+                        android:layout_marginTop="10sp" />
 
 
                 </RelativeLayout>
@@ -256,12 +255,11 @@
                         android:id="@+id/mapText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8sp"
                         android:layout_marginStart="10sp"
                         android:layout_marginTop="8sp"
                         android:text="@string/weather_maps"
                         android:textColor="@color/secondary_text"
-                        android:textSize="20sp"/>
+                        android:textSize="20sp" />
 
                     <View
                         android:id="@+id/mapsDivider"
@@ -272,7 +270,26 @@
                         android:layout_marginTop="2sp"
                         android:background="@color/divider"
                         android:paddingBottom="2sp"
-                        android:paddingTop="10sp"/>
+                        android:paddingTop="10sp" />
+
+                    <Spinner
+                        android:id="@+id/tileType"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/mapsDivider"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginRight="10dp" />
+
+                    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+                        xmlns:tools="http://schemas.android.com/tools"
+                        android:id="@+id/map"
+                        android:name="com.example.oriolgasset.utils.WorkaroundMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="300sp"
+                        android:layout_below="@id/tileType" />
+
 
                 </RelativeLayout>
             </android.support.v7.widget.CardView>

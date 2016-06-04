@@ -1,9 +1,13 @@
 package com.example.oriolgasset.weatherforecast;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -36,59 +40,65 @@ public class EditPlacesActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate (savedInstanceState);
-        setContentView (R.layout.activity_edit_places);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_edit_places);
 
-        ActionBar actionBar = getSupportActionBar ();
+        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
+        ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription(getString(R.string.app_name), bm, ContextCompat.getColor(this, R.color.primary_dark));
+        this.setTaskDescription(taskDesc);
+
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled (true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        listView = (DynamicListView) findViewById (R.id.edit_places_view);
-        sharedPreferences = getSharedPreferences ("weatherForecastPreferences", MODE_PRIVATE);
-        String defaultCity = sharedPreferences.getString ("defaultCity", "");
-        cities = sharedPreferences.getStringSet ("citiesList", new HashSet<String> ());
-        citiesList = new ArrayList<String> (cities);
-        if (!cities.isEmpty ()) {
+        listView = (DynamicListView) findViewById(R.id.edit_places_view);
+        sharedPreferences = getSharedPreferences("weatherForecastPreferences", MODE_PRIVATE);
+        String defaultCity = sharedPreferences.getString("defaultCity", "");
+        cities = sharedPreferences.getStringSet("citiesList", new HashSet<String>());
+        citiesList = new ArrayList<>(cities);
+        if (!cities.isEmpty()) {
             /* Setup the adapter */
-            MyListAdapter adapter = new MyListAdapter (this);
-            String defaultCityAux = defaultCity.split ("=")[0];
-            adapter.add (defaultCityAux);
+            MyListAdapter adapter = new MyListAdapter(this);
+            String defaultCityAux = defaultCity.split("=")[0];
+            defaultCityAux += " (default)";
+            adapter.add(defaultCityAux);
             for (String city : cities) {
-                if (!city.equals (defaultCity)) {
-                    String aux = city.split ("=")[0];
-                    adapter.add (aux);
+                if (!city.equals(defaultCity)) {
+                    String aux = city.split("=")[0];
+                    adapter.add(aux);
                 }
             }
-            TimedUndoAdapter simpleSwipeUndoAdapter = new TimedUndoAdapter (adapter, this, new MyOnDismissCallback (adapter));
-            AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter (simpleSwipeUndoAdapter);
-            animationAdapter.setAbsListView (listView);
-            listView.setAdapter (animationAdapter);
+            TimedUndoAdapter simpleSwipeUndoAdapter = new TimedUndoAdapter(adapter, this, new MyOnDismissCallback(adapter));
+            AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(simpleSwipeUndoAdapter);
+            animationAdapter.setAbsListView(listView);
+            listView.setAdapter(animationAdapter);
 
         /* Enable drag and drop functionality */
-            listView.enableDragAndDrop ();
-            listView.setDraggableManager (new TouchViewDraggableManager (R.id.list_row_draganddrop_textview));
-            listView.setOnItemMovedListener (new MyOnItemMovedListener (adapter));
-            listView.setOnItemLongClickListener (
-                    new AdapterView.OnItemLongClickListener () {
+            listView.enableDragAndDrop();
+            listView.setDraggableManager(new TouchViewDraggableManager(R.id.list_row_draganddrop_textview));
+            listView.setOnItemMovedListener(new MyOnItemMovedListener(adapter));
+            listView.setOnItemLongClickListener(
+                    new AdapterView.OnItemLongClickListener() {
                         @Override
                         public boolean onItemLongClick(final AdapterView<?> parent, final View view,
                                                        final int position, final long id) {
-                            listView.startDragging (position);
+                            listView.startDragging(position);
                             return true;
                         }
                     }
             );
 
         /* Enable swipe to dismiss */
-            listView.enableSimpleSwipeUndo ();
+            listView.enableSimpleSwipeUndo();
         }
     }
 
     @Override
     public void onBackPressed() {
-        setResult (2);
-        finish ();
+
+        setResult(2);
+        finish();
     }
 
     private static class MyListAdapter extends ArrayAdapter<String> implements UndoAdapter {
@@ -101,7 +111,7 @@ public class EditPlacesActivity extends AppCompatActivity {
 
         @Override
         public long getItemId(final int position) {
-            return getItem (position).hashCode ();
+            return getItem(position).hashCode();
         }
 
         @Override
@@ -113,10 +123,10 @@ public class EditPlacesActivity extends AppCompatActivity {
         public View getView(final int position, final View convertView, final ViewGroup parent) {
             View view = convertView;
             if (view == null) {
-                view = LayoutInflater.from (mContext).inflate (R.layout.list_row_dynamiclistview, parent, false);
+                view = LayoutInflater.from(mContext).inflate(R.layout.list_row_dynamiclistview, parent, false);
             }
 
-            ((TextView) view.findViewById (R.id.list_row_draganddrop_textview)).setText (getItem (position));
+            ((TextView) view.findViewById(R.id.list_row_draganddrop_textview)).setText(getItem(position));
 
             return view;
         }
@@ -126,7 +136,7 @@ public class EditPlacesActivity extends AppCompatActivity {
         public View getUndoView(final int position, final View convertView, @NonNull final ViewGroup parent) {
             View view = convertView;
             if (view == null) {
-                view = LayoutInflater.from (mContext).inflate (R.layout.undo_row, parent, false);
+                view = LayoutInflater.from(mContext).inflate(R.layout.undo_row, parent, false);
             }
             return view;
         }
@@ -134,7 +144,7 @@ public class EditPlacesActivity extends AppCompatActivity {
         @NonNull
         @Override
         public View getUndoClickView(@NonNull final View view) {
-            return view.findViewById (R.id.undo_row_undobutton);
+            return view.findViewById(R.id.undo_row_undobutton);
         }
 
     }
@@ -150,17 +160,21 @@ public class EditPlacesActivity extends AppCompatActivity {
         @Override
         public void onDismiss(@NonNull final ViewGroup listView, @NonNull final int[] reverseSortedPositions) {
             for (int position : reverseSortedPositions) {
-                String s = mAdapter.getItem (position);
-                SharedPreferences.Editor editor = sharedPreferences.edit ();
-                mAdapter.remove (s);
-                String aux = citiesList.get (position);
-                cities.remove (aux);
-                editor.remove (aux);
-                if (!mAdapter.isEmpty () && sharedPreferences.getString ("defaultCity", "").contains (s)) {
-                    editor.putString ("defaultCity", citiesList.get (0));
+                String s = mAdapter.getItem(position);
+                if (position == 0) {
+                    s = s.split(" \\(")[0];
                 }
-                editor.putStringSet ("citiesList", cities);
-                editor.commit ();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                mAdapter.remove(s);
+                String aux = citiesList.get(position);
+                cities.remove(aux);
+                editor.remove(aux);
+                citiesList.remove(position);
+                if (!mAdapter.isEmpty() && sharedPreferences.getString("defaultCity", "").contains(s)) {
+                    editor.putString("defaultCity", citiesList.get(0));
+                }
+                editor.putStringSet("citiesList", cities);
+                editor.commit();
             }
         }
     }
@@ -175,9 +189,27 @@ public class EditPlacesActivity extends AppCompatActivity {
 
         @Override
         public void onItemMoved(final int originalPosition, final int newPosition) {
+            String oldCity = citiesList.get(originalPosition);
+            citiesList.add(originalPosition, citiesList.get(newPosition));
+            citiesList.add(newPosition, oldCity);
             if (newPosition == 0) {
-                sharedPreferences.edit ().putString ("defaultCity", citiesList.get (newPosition)).commit ();
-                Toast.makeText (getBaseContext (), String.format ("Default city changed: %s", mAdapter.getItem (newPosition)), Toast.LENGTH_LONG).show ();
+                String newDefault = mAdapter.getItem(newPosition) + " (default)";
+                mAdapter.remove(newPosition);
+                mAdapter.add(newPosition, newDefault);
+                String oldDefault = mAdapter.getItem(originalPosition).split(" \\(")[0];
+                mAdapter.remove(originalPosition);
+                mAdapter.add(originalPosition, oldDefault);
+                sharedPreferences.edit().putString("defaultCity", citiesList.get(newPosition)).commit();
+                Toast.makeText(getBaseContext(), String.format("Default city changed: %s", newDefault.split("\\(")[0]), Toast.LENGTH_LONG).show();
+            } else if (originalPosition == 0) {
+                String oldDefault = mAdapter.getItem(originalPosition) + " (default)";
+                mAdapter.remove(originalPosition);
+                mAdapter.add(originalPosition, oldDefault);
+                String newDefault = mAdapter.getItem(newPosition).split(" \\(")[0];
+                mAdapter.remove(newPosition);
+                mAdapter.add(newPosition, newDefault);
+                sharedPreferences.edit().putString("defaultCity", citiesList.get(newPosition)).commit();
+                Toast.makeText(getBaseContext(), String.format("Default city changed: %s", oldDefault.split("\\(")[0]), Toast.LENGTH_LONG).show();
             }
         }
     }

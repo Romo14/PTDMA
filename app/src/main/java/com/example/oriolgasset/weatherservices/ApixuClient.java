@@ -32,75 +32,7 @@ public class ApixuClient {
     private WeatherModel weatherModel;
     private Gson gson = new GsonBuilder().create();
 
-    public WeatherModel parseJSON(String data) {
-        WeatherModel result = new WeatherModel();
-        if (!TextUtils.isEmpty(data)) {
-            JSONObject jObj;
-            try {
-                jObj = new JSONObject(data);
-                weatherModel = gson.fromJson(jObj.toString(), WeatherModel.class);
-                if (jObj.has("location")) {
-                    JSONObject locObj = jObj.getJSONObject("location");
-                    result.setLocation(gson.fromJson(locObj.toString(), Location.class));
-                }
-                if (jObj.has("current")) {
-                    JSONObject curObj = jObj.getJSONObject("current");
-                    JSONObject condObj = curObj.getJSONObject("condition");
-                    Current current = gson.fromJson(curObj.toString(), Current.class);
-                    Condition condition = gson.fromJson(condObj.toString(), Condition.class);
-                    current.setCondition(condition);
-                    result.setCurrent(current);
-                }
-                if (jObj.has("forecast")) {
-                    JSONObject forecastObj = jObj.getJSONObject("forecast");
-                    JSONArray forecastDayObj = forecastObj.getJSONArray("forecastday");
-                    ArrayList<Forecastday> forecastDayArray = new ArrayList<>();
-                    for (int i = 0; i < forecastDayObj.length(); ++i) {
-                        JSONObject dayObj = forecastDayObj.getJSONObject(i);
-                        JSONObject dayWeatherObj = dayObj.getJSONObject("day");
-                        JSONObject dayConditionObj = dayWeatherObj.getJSONObject("condition");
-                        Forecastday day = gson.fromJson(dayObj.toString(), Forecastday.class);
-                        Condition dayCondition = gson.fromJson(dayConditionObj.toString(), Condition.class);
-                        day.getDay().setCondition(dayCondition);
-                        forecastDayArray.add(day);
-                    }
-                    Forecast forecast = gson.fromJson(forecastObj.toString(), Forecast.class);
-                    forecast.setForecastday(forecastDayArray);
-                    result.setForecast(forecast);
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return result;
-    }
-
-    public String getWeatherData(String method, LatLng cityLatLng, String cityName, int numDdays) {
-        try {
-            String name = cityName;
-            if (name == null) {
-                name = cityLatLng.latitude + "," + cityLatLng.longitude;
-            }
-            if (method.equals("forecast")) {
-                name += "&days=" + numDdays;
-            }
-            url = APIURL + method + key + name;
-
-            OkHttpClient client = new OkHttpClient();
-
-            Request request = new Request.Builder()
-                    .url(url)
-                    .build();
-
-            Response response = client.newCall(request).execute();
-            return response.body().string();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    public int getImageData(Condition condition) {
+    public static int getImageData(Condition condition) {
         switch (condition.code) {
             case 1000:
                 if (condition.icon.contains("day")) return R.mipmap.sun;
@@ -231,7 +163,7 @@ public class ApixuClient {
 
     }
 
-    public int getBackgroundImage(int condition) {
+    public static int getBackgroundImage(int condition) {
         switch (condition) {
 
             case R.mipmap.clouds_with_2lighting:
@@ -276,6 +208,74 @@ public class ApixuClient {
                 return R.mipmap.mostly_cloudy_wallpaper;
         }
         return 0;
+    }
+
+    public WeatherModel parseJSON(String data) {
+        WeatherModel result = new WeatherModel();
+        if (!TextUtils.isEmpty(data)) {
+            JSONObject jObj;
+            try {
+                jObj = new JSONObject(data);
+                weatherModel = gson.fromJson(jObj.toString(), WeatherModel.class);
+                if (jObj.has("location")) {
+                    JSONObject locObj = jObj.getJSONObject("location");
+                    result.setLocation(gson.fromJson(locObj.toString(), Location.class));
+                }
+                if (jObj.has("current")) {
+                    JSONObject curObj = jObj.getJSONObject("current");
+                    JSONObject condObj = curObj.getJSONObject("condition");
+                    Current current = gson.fromJson(curObj.toString(), Current.class);
+                    Condition condition = gson.fromJson(condObj.toString(), Condition.class);
+                    current.setCondition(condition);
+                    result.setCurrent(current);
+                }
+                if (jObj.has("forecast")) {
+                    JSONObject forecastObj = jObj.getJSONObject("forecast");
+                    JSONArray forecastDayObj = forecastObj.getJSONArray("forecastday");
+                    ArrayList<Forecastday> forecastDayArray = new ArrayList<>();
+                    for (int i = 0; i < forecastDayObj.length(); ++i) {
+                        JSONObject dayObj = forecastDayObj.getJSONObject(i);
+                        JSONObject dayWeatherObj = dayObj.getJSONObject("day");
+                        JSONObject dayConditionObj = dayWeatherObj.getJSONObject("condition");
+                        Forecastday day = gson.fromJson(dayObj.toString(), Forecastday.class);
+                        Condition dayCondition = gson.fromJson(dayConditionObj.toString(), Condition.class);
+                        day.getDay().setCondition(dayCondition);
+                        forecastDayArray.add(day);
+                    }
+                    Forecast forecast = gson.fromJson(forecastObj.toString(), Forecast.class);
+                    forecast.setForecastday(forecastDayArray);
+                    result.setForecast(forecast);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
+    public String getWeatherData(String method, LatLng cityLatLng, String cityName, int numDdays) {
+        try {
+            String name = cityName;
+            if (name == null) {
+                name = cityLatLng.latitude + "," + cityLatLng.longitude;
+            }
+            if (method.equals("forecast")) {
+                name += "&days=" + numDdays;
+            }
+            url = APIURL + method + key + name;
+
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+                    .url(url)
+                    .build();
+
+            Response response = client.newCall(request).execute();
+            return response.body().string();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
