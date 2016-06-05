@@ -1,0 +1,85 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/widget_margin">
+
+    <TextView
+        android:id="@+id/temperatureText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textSize="40sp"/>
+
+    <ImageView
+        android:id="@+id/weatherIconMain"
+        android:layout_width="128sp"
+        android:layout_height="128sp"
+        android:layout_alignParentEnd="true"
+        android:contentDescription="@string/weather_icon"/>
+
+    <TextView
+        android:id="@+id/descriptionText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/temperatureText"
+        android:layout_below="@+id/temperatureText"
+        android:layout_toStartOf="@+id/weatherIconMain"
+        android:textSize="22sp"/>
+
+    <TextView
+        android:id="@+id/maxTempText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/descriptionText"
+        android:layout_below="@+id/realFeelText"
+        android:layout_marginTop="3sp"
+        android:text="@string/max_temperature"
+        android:textColor="@color/secondary_text"/>
+
+    <TextView
+        android:id="@+id/minTempText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/maxTempText"
+        android:layout_marginStart="6sp"
+        android:layout_toEndOf="@+id/maxTempValue"
+        android:text="@string/min_temperature"
+        android:textColor="@color/secondary_text"/>
+
+    <TextView
+        android:id="@+id/minTempValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/minTempText"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/minTempText"/>
+
+
+    <TextView
+        android:id="@+id/maxTempValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/maxTempText"
+        android:layout_marginLeft="5dp"
+        android:layout_toEndOf="@+id/maxTempText"/>
+
+    <TextView
+        android:id="@+id/realFeelValue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/realFeelText"
+        android:layout_alignBottom="@+id/realFeelText"
+        android:layout_marginLeft="5dp"
+        android:layout_toEndOf="@+id/realFeelText"/>
+
+    <TextView
+        android:id="@+id/realFeelText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/descriptionText"
+        android:layout_below="@+id/descriptionText"
+        android:layout_marginTop="3sp"
+        android:text="@string/real_feel_text"
+        android:textColor="@color/secondary_text"/>
+
+</RelativeLayout>
