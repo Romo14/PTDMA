@@ -23,11 +23,11 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-    compile 'com.android.support:design:23.4.0'
+    compile 'com.android.support:appcompat-v7:24.0.0-beta1'
+    compile 'com.android.support:design:24.0.0-beta1'
     compile 'com.google.android.gms:play-services:9.0.2'
-    compile 'com.android.support:cardview-v7:23.4.0'
-    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:cardview-v7:24.0.0-beta1'
+    compile 'com.android.support:support-v4:24.0.0-beta1'
     compile 'com.google.code.gson:gson:2.4'
     compile 'pl.droidsonroids.gif:android-gif-drawable:1.1.16'
     compile 'com.nhaarman.listviewanimations:lib-core:3.1.0@aar'
@@ -35,4 +35,7 @@ dependencies {
     compile 'com.nhaarman.listviewanimations:lib-core-slh:3.1.0@aar'
     compile 'com.nineoldandroids:library:2.4.0'
     compile 'com.squareup.okhttp3:okhttp:3.3.1'
+    compile 'com.google.android.gms:play-services-ads:9.0.2'
+    compile 'com.google.android.gms:play-services-auth:9.0.2'
+    compile 'com.google.android.gms:play-services-gcm:9.0.2'
 }

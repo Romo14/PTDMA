@@ -47,7 +47,6 @@
         android:src="@mipmap/ic_add_white"
         app:backgroundTint="@color/primary"/>
 
-    <include layout="@layout/loading_layout" />
 </RelativeLayout>
 
 
