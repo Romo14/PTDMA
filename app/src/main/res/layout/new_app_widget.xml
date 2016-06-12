@@ -1,102 +1,73 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/primary_dark"
-    android:padding="@dimen/widget_margin">
+    android:background="#770288D1"
+    android:padding="@dimen/widget_margin"
+    android:id="@+id/widgetLayout"
+    android:layout_centerInParent="true">
 
     <TextView
-        android:id="@+id/temperatureText"
+        android:id="@+id/widgetCityName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAlignment="center"
         android:textColor="@color/background"
-        android:background="@color/primary_dark"
-        android:textSize="40sp" />
+        android:textSize="24sp"
+        android:text="L'Hospitalet de Llobregat"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="10sp"
+        android:ellipsize="end"
+        android:maxEms="15"
+        android:singleLine="true"
+        android:layout_marginTop="18sp" />
 
     <ImageView
-        android:id="@+id/weatherIconMain"
-        android:layout_width="128sp"
-        android:layout_height="128sp"
+        android:id="@+id/widgetIcon"
+        android:layout_width="72sp"
+        android:layout_height="72sp"
+        android:contentDescription="@string/weather_icon"
+        android:src="@mipmap/clouds"
+        android:layout_alignBottom="@+id/widgetDescription"
+        android:layout_toEndOf="@+id/widgetTemperature"
+        android:layout_marginTop="22sp" />
+
+    <TextView
+        android:id="@+id/widgetDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/background"
+        android:text="Partly Cloudy"
+        android:layout_below="@+id/widgetCityName"
+        android:layout_alignStart="@+id/widgetCityName"
+        android:ellipsize="end"
+        android:maxLength="18"
+        android:singleLine="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/widgetTemperature"
+        android:text="21.0º"
+        android:textSize="30sp"
+        android:textColor="@color/background"
+        android:layout_marginStart="16dp"
+        android:layout_alignBottom="@+id/widgetCityName"
+        android:layout_toEndOf="@+id/widgetCityName"
+        android:layout_marginTop="18sp" />
+
+    <ImageButton
+        android:layout_width="15sp"
+        android:layout_height="15sp"
+        android:id="@+id/widgetNext"
         android:layout_alignParentEnd="true"
-        android:background="@color/primary_dark"
-        android:contentDescription="@string/weather_icon" />
+        android:src="@mipmap/widget_arrow"
+        android:background="@null"
+        android:layout_marginEnd="10sp"
+        android:contentDescription="@string/next_city"
+        android:layout_alignBottom="@+id/widgetIcon"
+        android:layout_alignTop="@+id/widgetIcon"
+        android:layout_toEndOf="@+id/widgetIcon"
+        android:layout_marginTop="15sp" />
 
-    <TextView
-        android:id="@+id/descriptionText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/temperatureText"
-        android:layout_below="@+id/temperatureText"
-        android:textColor="@color/background"
-        android:background="@color/primary_dark"
-        android:layout_toStartOf="@+id/weatherIconMain"
-        android:textSize="22sp" />
-
-    <TextView
-        android:id="@+id/maxTempText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/primary_dark"
-        android:textColor="@color/background"
-        android:layout_alignStart="@+id/descriptionText"
-        android:layout_below="@+id/realFeelText"
-        android:layout_marginTop="3sp"
-        android:text="@string/max_temperature"
-        />
-
-    <TextView
-        android:id="@+id/minTempText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/maxTempText"
-        android:background="@color/primary_dark"
-        android:layout_marginStart="6sp"
-        android:layout_toEndOf="@+id/maxTempValue"
-        android:text="@string/min_temperature"
-        android:textColor="@color/background"
-        />
-
-    <TextView
-        android:id="@+id/minTempValue"
-        android:background="@color/primary_dark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/minTempText"
-        android:textColor="@color/background"
-        android:layout_marginStart="5dp"
-        android:layout_toEndOf="@+id/minTempText" />
-
-
-    <TextView
-        android:id="@+id/maxTempValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/background"
-        android:background="@color/primary_dark"
-        android:layout_alignTop="@+id/maxTempText"
-        android:layout_marginStart="5dp"
-        android:layout_toEndOf="@+id/maxTempText" />
-
-    <TextView
-        android:id="@+id/realFeelValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/realFeelText"
-        android:textColor="@color/background"
-        android:background="@color/primary_dark"
-        android:layout_alignBottom="@+id/realFeelText"
-        android:layout_marginStart="5dp"
-        android:layout_toEndOf="@+id/realFeelText" />
-
-    <TextView
-        android:id="@+id/realFeelText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/descriptionText"
-        android:background="@color/primary_dark"
-        android:layout_below="@+id/descriptionText"
-        android:layout_marginTop="3sp"
-        android:text="@string/real_feel_text"
-        android:textColor="@color/background" />
 
 </RelativeLayout>

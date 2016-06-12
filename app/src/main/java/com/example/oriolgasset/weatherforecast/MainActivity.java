@@ -208,6 +208,7 @@ public class MainActivity extends AppCompatActivity
                     cityName = extras.getString("notificationCity");
                 }
             }
+            sharedPreferences.edit().putString("widgetCity",cityName).commit();
             loadCurrentWeather(cityName);
             loadAndCachePlaces();
         }
