@@ -1,73 +1,71 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widgetLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_centerInParent="true"
     android:background="#770288D1"
-    android:padding="@dimen/widget_margin"
-    android:id="@+id/widgetLayout"
-    android:layout_centerInParent="true">
+    android:padding="@dimen/widget_margin">
 
     <TextView
         android:id="@+id/widgetCityName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textColor="@color/background"
-        android:textSize="24sp"
-        android:text="L'Hospitalet de Llobregat"
         android:layout_alignParentStart="true"
         android:layout_marginStart="10sp"
+        android:layout_marginTop="18sp"
         android:ellipsize="end"
         android:maxEms="15"
         android:singleLine="true"
-        android:layout_marginTop="18sp" />
+        android:text="L'Hospitalet de Llobregat"
+        android:textAlignment="center"
+        android:textColor="@color/background"
+        android:textSize="24sp" />
 
     <ImageView
         android:id="@+id/widgetIcon"
         android:layout_width="72sp"
         android:layout_height="72sp"
-        android:contentDescription="@string/weather_icon"
-        android:src="@mipmap/clouds"
         android:layout_alignBottom="@+id/widgetDescription"
+        android:layout_marginTop="22sp"
         android:layout_toEndOf="@+id/widgetTemperature"
-        android:layout_marginTop="22sp" />
+        android:contentDescription="@string/weather_icon"
+        android:src="@mipmap/clouds" />
 
     <TextView
         android:id="@+id/widgetDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/background"
-        android:text="Partly Cloudy"
-        android:layout_below="@+id/widgetCityName"
         android:layout_alignStart="@+id/widgetCityName"
+        android:layout_below="@+id/widgetCityName"
         android:ellipsize="end"
         android:maxLength="18"
-        android:singleLine="true"/>
+        android:singleLine="true"
+        android:textColor="@color/background" />
 
     <TextView
+        android:id="@+id/widgetTemperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/widgetTemperature"
-        android:text="21.0º"
-        android:textSize="30sp"
-        android:textColor="@color/background"
-        android:layout_marginStart="16dp"
         android:layout_alignBottom="@+id/widgetCityName"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="18sp"
         android:layout_toEndOf="@+id/widgetCityName"
-        android:layout_marginTop="18sp" />
+        android:textColor="@color/background"
+        android:textSize="30sp" />
 
     <ImageButton
+        android:id="@+id/widgetNext"
         android:layout_width="15sp"
         android:layout_height="15sp"
-        android:id="@+id/widgetNext"
-        android:layout_alignParentEnd="true"
-        android:src="@mipmap/widget_arrow"
-        android:background="@null"
-        android:layout_marginEnd="10sp"
-        android:contentDescription="@string/next_city"
         android:layout_alignBottom="@+id/widgetIcon"
+        android:layout_alignParentEnd="true"
         android:layout_alignTop="@+id/widgetIcon"
+        android:layout_marginEnd="10sp"
+        android:layout_marginTop="15sp"
         android:layout_toEndOf="@+id/widgetIcon"
-        android:layout_marginTop="15sp" />
+        android:background="@null"
+        android:contentDescription="@string/next_city"
+        android:src="@mipmap/widget_arrow" />
 
 
 </RelativeLayout>

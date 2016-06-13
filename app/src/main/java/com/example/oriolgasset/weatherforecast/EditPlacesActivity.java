@@ -96,7 +96,6 @@ public class EditPlacesActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
         setResult(2);
         finish();
     }
@@ -166,11 +165,16 @@ public class EditPlacesActivity extends AppCompatActivity {
                 }
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 mAdapter.remove(s);
-                String aux = citiesList.get(position);
+                String aux = "";
+                for (String a : citiesList) {
+                    if (a.contains(s)) {
+                        aux = a;
+                    }
+                }
                 cities.remove(aux);
                 editor.remove(aux);
                 citiesList.remove(position);
-                if (!mAdapter.isEmpty() && sharedPreferences.getString("defaultCity", "").contains(s)) {
+                if (!citiesList.isEmpty() && !mAdapter.isEmpty() && sharedPreferences.getString("defaultCity", "").contains(s)) {
                     editor.putString("defaultCity", citiesList.get(0));
                 }
                 editor.putStringSet("citiesList", cities);

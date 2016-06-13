@@ -399,6 +399,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void addCitiesToMenu(Menu menu, List<String> cities) {
+        menu.clear();
         menuHeaderText = (TextView) findViewById(R.id.menuHeaderText);
         if (menuHeaderText != null) {
             menuHeaderText.setText(defaultCity.split("=")[0]);
