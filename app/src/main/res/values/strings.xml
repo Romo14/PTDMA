@@ -92,6 +92,7 @@
     <string name="last_updated_text">Last updated</string>
     <string name="city_duplicate">The city is already in the list</string>
     <string name="edit_places">Edit places</string>
+    <string name="about">About</string>
     <string name="moved">City moved</string>
     <string name="itemdeleted">City deleted</string>
     <string name="taptoundo">Undo</string>

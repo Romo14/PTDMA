@@ -238,7 +238,7 @@ public class CountryCodes {
         map.put("Uganda", "UG");
         map.put("United Kingdom", "UK");
         map.put("USA Minor Outlying Islands", "UM");
-        map.put("United States", "US");
+        map.put("United States of America", "US");
         map.put("Uruguay", "UY");
         map.put("Uzbekistan", "UZ");
         map.put("Holy See (Vatican City State)", "VA");
@@ -263,7 +263,7 @@ public class CountryCodes {
     public String getCode(String country) {
         String countryFound = map.get(country);
         if (countryFound == null) {
-            countryFound = "ES";
+            countryFound = "";
         }
         return countryFound;
     }

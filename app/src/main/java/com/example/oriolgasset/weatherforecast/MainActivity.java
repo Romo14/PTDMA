@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity
      */
     private static final String WEATHER_MAP_URL_FORMAT =
             "http://tile.openweathermap.org/map/%s/%d/%d/%d.png";
-    private List<String> cities = new ArrayList<>();
+    private List<String> cities = new ArrayList<> ();
     private ApixuClient weatherClient;
     private TextView temperatureText;
     private TextView maxTemperatureText;
@@ -120,190 +120,190 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        super.onCreate (savedInstanceState);
+        setContentView (R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        Toolbar toolbar = (Toolbar) findViewById (R.id.toolbar);
+        setSupportActionBar (toolbar);
+        getSupportActionBar ().setDisplayShowHomeEnabled (true);
 
 
-        Bitmap bm = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher);
-        ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription(getString(R.string.app_name), bm, ContextCompat.getColor(this, R.color.primary_dark));
-        this.setTaskDescription(taskDesc);
+        Bitmap bm = BitmapFactory.decodeResource (getResources (), R.mipmap.ic_launcher);
+        ActivityManager.TaskDescription taskDesc = new ActivityManager.TaskDescription (getString (R.string.app_name), bm, ContextCompat.getColor (this, R.color.primary_dark));
+        this.setTaskDescription (taskDesc);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+        DrawerLayout drawer = (DrawerLayout) findViewById (R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle (
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        toggle.syncState();
+        toggle.syncState ();
         if (drawer != null) {
-            drawer.findViewById(R.id.citiesMenu);
+            drawer.findViewById (R.id.citiesMenu);
         }
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        NavigationView navigationView = (NavigationView) findViewById (R.id.nav_view);
         if (navigationView != null) {
-            navigationView.setNavigationItemSelectedListener(this);
+            navigationView.setNavigationItemSelectedListener (this);
         }
 
         m = null;
         if (navigationView != null) {
-            m = navigationView.getMenu();
+            m = navigationView.getMenu ();
         }
 
-        temperatureText = (TextView) findViewById(R.id.temperatureText);
-        maxTemperatureText = (TextView) findViewById(R.id.maxTempValue);
-        minTemperatureText = (TextView) findViewById(R.id.minTempValue);
-        descriptionText = (TextView) findViewById(R.id.descriptionText);
-        weatherIcon = (ImageView) findViewById(R.id.weatherIconMain);
-        realFeelText = (TextView) findViewById(R.id.realFeelValue);
-        lastUpdatedText = (TextView) findViewById(R.id.lastUpdatedValue);
-        toolbarTitle = (TextView) findViewById(R.id.toolbar_title);
-        menuHeaderLayout = (LinearLayout) findViewById(R.id.menuHeaderLayout);
-        mySwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swiperefresh);
+        temperatureText = (TextView) findViewById (R.id.temperatureText);
+        maxTemperatureText = (TextView) findViewById (R.id.maxTempValue);
+        minTemperatureText = (TextView) findViewById (R.id.minTempValue);
+        descriptionText = (TextView) findViewById (R.id.descriptionText);
+        weatherIcon = (ImageView) findViewById (R.id.weatherIconMain);
+        realFeelText = (TextView) findViewById (R.id.realFeelValue);
+        lastUpdatedText = (TextView) findViewById (R.id.lastUpdatedValue);
+        toolbarTitle = (TextView) findViewById (R.id.toolbar_title);
+        menuHeaderLayout = (LinearLayout) findViewById (R.id.menuHeaderLayout);
+        mySwipeRefreshLayout = (SwipeRefreshLayout) findViewById (R.id.swiperefresh);
         if (mySwipeRefreshLayout != null) {
-            mySwipeRefreshLayout.setColorSchemeResources(R.color.primary);
+            mySwipeRefreshLayout.setColorSchemeResources (R.color.primary);
         }
 
-        mySwipeRefreshLayout.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
+        mySwipeRefreshLayout.setOnRefreshListener (
+                new SwipeRefreshLayout.OnRefreshListener () {
                     @Override
                     public void onRefresh() {
-                        mySwipeRefreshLayout.setRefreshing(true);
-                        new Thread(new Runnable() {
+                        mySwipeRefreshLayout.setRefreshing (true);
+                        new Thread (new Runnable () {
                             @Override
                             public void run() {
-                                runOnUiThread(new Runnable() {
+                                runOnUiThread (new Runnable () {
                                     @Override
                                     public void run() {
                                         showWeatherInfo = true;
                                         reloadWeatherInfo = true;
-                                        loadCurrentWeather(cityName);
+                                        loadCurrentWeather (cityName);
                                     }
                                 });
                             }
-                        }).start();
+                        }).start ();
                     }
                 }
         );
 
-        humidityDetail = (LinearLayout) findViewById(R.id.humidityDetail);
-        pressureDetail = (LinearLayout) findViewById(R.id.pressureDetail);
-        windDetail = (LinearLayout) findViewById(R.id.windDetail);
-        precipitationsDetail = (LinearLayout) findViewById(R.id.precipitationsDetail);
-        cloudsDetail = (LinearLayout) findViewById(R.id.cloudsDetail);
+        humidityDetail = (LinearLayout) findViewById (R.id.humidityDetail);
+        pressureDetail = (LinearLayout) findViewById (R.id.pressureDetail);
+        windDetail = (LinearLayout) findViewById (R.id.windDetail);
+        precipitationsDetail = (LinearLayout) findViewById (R.id.precipitationsDetail);
+        cloudsDetail = (LinearLayout) findViewById (R.id.cloudsDetail);
 
-        sharedPreferences = getSharedPreferences("weatherForecastPreferences", MODE_PRIVATE);
-        weatherClient = new ApixuClient();
+        sharedPreferences = getSharedPreferences ("weatherForecastPreferences", MODE_PRIVATE);
+        weatherClient = new ApixuClient ();
 
         sharedPrefs = PreferenceManager
-                .getDefaultSharedPreferences(this);
+                .getDefaultSharedPreferences (this);
 
         if (!weatherLoaded) {
-            cities = loadCities();
-            addCitiesToMenu(m, cities);
+            cities = loadCities ();
+            addCitiesToMenu (m, cities);
             cityName = defaultCity;
-            Bundle extras = getIntent().getExtras();
+            Bundle extras = getIntent ().getExtras ();
             if (extras != null) {
-                if (extras.containsKey("notificationCity")) {
-                    cityName = extras.getString("notificationCity");
+                if (extras.containsKey ("notificationCity")) {
+                    cityName = extras.getString ("notificationCity");
                 }
             }
-            sharedPreferences.edit().putString("widgetCity",cityName).commit();
-            loadCurrentWeather(cityName);
-            loadAndCachePlaces();
+            sharedPreferences.edit ().putString ("widgetCity", cityName).commit ();
+            loadCurrentWeather (cityName);
+            loadAndCachePlaces ();
         }
         weatherLoaded = true;
-        initMapSettins();
-        spinnerConfig();
+        initMapSettins ();
+        spinnerConfig ();
 
 
     }
 
     private void initNotification(WeatherModel weather) {
-        if (sharedPrefs.getBoolean("notifications_new_message", true)) {
+        if (sharedPrefs.getBoolean ("notifications_new_message", true)) {
             NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(this)
-                            .setSmallIcon(ApixuClient.getImageData(weather.getCurrent().getCondition()))
-                            .setContentTitle(cityName.split("=")[0])
-                            .setContentText(temperatureText.getText());
-            if (sharedPrefs.getBoolean("notifications_new_message_static", true)) {
-                mBuilder.setOngoing(true);
+                    new NotificationCompat.Builder (this)
+                            .setSmallIcon (ApixuClient.getImageData (weather.getCurrent ().getCondition ()))
+                            .setContentTitle (cityName.split ("=")[0])
+                            .setContentText (temperatureText.getText ());
+            if (sharedPrefs.getBoolean ("notifications_new_message_static", true)) {
+                mBuilder.setOngoing (true);
             }
             NotificationCompat.InboxStyle inboxStyle =
-                    new NotificationCompat.InboxStyle();
-            inboxStyle.setBigContentTitle(cityName.split("=")[0]);
-            inboxStyle.addLine(temperatureText.getText());
-            inboxStyle.addLine(weather.getCurrent().getCondition().text);
-            String minMax = String.valueOf(weather.getForecast().getForecastday().get(0).getDay().maxtemp_c) + "º " + String.valueOf(weather.getForecast().getForecastday().get(0).getDay().mintemp_c) + "º";
-            inboxStyle.addLine(minMax);
+                    new NotificationCompat.InboxStyle ();
+            inboxStyle.setBigContentTitle (cityName.split ("=")[0]);
+            inboxStyle.addLine (temperatureText.getText ());
+            inboxStyle.addLine (weather.getCurrent ().getCondition ().text);
+            String minMax = String.valueOf (weather.getForecast ().getForecastday ().get (0).getDay ().maxtemp_c) + "º " + String.valueOf (weather.getForecast ().getForecastday ().get (0).getDay ().mintemp_c) + "º";
+            inboxStyle.addLine (minMax);
 
-            mBuilder.setStyle(inboxStyle);
-            Intent resultIntent = new Intent(this, MainActivity.class);
-            resultIntent.putExtra("notificationCity", cityName);
+            mBuilder.setStyle (inboxStyle);
+            Intent resultIntent = new Intent (this, MainActivity.class);
+            resultIntent.putExtra ("notificationCity", cityName);
 
-            TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);
-            stackBuilder.addNextIntent(resultIntent);
+            TaskStackBuilder stackBuilder = TaskStackBuilder.create (this);
+            stackBuilder.addNextIntent (resultIntent);
             PendingIntent resultPendingIntent =
-                    stackBuilder.getPendingIntent(
+                    stackBuilder.getPendingIntent (
                             0,
                             PendingIntent.FLAG_UPDATE_CURRENT
                     );
-            mBuilder.setContentIntent(resultPendingIntent);
+            mBuilder.setContentIntent (resultPendingIntent);
             NotificationManager mNotificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            if (sharedPrefs.getBoolean("notifications_new_message_static", true)) {
-                mBuilder.setAutoCancel(false);
+                    (NotificationManager) getSystemService (Context.NOTIFICATION_SERVICE);
+            if (sharedPrefs.getBoolean ("notifications_new_message_static", true)) {
+                mBuilder.setAutoCancel (false);
             }
-            mNotificationManager.notify(1, mBuilder.build());
+            mNotificationManager.notify (1, mBuilder.build ());
         }
     }
 
     private void initMapSettins() {
         if (mMap == null) {
-            mMap = ((WorkaroundMapFragment) getSupportFragmentManager().findFragmentById(R.id.map)).getMap();
-            mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-            mMap.getUiSettings().setZoomControlsEnabled(true);
-            UiSettings mUiSettings = mMap.getUiSettings();
+            mMap = ((WorkaroundMapFragment) getSupportFragmentManager ().findFragmentById (R.id.map)).getMap ();
+            mMap.setMapType (GoogleMap.MAP_TYPE_NORMAL);
+            mMap.getUiSettings ().setZoomControlsEnabled (true);
+            UiSettings mUiSettings = mMap.getUiSettings ();
 
-            WeatherForecastUtils.checkLocationPermission(this);
+            WeatherForecastUtils.checkLocationPermission (this);
             if (permissionsChecked) {
-                mMap.setMyLocationEnabled(true);
+                mMap.setMyLocationEnabled (true);
             }
 
             // Keep the UI Settings state in sync with the checkboxes.
-            mUiSettings.setZoomControlsEnabled(true);
-            mUiSettings.setCompassEnabled(true);
-            mUiSettings.setMyLocationButtonEnabled(true);
-            mUiSettings.setMapToolbarEnabled(true);
-            mUiSettings.setAllGesturesEnabled(true);
+            mUiSettings.setZoomControlsEnabled (true);
+            mUiSettings.setCompassEnabled (true);
+            mUiSettings.setMyLocationButtonEnabled (true);
+            mUiSettings.setMapToolbarEnabled (true);
+            mUiSettings.setAllGesturesEnabled (true);
             // Add a marker and move the camera.
-            mMap.clear();
-            LatLng location = citiesCoordinates.get(cityName.split("=")[0]);
-            mMap.addMarker(new MarkerOptions().position(location).title(cityName.split("=")[0]));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 10));
-            final ScrollView mScrollView = (ScrollView) findViewById(R.id.mainScrollView); //parent scrollview in xml, give your scrollview id value
+            mMap.clear ();
+            LatLng location = citiesCoordinates.get (cityName.split ("=")[0]);
+            mMap.addMarker (new MarkerOptions ().position (location).title (cityName.split ("=")[0]));
+            mMap.moveCamera (CameraUpdateFactory.newLatLngZoom (location, 10));
+            final ScrollView mScrollView = (ScrollView) findViewById (R.id.mainScrollView); //parent scrollview in xml, give your scrollview id value
 
-            ((WorkaroundMapFragment) getSupportFragmentManager().findFragmentById(R.id.map))
-                    .setListener(new WorkaroundMapFragment.OnTouchListener() {
+            ((WorkaroundMapFragment) getSupportFragmentManager ().findFragmentById (R.id.map))
+                    .setListener (new WorkaroundMapFragment.OnTouchListener () {
                         @Override
                         public void onTouch() {
                             if (mScrollView != null) {
-                                mScrollView.requestDisallowInterceptTouchEvent(true);
+                                mScrollView.requestDisallowInterceptTouchEvent (true);
                             }
                         }
                     });
-            TileProvider tileProvider = createTilePovider();
-            tileOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(tileProvider));
+            TileProvider tileProvider = createTilePovider ();
+            tileOverlay = mMap.addTileOverlay (new TileOverlayOptions ().tileProvider (tileProvider));
         }
     }
 
     private void spinnerConfig() {
-        spinner = (Spinner) findViewById(R.id.tileType);
+        spinner = (Spinner) findViewById (R.id.tileType);
         String[] tileName = new String[]{"No layer", "Clouds", "Temperature", "Precipitations", "Snow", "Rain", "Wind", "Sea level press."};
-        ArrayAdapter adpt = new ArrayAdapter(this, R.layout.spinner_item, tileName);
-        spinner.setAdapter(adpt);
-        spinner.setSelection(0);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        ArrayAdapter adpt = new ArrayAdapter (this, R.layout.spinner_item, tileName);
+        spinner.setAdapter (adpt);
+        spinner.setSelection (0);
+        spinner.setOnItemSelectedListener (new AdapterView.OnItemSelectedListener () {
             @Override
             public void onNothingSelected(AdapterView parent) {
             }
@@ -313,7 +313,7 @@ public class MainActivity extends AppCompatActivity
                 switch (position) {
                     case 0:
                         tileType = "";
-                        tileOverlay.remove();
+                        tileOverlay.remove ();
                         return;
                     case 1:
                         tileType = "clouds";
@@ -337,10 +337,10 @@ public class MainActivity extends AppCompatActivity
                         tileType = "pressure";
                         break;
                 }
-                if (position != 0) showDialog();
-                if (!tileType.equals("")) {
-                    TileProvider tileProvider = createTilePovider();
-                    tileOverlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(tileProvider));
+                if (position != 0) showDialog ();
+                if (!tileType.equals ("")) {
+                    TileProvider tileProvider = createTilePovider ();
+                    tileOverlay = mMap.addTileOverlay (new TileOverlayOptions ().tileProvider (tileProvider));
                 }
             }
         });
@@ -348,48 +348,48 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        if (sharedPreferences.getBoolean("settingsChanged", false)) {
+        if (sharedPreferences.getBoolean ("settingsChanged", false)) {
             reloadWeatherInfo = true;
             showWeatherInfo = true;
-            loadCurrentWeather(cityName);
-            initMapSettins();
-            spinnerConfig();
-            sharedPreferences.edit().putBoolean("settingsChanged", false).commit();
+            loadCurrentWeather (cityName);
+            initMapSettins ();
+            spinnerConfig ();
+            sharedPreferences.edit ().putBoolean ("settingsChanged", false).commit ();
         }
-        super.onResume();
+        super.onResume ();
     }
 
     private void showDialog() {
-        AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-        alertDialog.setTitle("Warning");
-        alertDialog.setMessage("Using weather layers will increase data usage dramatically. Are you sure?");
-        alertDialog.setIcon(android.R.drawable.ic_dialog_alert);
-        alertDialog.setButton(DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener() {
+        AlertDialog alertDialog = new AlertDialog.Builder (this).create ();
+        alertDialog.setTitle ("Warning");
+        alertDialog.setMessage ("Using weather layers will increase data usage dramatically. Are you sure?");
+        alertDialog.setIcon (android.R.drawable.ic_dialog_alert);
+        alertDialog.setButton (DialogInterface.BUTTON_POSITIVE, "Yes", new DialogInterface.OnClickListener () {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 
             }
         });
-        alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener() {
+        alertDialog.setButton (DialogInterface.BUTTON_NEGATIVE, "No", new DialogInterface.OnClickListener () {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                spinner.setSelection(0);
+                spinner.setSelection (0);
                 tileType = "";
             }
         });
-        alertDialog.show();
+        alertDialog.show ();
     }
 
     private TileProvider createTilePovider() {
-        TileProvider tileProvider = new UrlTileProvider(256, 256) {
+        TileProvider tileProvider = new UrlTileProvider (256, 256) {
             @Override
             public URL getTileUrl(int x, int y, int zoom) {
-                String fUrl = String.format(WEATHER_MAP_URL_FORMAT, tileType, zoom, x, y);
+                String fUrl = String.format (WEATHER_MAP_URL_FORMAT, tileType, zoom, x, y);
                 URL url = null;
                 try {
-                    url = new URL(fUrl);
+                    url = new URL (fUrl);
                 } catch (MalformedURLException mfe) {
-                    mfe.printStackTrace();
+                    mfe.printStackTrace ();
                 }
 
                 return url;
@@ -399,64 +399,65 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void addCitiesToMenu(Menu menu, List<String> cities) {
-        menu.clear();
-        menuHeaderText = (TextView) findViewById(R.id.menuHeaderText);
+        menu.clear ();
+        menuHeaderText = (TextView) findViewById (R.id.menuHeaderText);
         if (menuHeaderText != null) {
-            menuHeaderText.setText(defaultCity.split("=")[0]);
+            menuHeaderText.setText (defaultCity.split ("=")[0]);
         }
-        menu.add(R.id.citiesMenu, Menu.FIRST, Menu.NONE, defaultCity.split("=")[0]);
+        menu.add (R.id.citiesMenu, Menu.FIRST, Menu.NONE, defaultCity.split ("=")[0]);
         for (String cityName : cities) {
-            if (!cityName.equals(defaultCity))
-                menu.add(R.id.citiesMenu, Menu.FIRST, Menu.NONE, cityName.split("=")[0]);
+            if (!cityName.equals (defaultCity))
+                menu.add (R.id.citiesMenu, Menu.FIRST, Menu.NONE, cityName.split ("=")[0]);
         }
-        menu.add(R.id.group_settings, Menu.FIRST, Menu.NONE, getString(R.string.edit_places)).setIcon(R.mipmap.ic_mode_edit_black_48dp);
-        menu.add(R.id.group_settings, Menu.FIRST, Menu.NONE, R.string.action_settings).setIcon(R.mipmap.ic_settings_black_48dp);
+        menu.add (R.id.group_settings, Menu.FIRST, Menu.NONE, getString (R.string.edit_places)).setIcon (R.mipmap.ic_mode_edit_black_48dp);
+        menu.add (R.id.group_settings, Menu.FIRST, Menu.NONE, R.string.action_settings).setIcon (R.mipmap.ic_settings_black_48dp);
+        menu.add (R.id.group_settings, Menu.FIRST, Menu.NONE, R.string.about).setIcon (R.mipmap.ic_info_black_48dp);
     }
 
     private void loadCurrentWeather(String city) {
         cityName = city;
-        if (reloadWeatherInfo || toolbarTitle.getText() == "" || !city.contains(toolbarTitle.getText())) {
-            new getWeatherList().execute(city);
+        if (reloadWeatherInfo || toolbarTitle.getText () == "" || !city.contains (toolbarTitle.getText ())) {
+            new getWeatherList ().execute (city);
         }
     }
 
     private void loadHourlyForecast(WeatherModel weather) {
-        LinearLayout hourlyLinearLayoutParent = (LinearLayout) findViewById(R.id.hourlyParentLayout);
+        LinearLayout hourlyLinearLayoutParent = (LinearLayout) findViewById (R.id.hourlyParentLayout);
         if (hourlyLinearLayoutParent != null) {
-            hourlyLinearLayoutParent.removeAllViews();
+            hourlyLinearLayoutParent.removeAllViews ();
         }
 
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams (
                 LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-        layoutParams.setMargins(22, 10, 22, 10);
+        layoutParams.setMargins (22, 10, 22, 10);
 
         if (hourlyLinearLayoutParent != null) {
             int i = 0;
             int j = 0;
             while (i < 24) {
-                for (Hour hour : weather.getForecast().getForecastday().get(j).getHour()) {
-                    if (hour.time_epoch > weather.getLocation().localtime_epoch && i < 24) {
-                        LinearLayout ll = new LinearLayout(this);
-                        ll.setOrientation(LinearLayout.VERTICAL);
+                for (Hour hour : weather.getForecast ().getForecastday ().get (j).getHour ()) {
+                    if (hour.time_epoch > weather.getLocation ().localtime_epoch && i < 24) {
+                        LinearLayout ll = new LinearLayout (this);
+                        ll.setOrientation (LinearLayout.VERTICAL);
 
-                        TextView hourView = new TextView(this);
-                        String hourText = String.format("%s", hour.getTime().substring(10));
-                        hourView.setText(hourText);
-                        hourView.setGravity(Gravity.CENTER);
-                        ll.addView(hourView);
+                        TextView hourView = new TextView (this);
+                        String hourText = String.format ("%s", hour.getTime ().substring (10));
+                        hourView.setText (hourText);
+                        hourView.setGravity (Gravity.CENTER);
+                        ll.addView (hourView);
 
-                        ImageView icon = new ImageView(this);
-                        icon.setImageResource(weatherClient.getImageData(hour.getCondition()));
-                        ll.addView(icon);
+                        ImageView icon = new ImageView (this);
+                        icon.setImageResource (weatherClient.getImageData (hour.getCondition ()));
+                        ll.addView (icon);
 
-                        TextView temp = new TextView(this);
-                        String tempText = String.format("%sº", String.valueOf(hour.getTempC()));
-                        temp.setText(tempText);
-                        temp.setGravity(Gravity.CENTER);
-                        ll.addView(temp);
+                        TextView temp = new TextView (this);
+                        String tempText = String.format ("%sº", String.valueOf (hour.getTempC ()));
+                        temp.setText (tempText);
+                        temp.setGravity (Gravity.CENTER);
+                        ll.addView (temp);
 
-                        hourlyLinearLayoutParent.addView(ll, layoutParams);
+                        hourlyLinearLayoutParent.addView (ll, layoutParams);
                         ++i;
                     }
                 }
@@ -466,109 +467,109 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void loadDailyForecast(final WeatherModel weather) {
-        LinearLayout dailyLinearLayoutParent = (LinearLayout) findViewById(R.id.dailyParentLayout);
+        LinearLayout dailyLinearLayoutParent = (LinearLayout) findViewById (R.id.dailyParentLayout);
         if (dailyLinearLayoutParent != null) {
-            dailyLinearLayoutParent.removeAllViews();
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+            dailyLinearLayoutParent.removeAllViews ();
+            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams (
                     LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-            layoutParams.setMargins(35, 15, 35, 15);
-            for (final Forecastday day : weather.getForecast().getForecastday()) {
-                LinearLayout ll = new LinearLayout(this);
-                ll.setOrientation(LinearLayout.VERTICAL);
+            layoutParams.setMargins (35, 15, 35, 15);
+            for (final Forecastday day : weather.getForecast ().getForecastday ()) {
+                LinearLayout ll = new LinearLayout (this);
+                ll.setOrientation (LinearLayout.VERTICAL);
 
-                TextView dayView = new TextView(this);
-                String[] dayText = day.getDate().substring(6).split("-");
-                dayView.setText(dayText[1] + "/" + dayText[0]);
-                dayView.setGravity(Gravity.CENTER);
-                ll.addView(dayView);
+                TextView dayView = new TextView (this);
+                String[] dayText = day.getDate ().substring (6).split ("-");
+                dayView.setText (dayText[1] + "/" + dayText[0]);
+                dayView.setGravity (Gravity.CENTER);
+                ll.addView (dayView);
 
-                LinearLayout llaux = new LinearLayout(this);
-                llaux.setOrientation(LinearLayout.HORIZONTAL);
+                LinearLayout llaux = new LinearLayout (this);
+                llaux.setOrientation (LinearLayout.HORIZONTAL);
 
-                TextView maxTemp = new TextView(this);
-                String tempText = String.format("%sº ", String.valueOf(day.getDay().maxtemp_c));
-                maxTemp.setText(tempText);
-                maxTemp.setTextColor(ContextCompat.getColor(this, R.color.primary_text));
-                maxTemp.setTextSize(12);
-                llaux.addView(maxTemp);
+                TextView maxTemp = new TextView (this);
+                String tempText = String.format ("%sº ", String.valueOf (day.getDay ().maxtemp_c));
+                maxTemp.setText (tempText);
+                maxTemp.setTextColor (ContextCompat.getColor (this, R.color.primary_text));
+                maxTemp.setTextSize (12);
+                llaux.addView (maxTemp);
 
-                TextView minTemp = new TextView(this);
-                String minTempText = String.format("%sº", String.valueOf(day.getDay().mintemp_c));
-                minTemp.setText(minTempText);
-                minTemp.setTextColor(ContextCompat.getColor(this, R.color.secondary_text));
-                minTemp.setTextSize(12);
-                llaux.addView(minTemp);
+                TextView minTemp = new TextView (this);
+                String minTempText = String.format ("%sº", String.valueOf (day.getDay ().mintemp_c));
+                minTemp.setText (minTempText);
+                minTemp.setTextColor (ContextCompat.getColor (this, R.color.secondary_text));
+                minTemp.setTextSize (12);
+                llaux.addView (minTemp);
 
-                llaux.setGravity(Gravity.CENTER);
-                ll.addView(llaux);
+                llaux.setGravity (Gravity.CENTER);
+                ll.addView (llaux);
 
-                ImageView icon = new ImageView(this);
-                icon.setImageResource(ApixuClient.getImageData(day.getDay().getCondition()));
-                ll.addView(icon);
+                ImageView icon = new ImageView (this);
+                icon.setImageResource (ApixuClient.getImageData (day.getDay ().getCondition ()));
+                ll.addView (icon);
 
-                ll.setOnClickListener(new View.OnClickListener() {
+                ll.setOnClickListener (new View.OnClickListener () {
                     @Override
                     public void onClick(View v) {
-                        Intent intent = new Intent(getBaseContext(), DetailedDailyForecast.class);
-                        intent.putExtra("dailyForecast", day);
-                        startActivity(intent);
+                        Intent intent = new Intent (getBaseContext (), DetailedDailyForecast.class);
+                        intent.putExtra ("dailyForecast", day);
+                        startActivity (intent);
                     }
                 });
 
-                dailyLinearLayoutParent.addView(ll, layoutParams);
+                dailyLinearLayoutParent.addView (ll, layoutParams);
             }
         }
     }
 
     private List<String> loadCities() {
-        List<String> result = new ArrayList<>();
-        citiesCoordinates = new ArrayMap<>();
-        defaultCity = sharedPreferences.getString("defaultCity", "");
-        Set<String> citiesList = sharedPreferences.getStringSet("citiesList", new LinkedHashSet<String>());
-        LinkedHashSet<String> citiesAux = new LinkedHashSet<>(citiesList);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        if (defaultCity.equals("")) {
-            loadUserLocationWeather();
+        List<String> result = new ArrayList<> ();
+        citiesCoordinates = new ArrayMap<> ();
+        defaultCity = sharedPreferences.getString ("defaultCity", "");
+        Set<String> citiesList = sharedPreferences.getStringSet ("citiesList", new LinkedHashSet<String> ());
+        LinkedHashSet<String> citiesAux = new LinkedHashSet<> (citiesList);
+        SharedPreferences.Editor editor = sharedPreferences.edit ();
+        if (defaultCity.equals ("")) {
+            loadUserLocationWeather ();
             defaultCity = cityName;
-            citiesAux.add(defaultCity);
-            editor.putString("defaultCity", defaultCity);
-            editor.putStringSet("citiesList", citiesAux);
-        } else if (!citiesAux.contains(defaultCity)) {
-            citiesAux.add(defaultCity);
-            editor.putStringSet("citiesList", citiesAux);
+            citiesAux.add (defaultCity);
+            editor.putString ("defaultCity", defaultCity);
+            editor.putStringSet ("citiesList", citiesAux);
+        } else if (!citiesAux.contains (defaultCity)) {
+            citiesAux.add (defaultCity);
+            editor.putStringSet ("citiesList", citiesAux);
         }
         for (String cityName : citiesAux) {
-            String key = cityName.split("=")[0];
-            String[] valueAux = cityName.split("=")[1].split(",");
-            result.add(cityName);
-            LatLng value = new LatLng(Double.valueOf(valueAux[0]), Double.valueOf(valueAux[1]));
-            citiesCoordinates.put(key, value);
+            String key = cityName.split ("=")[0];
+            String[] valueAux = cityName.split ("=")[1].split (",");
+            result.add (cityName);
+            LatLng value = new LatLng (Double.valueOf (valueAux[0]), Double.valueOf (valueAux[1]));
+            citiesCoordinates.put (key, value);
         }
-        editor.commit();
+        editor.commit ();
         return result;
     }
 
     private void loadUserLocationWeather() {
-        LatLng latLng = WeatherForecastUtils.getCityByName(this, "Barcelona,ES");
+        LatLng latLng = WeatherForecastUtils.getCityByName (this, "Barcelona,ES");
         cityName = "Barcelona, ES=" + latLng.latitude + "," + latLng.longitude;
     }
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById (R.id.drawer_layout);
         assert drawer != null;
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (drawer.isDrawerOpen (GravityCompat.START)) {
+            drawer.closeDrawer (GravityCompat.START);
         } else {
-            super.onBackPressed();
+            super.onBackPressed ();
         }
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        menu.clear();
-        getMenuInflater().inflate(R.menu.main, menu);
+        menu.clear ();
+        getMenuInflater ().inflate (R.menu.main, menu);
         return true;
     }
 
@@ -577,11 +578,11 @@ public class MainActivity extends AppCompatActivity
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        if (item.getItemId() == R.id.action_add_task) {
-            Intent intent = new Intent(this, AddCityActivity.class);
-            startActivityForResult(intent, 1);
+        if (item.getItemId () == R.id.action_add_task) {
+            Intent intent = new Intent (this, AddCityActivity.class);
+            startActivityForResult (intent, 1);
         }
-        return super.onOptionsItemSelected(item);
+        return super.onOptionsItemSelected (item);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -589,31 +590,43 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
 
-        if (item.getTitle().equals(getResources().getString(R.string.action_settings))) {
-            Intent intent = new Intent(this, SettingsActivity.class);
-            startActivity(intent);
-        } else if (item.getTitle().equals(getResources().getString(R.string.edit_places))) {
-            Intent intent = new Intent(this, EditPlacesActivity.class);
-            startActivityForResult(intent, 2);
+        if (item.getTitle ().equals (getResources ().getString (R.string.action_settings))) {
+            Intent intent = new Intent (this, SettingsActivity.class);
+            startActivity (intent);
+        } else if (item.getTitle ().equals (getResources ().getString (R.string.edit_places))) {
+            Intent intent = new Intent (this, EditPlacesActivity.class);
+            startActivityForResult (intent, 2);
+        } else if (item.getTitle ().equals (getResources ().getString (R.string.about))) {
+            AlertDialog alertDialog = new AlertDialog.Builder (MainActivity.this).create ();
+            alertDialog.setTitle ("Weather Forecast");
+            alertDialog.setMessage ("Author: Oriol Gasset Romo \nEmail: romo149@gmail.com \n" +
+                    "Barcelona School of Informatics (FIB)");
+            alertDialog.setButton (AlertDialog.BUTTON_NEUTRAL, "Close",
+                    new DialogInterface.OnClickListener () {
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss ();
+                        }
+                    });
+            alertDialog.show ();
         } else {
             String city = "=";
             for (String aux : cities) {
-                if (aux.contains(item.getTitle())) {
+                if (aux.contains (item.getTitle ())) {
                     city = aux;
                 }
             }
-            TextView text = (TextView) findViewById(R.id.menuHeaderText);
+            TextView text = (TextView) findViewById (R.id.menuHeaderText);
             if (text != null) {
-                text.setText(city.split("=")[0]);
+                text.setText (city.split ("=")[0]);
             }
             cityName = city;
             showWeatherInfo = true;
-            loadCurrentWeather(city);
+            loadCurrentWeather (city);
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById (R.id.drawer_layout);
         if (drawer != null) {
-            drawer.closeDrawer(GravityCompat.START);
+            drawer.closeDrawer (GravityCompat.START);
         }
         return true;
     }
@@ -622,38 +635,38 @@ public class MainActivity extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         showWeatherInfo = true;
         if (resultCode == 1) {
-            cities = loadCities();
-            m.clear();
-            clearInfo();
-            addCitiesToMenu(m, cities);
-            cityName = sharedPreferences.getString("newCity", defaultCity);
-            loadCurrentWeather(cityName);
-            loadAndCachePlaces();
+            cities = loadCities ();
+            m.clear ();
+            clearInfo ();
+            addCitiesToMenu (m, cities);
+            cityName = sharedPreferences.getString ("newCity", defaultCity);
+            loadCurrentWeather (cityName);
+            loadAndCachePlaces ();
         } else if (resultCode == 2) {
-            cities = loadCities();
-            m.clear();
-            clearInfo();
-            addCitiesToMenu(m, cities);
-            cityName = sharedPreferences.getString("defaultCity", defaultCity);
-            loadCurrentWeather(cityName);
-            loadAndCachePlaces();
+            cities = loadCities ();
+            m.clear ();
+            clearInfo ();
+            addCitiesToMenu (m, cities);
+            cityName = sharedPreferences.getString ("defaultCity", defaultCity);
+            loadCurrentWeather (cityName);
+            loadAndCachePlaces ();
         }
     }
 
     private void clearInfo() {
-        temperatureText.setText("");
-        maxTemperatureText.setText("");
-        minTemperatureText.setText("");
-        descriptionText.setText("");
-        weatherIcon.setImageResource(R.mipmap.unknown);
-        realFeelText.setText("");
-        lastUpdatedText.setText("");
-        toolbarTitle.setText("");
+        temperatureText.setText ("");
+        maxTemperatureText.setText ("");
+        minTemperatureText.setText ("");
+        descriptionText.setText ("");
+        weatherIcon.setImageResource (R.mipmap.unknown);
+        realFeelText.setText ("");
+        lastUpdatedText.setText ("");
+        toolbarTitle.setText ("");
     }
 
     public void loadAndCachePlaces() {
         for (String city : cities) {
-            new getWeatherList().execute(city);
+            new getWeatherList ().execute (city);
         }
     }
 
@@ -663,44 +676,44 @@ public class MainActivity extends AppCompatActivity
         ImageView icon;
 
         // Humidity
-        text = (TextView) humidityDetail.findViewById(R.id.detailText);
-        value = (TextView) humidityDetail.findViewById(R.id.detailValue);
-        icon = (ImageView) humidityDetail.findViewById(R.id.imageView);
-        text.setText(getString(R.string.humidityText));
-        value.setText(String.format("%s%%", String.valueOf(weather.getCurrent().humidity)));
-        icon.setImageResource(R.mipmap.humidity_icon);
+        text = (TextView) humidityDetail.findViewById (R.id.detailText);
+        value = (TextView) humidityDetail.findViewById (R.id.detailValue);
+        icon = (ImageView) humidityDetail.findViewById (R.id.imageView);
+        text.setText (getString (R.string.humidityText));
+        value.setText (String.format ("%s%%", String.valueOf (weather.getCurrent ().humidity)));
+        icon.setImageResource (R.mipmap.humidity_icon);
 
         // Wind
-        text = (TextView) windDetail.findViewById(R.id.detailText);
-        value = (TextView) windDetail.findViewById(R.id.detailValue);
-        icon = (ImageView) windDetail.findViewById(R.id.imageView);
-        text.setText(getString(R.string.wind_text));
-        value.setText(String.format("%skm/h %dº %s", weather.getCurrent().wind_kph, weather.getCurrent().wind_degree, weather.getCurrent().wind_dir));
-        icon.setImageResource(R.mipmap.wind_icon);
+        text = (TextView) windDetail.findViewById (R.id.detailText);
+        value = (TextView) windDetail.findViewById (R.id.detailValue);
+        icon = (ImageView) windDetail.findViewById (R.id.imageView);
+        text.setText (getString (R.string.wind_text));
+        value.setText (String.format ("%skm/h %dº %s", weather.getCurrent ().wind_kph, weather.getCurrent ().wind_degree, weather.getCurrent ().wind_dir));
+        icon.setImageResource (R.mipmap.wind_icon);
 
         // Pressure
-        text = (TextView) pressureDetail.findViewById(R.id.detailText);
-        value = (TextView) pressureDetail.findViewById(R.id.detailValue);
-        icon = (ImageView) pressureDetail.findViewById(R.id.imageView);
-        text.setText(getString(R.string.pressureText));
-        value.setText(String.format("%smb", weather.getCurrent().pressure_mb));
-        icon.setImageResource(R.mipmap.pressure_icon);
+        text = (TextView) pressureDetail.findViewById (R.id.detailText);
+        value = (TextView) pressureDetail.findViewById (R.id.detailValue);
+        icon = (ImageView) pressureDetail.findViewById (R.id.imageView);
+        text.setText (getString (R.string.pressureText));
+        value.setText (String.format ("%smb", weather.getCurrent ().pressure_mb));
+        icon.setImageResource (R.mipmap.pressure_icon);
 
         // Precipitations
-        text = (TextView) precipitationsDetail.findViewById(R.id.detailText);
-        value = (TextView) precipitationsDetail.findViewById(R.id.detailValue);
-        icon = (ImageView) precipitationsDetail.findViewById(R.id.imageView);
-        text.setText(getString(R.string.precipText));
-        value.setText(String.format("%smm", weather.getCurrent().precip_mm));
-        icon.setImageResource(R.mipmap.precipitation_icon);
+        text = (TextView) precipitationsDetail.findViewById (R.id.detailText);
+        value = (TextView) precipitationsDetail.findViewById (R.id.detailValue);
+        icon = (ImageView) precipitationsDetail.findViewById (R.id.imageView);
+        text.setText (getString (R.string.precipText));
+        value.setText (String.format ("%smm", weather.getCurrent ().precip_mm));
+        icon.setImageResource (R.mipmap.precipitation_icon);
 
         // Cloud
-        text = (TextView) cloudsDetail.findViewById(R.id.detailText);
-        value = (TextView) cloudsDetail.findViewById(R.id.detailValue);
-        icon = (ImageView) cloudsDetail.findViewById(R.id.imageView);
-        text.setText(getString(R.string.cloudtext));
-        value.setText(String.valueOf(weather.getCurrent().cloud) + "%");
-        icon.setImageResource(R.mipmap.cloud_icon);
+        text = (TextView) cloudsDetail.findViewById (R.id.detailText);
+        value = (TextView) cloudsDetail.findViewById (R.id.detailValue);
+        icon = (ImageView) cloudsDetail.findViewById (R.id.imageView);
+        text.setText (getString (R.string.cloudtext));
+        value.setText (String.valueOf (weather.getCurrent ().cloud) + "%");
+        icon.setImageResource (R.mipmap.cloud_icon);
     }
 
     @Override
@@ -708,10 +721,10 @@ public class MainActivity extends AppCompatActivity
                                            String permissions[], int[] grantResults) {
         switch (requestCode) {
             case 1: {
-                if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-                        && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission (this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+                        && ActivityCompat.checkSelfPermission (this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
                     permissionsChecked = true;
-                    mMap.setMyLocationEnabled(true);
+                    mMap.setMyLocationEnabled (true);
                 }
             }
         }
@@ -726,120 +739,124 @@ public class MainActivity extends AppCompatActivity
         @Override
         protected void onPreExecute() {
             if (showWeatherInfo) {
-                progDailog = new ProgressDialog(MainActivity.this);
-                progDailog.setMessage("Loading...");
-                progDailog.setIndeterminate(false);
-                progDailog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                progDailog.setCancelable(true);
-                progDailog.show();
+                progDailog = new ProgressDialog (MainActivity.this);
+                progDailog.setMessage ("Loading...");
+                progDailog.setIndeterminate (false);
+                progDailog.setProgressStyle (ProgressDialog.STYLE_SPINNER);
+                progDailog.setCancelable (true);
+                progDailog.show ();
             }
         }
 
         @Override
         protected WeatherModel doInBackground(String... params) {
             WeatherModel result;
-            String data = sharedPreferences.getString(params[0], "");
+            String data = sharedPreferences.getString (params[0], "");
             cityLoaded = params[0];
-            if (data.equals("") || reloadWeatherInfo) {
-                if (WeatherForecastUtils.isConnected(getBaseContext())) {
-                    data = weatherClient.getWeatherData("forecast", citiesCoordinates.get(params[0].split("=")[0]), null, 7);
-                    Log.i("Weather loaded", "no info");
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putString(params[0], data);
-                    editor.commit();
+            if (data.equals ("") || reloadWeatherInfo) {
+                if (WeatherForecastUtils.isConnected (getBaseContext ())) {
+                    data = weatherClient.getWeatherData ("forecast", citiesCoordinates.get (params[0].split ("=")[0]), null, 7);
+                    Log.i ("Weather loaded", "no info");
+                    SharedPreferences.Editor editor = sharedPreferences.edit ();
+                    editor.putString (params[0], data);
+                    editor.commit ();
                 } else {
-                    Toast.makeText(MainActivity.this, R.string.interntet_error, Toast.LENGTH_SHORT).show();
+                    Toast.makeText (MainActivity.this, R.string.interntet_error, Toast.LENGTH_SHORT).show ();
                 }
                 reloadWeatherInfo = false;
             } else {
-                Gson gson = new GsonBuilder().create();
+                Gson gson = new GsonBuilder ().create ();
                 JSONObject jObj;
                 String dateString;
                 try {
-                    jObj = new JSONObject(data);
-                    if (jObj.has("current")) {
-                        JSONObject curObj = jObj.getJSONObject("current");
-                        Current current = gson.fromJson(curObj.toString(), Current.class);
-                        dateString = current.getLastUpdated();
-                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+                    jObj = new JSONObject (data);
+                    if (jObj.has ("current")) {
+                        JSONObject curObj = jObj.getJSONObject ("current");
+                        Current current = gson.fromJson (curObj.toString (), Current.class);
+                        dateString = current.getLastUpdated ();
+                        DateFormat df = new SimpleDateFormat ("yyyy-MM-dd HH:mm", Locale.getDefault ());
                         Date startDate = null;
                         try {
-                            startDate = df.parse(dateString);
+                            startDate = df.parse (dateString);
                         } catch (ParseException e) {
-                            e.printStackTrace();
+                            e.printStackTrace ();
                         }
-                        Calendar cal = Calendar.getInstance();
-                        cal.setTime(new Date());
+                        Calendar cal = Calendar.getInstance ();
+                        cal.setTime (new Date ());
 
-                        Integer syncTime = Integer.valueOf(sharedPrefs.getString("sync_frequency", "60"));
-                        cal.add(Calendar.MINUTE, -syncTime);
-                        Date syncDate = cal.getTime();
-                        if (syncDate.compareTo(startDate) >= 0) {
-                            data = weatherClient.getWeatherData("forecast", citiesCoordinates.get(params[0].split("=")[0]), null, 7);
-                            Log.i("Weather loaded", "date");
+                        Integer syncTime = Integer.valueOf (sharedPrefs.getString ("sync_frequency", "60"));
+                        cal.add (Calendar.MINUTE, -syncTime);
+                        Date syncDate = cal.getTime ();
+                        if (syncDate.compareTo (startDate) >= 0) {
+                            data = weatherClient.getWeatherData ("forecast", citiesCoordinates.get (params[0].split ("=")[0]), null, 7);
+                            Log.i ("Weather loaded", "date");
                         }
                     }
 
 
                 } catch (JSONException e) {
-                    e.printStackTrace();
+                    e.printStackTrace ();
                 }
             }
-            result = weatherClient.parseJSON(data);
+            result = weatherClient.parseJSON (data);
             return result;
         }
 
         @Override
         protected void onPostExecute(WeatherModel weather) {
-            if (weather != null && weather.getLocation() != null) {
-                int image = ApixuClient.getImageData(weather.getCurrent().getCondition());
+            if (weather != null && weather.getLocation () != null) {
+                int image = ApixuClient.getImageData (weather.getCurrent ().getCondition ());
                 if (showWeatherInfo) {
-                    if (cityName.split("=")[0].equals("")) {
-                        String[] ll = cityName.split("=")[1].split(",");
-                        LatLng aux = new LatLng(Double.valueOf(ll[0]), Double.valueOf(ll[1]));
-                        cityName = WeatherForecastUtils.getCityByLatLang(getBaseContext(), aux) + cityName;
+                    if (cityName.split ("=")[0].equals ("")) {
+                        String[] ll = cityName.split ("=")[1].split (",");
+                        LatLng aux = new LatLng (Double.valueOf (ll[0]), Double.valueOf (ll[1]));
+                        cityName = WeatherForecastUtils.getCityByLatLang (getBaseContext (), aux) + cityName;
                     }
                     // Main info
-                    temperatureText.setText(String.format("%sº", String.valueOf(weather.getCurrent().temp_c)));
-                    maxTemperatureText.setText(String.format("%sº", String.valueOf(weather.getForecast().getForecastday().get(0).getDay().maxtemp_c)));
-                    minTemperatureText.setText(String.format("%sº", String.valueOf(weather.getForecast().getForecastday().get(0).getDay().mintemp_c)));
-                    descriptionText.setText(weather.getCurrent().getCondition().getText());
-                    image = ApixuClient.getImageData(weather.getCurrent().getCondition());
-                    weatherIcon.setImageResource(image);
-                    menuHeaderText = (TextView) findViewById(R.id.menuHeaderText);
-                    menuHeaderText.setText(cityName.split("=")[0]);
-                    menuHeaderLayout = (LinearLayout) findViewById(R.id.menuHeaderLayout);
-                    menuHeaderLayout.setBackgroundResource(ApixuClient.getBackgroundImage(image));
-                    realFeelText.setText(String.format("%sº", String.valueOf(weather.getCurrent().feelslike_c)));
-                    DateFormat dfaux = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault());
+                    temperatureText.setText (String.format ("%sº", String.valueOf (weather.getCurrent ().temp_c)));
+                    maxTemperatureText.setText (String.format ("%sº", String.valueOf (weather.getForecast ().getForecastday ().get (0).getDay ().maxtemp_c)));
+                    minTemperatureText.setText (String.format ("%sº", String.valueOf (weather.getForecast ().getForecastday ().get (0).getDay ().mintemp_c)));
+                    descriptionText.setText (weather.getCurrent ().getCondition ().getText ());
+                    image = ApixuClient.getImageData (weather.getCurrent ().getCondition ());
+                    weatherIcon.setImageResource (image);
+                    menuHeaderText = (TextView) findViewById (R.id.menuHeaderText);
+                    menuHeaderText.setText (cityName.split ("=")[0]);
+                    menuHeaderLayout = (LinearLayout) findViewById (R.id.menuHeaderLayout);
+                    menuHeaderLayout.setBackgroundResource (ApixuClient.getBackgroundImage (image));
+                    realFeelText.setText (String.format ("%sº", String.valueOf (weather.getCurrent ().feelslike_c)));
+                    DateFormat dfaux = new SimpleDateFormat ("yyyy-MM-dd HH:mm", Locale.getDefault ());
                     Date startDate = null;
                     try {
-                        startDate = dfaux.parse(weather.getCurrent().last_updated);
+                        startDate = dfaux.parse (weather.getCurrent ().last_updated);
                     } catch (ParseException e) {
-                        e.printStackTrace();
+                        e.printStackTrace ();
                     }
-                    dfaux = new SimpleDateFormat("dd/MM HH:mm", Locale.getDefault());
-                    String updated = dfaux.format(startDate);
-                    lastUpdatedText.setText(updated);
-                    toolbarTitle.setText(cityName.split("=")[0]);
-                    initNotification(weather);
+                    dfaux = new SimpleDateFormat ("dd/MM HH:mm", Locale.getDefault ());
+                    String updated = dfaux.format (startDate);
+                    lastUpdatedText.setText (updated);
+                    toolbarTitle.setText (cityName.split ("=")[0]);
+                    initNotification (weather);
 
                     // Details
-                    loadDetailsForecast(weather);
-                    loadHourlyForecast(weather);
-                    loadDailyForecast(weather);
+                    loadDetailsForecast (weather);
+                    loadHourlyForecast (weather);
+                    loadDailyForecast (weather);
                     showWeatherInfo = false;
-                    LatLng location = citiesCoordinates.get(cityName.split("=")[0]);
-                    mMap.clear();
-                    mMap.addMarker(new MarkerOptions().position(location).title(cityName.split("=")[0]));
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(location, 10));
+                    LatLng location = citiesCoordinates.get (cityName.split ("=")[0]);
+                    mMap.clear ();
+                    mMap.addMarker (new MarkerOptions ().position (location).title (cityName.split ("=")[0]));
+                    mMap.moveCamera (CameraUpdateFactory.newLatLngZoom (location, 10));
+                    WeatherForecastUtils.checkLocationPermission (MainActivity.this);
+                    if (permissionsChecked){
+                        mMap.setMyLocationEnabled (true);
+                    }
                 }
-                m.getItem(cities.indexOf(cityLoaded)).setIcon(image);
+                m.getItem (cities.indexOf (cityLoaded)).setIcon (image);
             } else {
-                Toast.makeText(getBaseContext(), getString(R.string.apixu_errpr), Toast.LENGTH_SHORT).show();
+                Toast.makeText (getBaseContext (), getString (R.string.apixu_errpr), Toast.LENGTH_SHORT).show ();
             }
-            progDailog.dismiss();
-            mySwipeRefreshLayout.setRefreshing(false);
+            progDailog.dismiss ();
+            mySwipeRefreshLayout.setRefreshing (false);
         }
     }
 }

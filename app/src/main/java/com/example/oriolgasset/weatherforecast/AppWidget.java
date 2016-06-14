@@ -41,7 +41,7 @@ public class AppWidget extends AppWidgetProvider {
 
         views.setTextViewText(R.id.widgetTemperature, String.format("%sº", String.valueOf(weather.getCurrent().temp_c)));
         views.setTextViewText(R.id.widgetDescription, weather.getCurrent().getCondition().getText());
-        views.setTextViewText(R.id.widgetCityName, weather.getLocation().getName());
+        views.setTextViewText(R.id.widgetCityName,cityName.split (",")[0]);
         views.setImageViewResource(R.id.widgetIcon, ApixuClient.getImageData(weather.getCurrent().getCondition()));
 
         Intent resultIntent = new Intent(context, MainActivity.class);
