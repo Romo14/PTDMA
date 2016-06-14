@@ -219,9 +219,9 @@ public class EditPlacesActivity extends AppCompatActivity {
                 String newDefault = mAdapter.getItem(newPosition) + " (default)";
                 mAdapter.remove(newPosition);
                 mAdapter.add(newPosition, newDefault);
-                String oldDefault = mAdapter.getItem(originalPosition).split(" \\(")[0];
-                mAdapter.remove(originalPosition);
-                mAdapter.add(originalPosition, oldDefault);
+                String oldDefault = mAdapter.getItem(1).split(" \\(")[0];
+                mAdapter.remove(1);
+                mAdapter.add(1, oldDefault);
                 sharedPreferences.edit().putString("defaultCity", citiesList.get(newPosition)).commit();
                 Toast.makeText(getBaseContext(), String.format("Default city changed: %s", newDefault.split("\\(")[0]), Toast.LENGTH_LONG).show();
             } else if (originalPosition == 0) {
