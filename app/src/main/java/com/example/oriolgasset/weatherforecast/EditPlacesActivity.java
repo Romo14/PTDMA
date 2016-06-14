@@ -170,13 +170,17 @@ public class EditPlacesActivity extends AppCompatActivity {
 
         @Override
         public void onDismiss(@NonNull final ViewGroup listView, @NonNull final int[] reverseSortedPositions) {
+            if(mAdapter.getCount () == 1){
+                Toast.makeText (getBaseContext (),"Error! There have to be at least one city", Toast.LENGTH_SHORT).show ();
+                return;
+            }
             for (int position : reverseSortedPositions) {
                 String s = mAdapter.getItem(position);
+                mAdapter.remove(s);
                 if (position == 0) {
                     s = s.split(" \\(")[0];
                 }
                 SharedPreferences.Editor editor = sharedPreferences.edit();
-                mAdapter.remove(s);
                 String aux = "";
                 for (String a : citiesList) {
                     if (a.contains(s)) {
@@ -185,9 +189,12 @@ public class EditPlacesActivity extends AppCompatActivity {
                 }
                 cities.remove(aux);
                 editor.remove(aux);
-                citiesList.remove(position);
+                citiesList.remove(aux);
                 if (!citiesList.isEmpty() && !mAdapter.isEmpty() && sharedPreferences.getString("defaultCity", "").contains(s)) {
                     editor.putString("defaultCity", citiesList.get(0));
+                    String s1 = mAdapter.getItem (0) + " (default)";
+                    mAdapter.remove (0);
+                    mAdapter.add (0,s1);
                 }
                 editor.putStringSet("citiesList", cities);
                 editor.commit();
