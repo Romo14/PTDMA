@@ -11,7 +11,9 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.widget.Toast;
 
+import com.example.oriolgasset.weatherforecast.R;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.IOException;
@@ -53,7 +55,8 @@ public class WeatherForecastUtils {
         String city = name.split(",")[0];
         try {
             addresses = gcd.getFromLocationName(city, 1);
-        } catch (IOException e) {
+        } catch (Exception e) {
+            Toast.makeText (ctx, R.string.interntet_error, Toast.LENGTH_SHORT).show ();
             return null;
         }
         if (addresses.size() > 0) {

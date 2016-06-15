@@ -213,8 +213,10 @@ public class MainActivity extends AppCompatActivity
             loadAndCachePlaces ();
         }
         weatherLoaded = true;
-        initMapSettins ();
-        spinnerConfig ();
+        if (cityName != null) {
+            initMapSettins ();
+            spinnerConfig ();
+        }
 
 
     }
@@ -404,7 +406,10 @@ public class MainActivity extends AppCompatActivity
         if (menuHeaderText != null) {
             menuHeaderText.setText (defaultCity.split ("=")[0]);
         }
-        menu.add (R.id.citiesMenu, Menu.FIRST, Menu.NONE, defaultCity.split ("=")[0]);
+        if (defaultCity != null) {
+            menu.add (R.id.citiesMenu, Menu.FIRST, Menu.NONE, defaultCity.split ("=")[0]);
+        }
+
         for (String cityName : cities) {
             if (!cityName.equals (defaultCity))
                 menu.add (R.id.citiesMenu, Menu.FIRST, Menu.NONE, cityName.split ("=")[0]);
@@ -539,11 +544,13 @@ public class MainActivity extends AppCompatActivity
             editor.putStringSet ("citiesList", citiesAux);
         }
         for (String cityName : citiesAux) {
-            String key = cityName.split ("=")[0];
-            String[] valueAux = cityName.split ("=")[1].split (",");
-            result.add (cityName);
-            LatLng value = new LatLng (Double.valueOf (valueAux[0]), Double.valueOf (valueAux[1]));
-            citiesCoordinates.put (key, value);
+            if (cityName != null && cityName.contains ("=")) {
+                String key = cityName.split ("=")[0];
+                String[] valueAux = cityName.split ("=")[1].split (",");
+                result.add (cityName);
+                LatLng value = new LatLng (Double.valueOf (valueAux[0]), Double.valueOf (valueAux[1]));
+                citiesCoordinates.put (key, value);
+            }
         }
         editor.commit ();
         return result;
@@ -551,7 +558,11 @@ public class MainActivity extends AppCompatActivity
 
     private void loadUserLocationWeather() {
         LatLng latLng = WeatherForecastUtils.getCityByName (this, "Barcelona,ES");
-        cityName = "Barcelona, ES=" + latLng.latitude + "," + latLng.longitude;
+        if (latLng != null) {
+            cityName = "Barcelona, ES=" + latLng.latitude + "," + latLng.longitude;
+        } else {
+            Toast.makeText (this, R.string.interntet_error, Toast.LENGTH_SHORT).show ();
+        }
     }
 
     @Override
@@ -761,7 +772,7 @@ public class MainActivity extends AppCompatActivity
                     editor.putString (params[0], data);
                     editor.commit ();
                 } else {
-                    Toast.makeText (MainActivity.this, R.string.interntet_error, Toast.LENGTH_SHORT).show ();
+                    return null;
                 }
                 reloadWeatherInfo = false;
             } else {
@@ -788,8 +799,9 @@ public class MainActivity extends AppCompatActivity
                         cal.add (Calendar.MINUTE, -syncTime);
                         Date syncDate = cal.getTime ();
                         if (syncDate.compareTo (startDate) >= 0) {
-                            data = weatherClient.getWeatherData ("forecast", citiesCoordinates.get (params[0].split ("=")[0]), null, 7);
-                            Log.i ("Weather loaded", "date");
+                            if (WeatherForecastUtils.isConnected (getBaseContext ())) {
+                                data = weatherClient.getWeatherData ("forecast", citiesCoordinates.get (params[0].split ("=")[0]), null, 7);
+                            }
                         }
                     }
 
@@ -843,12 +855,16 @@ public class MainActivity extends AppCompatActivity
                     loadDailyForecast (weather);
                     showWeatherInfo = false;
                     LatLng location = citiesCoordinates.get (cityName.split ("=")[0]);
-                    mMap.clear ();
-                    mMap.addMarker (new MarkerOptions ().position (location).title (cityName.split ("=")[0]));
-                    mMap.moveCamera (CameraUpdateFactory.newLatLngZoom (location, 10));
-                    WeatherForecastUtils.checkLocationPermission (MainActivity.this);
-                    if (permissionsChecked){
-                        mMap.setMyLocationEnabled (true);
+                    if (mMap != null) {
+                        mMap.clear ();
+                        mMap.addMarker (new MarkerOptions ().position (location).title (cityName.split ("=")[0]));
+                        mMap.moveCamera (CameraUpdateFactory.newLatLngZoom (location, 10));
+                        WeatherForecastUtils.checkLocationPermission (MainActivity.this);
+                        if (permissionsChecked) {
+                            mMap.setMyLocationEnabled (true);
+                        }
+                    } else {
+                        initMapSettins ();
                     }
                 }
                 m.getItem (cities.indexOf (cityLoaded)).setIcon (image);

@@ -173,6 +173,8 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
         if (WeatherForecastUtils.isConnected (this)) {
             mainInfoLayout.setVisibility (View.GONE);
             new getWeatherList ().execute (latLng);
+        } else {
+            Toast.makeText (this, R.string.interntet_error, Toast.LENGTH_SHORT).show ();
         }
 
     }
@@ -184,7 +186,7 @@ public class AddCityActivity extends AppCompatActivity implements ConnectionCall
             Set<String> cities = sharedPreferences.getStringSet ("citiesList", new LinkedHashSet<String> ());
             Set<String> citiesAux = new LinkedHashSet<> (cities);
             for (String aux : cities) {
-                if (aux.contains (cityName.split ("=")[0])) {
+                if (aux != null && aux.contains (cityName.split ("=")[0])) {
                     Toast.makeText (this, R.string.city_duplicate, Toast.LENGTH_SHORT).show ();
                     cityAdded = true;
                 }
