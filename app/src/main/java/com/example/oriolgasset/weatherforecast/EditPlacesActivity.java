@@ -59,6 +59,8 @@ public class EditPlacesActivity extends AppCompatActivity {
         String defaultCity = sharedPreferences.getString("defaultCity", "");
         cities = sharedPreferences.getStringSet("citiesList", new HashSet<String>());
         citiesList = new ArrayList<>(cities);
+        citiesList.remove (defaultCity);
+        citiesList.add (0,defaultCity);
         if (!cities.isEmpty()) {
             /* Setup the adapter */
             MyListAdapter adapter = new MyListAdapter(this);
@@ -71,6 +73,7 @@ public class EditPlacesActivity extends AppCompatActivity {
                     adapter.add(aux);
                 }
             }
+
             TimedUndoAdapter simpleSwipeUndoAdapter = new TimedUndoAdapter(adapter, this, new MyOnDismissCallback(adapter));
             AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(simpleSwipeUndoAdapter);
             animationAdapter.setAbsListView(listView);
@@ -213,7 +216,10 @@ public class EditPlacesActivity extends AppCompatActivity {
         @Override
         public void onItemMoved(final int originalPosition, final int newPosition) {
             String oldCity = citiesList.get(originalPosition);
-            citiesList.add(originalPosition, citiesList.get(newPosition));
+            String newCity = citiesList.get(newPosition);
+            citiesList.remove (originalPosition);
+            citiesList.add(originalPosition, newCity);
+            citiesList.remove (newPosition);
             citiesList.add(newPosition, oldCity);
             if (newPosition == 0) {
                 String newDefault = mAdapter.getItem(newPosition) + " (default)";
@@ -231,7 +237,7 @@ public class EditPlacesActivity extends AppCompatActivity {
                 String newDefault = mAdapter.getItem(newPosition).split(" \\(")[0];
                 mAdapter.remove(newPosition);
                 mAdapter.add(newPosition, newDefault);
-                sharedPreferences.edit().putString("defaultCity", citiesList.get(newPosition)).commit();
+                sharedPreferences.edit().putString("defaultCity", citiesList.get(originalPosition)).commit();
                 Toast.makeText(getBaseContext(), String.format("Default city changed: %s", oldDefault.split("\\(")[0]), Toast.LENGTH_LONG).show();
             }
         }
